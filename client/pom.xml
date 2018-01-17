@@ -21,7 +21,7 @@
     <configuration>
         <mainClass>pfq.store.Main</mainClass>
         <nativeInstallers />
-    </configuration>
+    </configuration> 
 </plugin>
     </plugins>
   </build>
