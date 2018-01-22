@@ -2,6 +2,7 @@ package pfq.storage.server.model;
 
 import java.util.Map;
 
+
 public class User {
 
 	public String getName() {
