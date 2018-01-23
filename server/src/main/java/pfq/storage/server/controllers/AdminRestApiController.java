@@ -1,44 +1,56 @@
 package pfq.storage.server.controllers;
 
 import java.util.List;
+import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import pfq.storage.server.CustomErrorType;
-import pfq.storage.server.dao.UserService;
+import pfq.storage.server.PFQloger;
 import pfq.storage.server.model.User;
+import pfq.storage.server.service.UserService;
  
  
 @RestController
 @RequestMapping("/admin/api/")
-public class AdminRestApiController {
+public class AdminRestApiController implements AdminRestApiControllerI {
 	
-	public static final Logger logger = LoggerFactory.getLogger(AdminRestApiController.class);
-	
-    @Autowired
-    UserService userService;
+    private Logger logger = PFQloger.getLogger(AdminRestApiController.class, Level.ALL);
+    private static final HttpHeaders head = new HttpHeaders();
+    private Map<String, Object> map;
     
-
-
-    @RequestMapping(value = "/test", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-       public @ResponseBody String so() {
-       return "This is a String";
+    @Autowired
+    private UserService userService;
+    
+    public AdminRestApiController() {
+        super();
+        head.add("Content-type",MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
     }
 	
-    @RequestMapping(value = "/user/", method = RequestMethod.GET)
+    
+    /*
+     * @see /all-user-get GET No Parameters
+     */
+    @Override
+    public @ResponseBody List<User> allUser(ModelMap model) {
+        return userService.listUser();
+    }
+
+    
+    
+    
+    
+
+    /*
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ResponseEntity<List<User>> listAllUsers() {
     	 List<User> users = userService.findAllUsers();
     	 if (users.isEmpty()) {
@@ -116,4 +128,5 @@ public class AdminRestApiController {
         userService.deleteUserById(id);
         return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
     }
+    */
 }

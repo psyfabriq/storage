@@ -1,43 +1,69 @@
 package pfq.storage.server.model;
 
+import java.io.Serializable;
+import java.util.Date;
 import java.util.Map;
 
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public class User {
+@Document(collection = "user")
+@SuppressWarnings("serial")
+public class User  implements Serializable,Cloneable{
+	
+	@Indexed
+	String id;
+	String name;
+	String login;
+	String foldercode;
+	Date  dateAdd;
+	
+	  @Override
+	    protected Object clone() throws CloneNotSupportedException {
+	      return super.clone();
+	    }
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
 
 	public void setName(String name) {
-		// TODO Auto-generated method stub
-		
+		this.name = name;
 	}
 
-	public Object getSalary() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getFoldercode() {
+		return foldercode;
 	}
 
-	public void setSalary(Object salary) {
-		// TODO Auto-generated method stub
-		
+	public void setFoldercode(String foldercode) {
+		this.foldercode = foldercode;
 	}
 
-	public Object getAge() {
-		// TODO Auto-generated method stub
-		return null;
+	public Date getDateAdd() {
+		return dateAdd;
 	}
 
-	public void setAge(Object age) {
-		// TODO Auto-generated method stub
-		
+	public void setDateAdd(Date dateAdd) {
+		this.dateAdd = dateAdd;
 	}
 
-	public Map<String, ?> getId() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getLogin() {
+		return login;
 	}
+
+	public void setLogin(String login) {
+		this.login = login;
+	} 
+	
+	
+	  
 
 }
