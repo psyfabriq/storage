@@ -51,6 +51,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> listUser() {
         logger.debug("listUser");
-		return null;
+		return userDao.getAllUser();
 	}
 }

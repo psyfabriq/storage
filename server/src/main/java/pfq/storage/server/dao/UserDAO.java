@@ -1,6 +1,8 @@
 package pfq.storage.server.dao;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.mongodb.core.query.Query;
 
 import pfq.storage.server.model.Role;
@@ -13,9 +15,9 @@ public interface UserDAO {
     boolean deleteUser(User user);
     boolean checkHasUser(String login);
     boolean checkHasUserByID(String ID);
-    User findUser(String login);
-    User findUserByID(String id);
-    User findUserByQueryOne(String query);
+    Optional<User>  findUser(String login);
+    Optional<User>  findUserByID(String id);
+    Optional<User>  findUserByQueryOne(String query);
     List<User> findUserByQueryList(String query);
     List<User> findUserByQueryList(Query query);
     List<Role> getListRole(String login);

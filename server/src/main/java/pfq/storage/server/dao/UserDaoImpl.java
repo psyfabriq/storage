@@ -4,6 +4,7 @@ package pfq.storage.server.dao;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -15,6 +16,7 @@ import pfq.storage.server.AppUtil;
 import pfq.storage.server.PFQloger;
 import pfq.storage.server.model.Role;
 import pfq.storage.server.model.User;
+import pfq.storage.server.repository.UserRepository;
 
 @Repository
 public class UserDaoImpl implements UserDAO {
@@ -25,6 +27,9 @@ public class UserDaoImpl implements UserDAO {
     
     @Autowired
     MongoOperations mongoOperation;
+    
+    @Autowired
+    UserRepository userRepository;
 
 
 	@Override
@@ -72,51 +77,61 @@ public class UserDaoImpl implements UserDAO {
 	}
 
 	@Override
-	public User findUser(String login) {
+	public Optional<User>findUser(String login) {
         logger.debug("findUser");
-		return null;
+        
+        BasicQuery querycargo = new BasicQuery("{$or:[{login:'"+login+"'}]}");
+        tmp = mongoOperation.findOne(querycargo, User.class);
+        return Optional.of(tmp);
 	}
 
 	@Override
-	public User findUserByID(String id) {
+	public Optional<User>findUserByID(String id) {
         logger.debug("findUserByID");
-		return null;
+        BasicQuery querycargo = new BasicQuery("{$or:[{_id:'"+id+"'}]}");
+        tmp = mongoOperation.findOne(querycargo, User.class);
+		return Optional.of(tmp);
 	}
 
 	@Override
-	public User findUserByQueryOne(String query) {
+	public Optional<User>  findUserByQueryOne(String query) {
         logger.debug("findUserByQueryOne");
-		return null;
+        BasicQuery querycargo = new BasicQuery(query);
+        tmp = mongoOperation.findOne(querycargo, User.class);
+		return Optional.of(tmp);
 	}
 
 	@Override
-	public List<User> findUserByQueryList(String query) {
+	public List<User>findUserByQueryList(String query) {
         logger.debug("findUserByQueryList");
-		return null;
+        BasicQuery querycargo = new BasicQuery(query);
+        List<User> ltmp = mongoOperation.find(querycargo, User.class);
+		return ltmp;
 	}
 
 	@Override
 	public List<User> findUserByQueryList(Query query) {
         logger.debug("findUserByQueryList");
-		return null;
+        List<User> ltmp = mongoOperation.find(query, User.class);
+        return ltmp;
 	}
 
 	@Override
 	public List<Role> getListRole(String login) {
         logger.debug("getListRole");
-		return null;
+        return findUser(login).get().getUserRoles();
 	}
 
 	@Override
 	public List<Role> getListRoleByID(String id) {
         logger.debug("getListRoleByID");
-		return null;
+		return findUserByID(id).get().getUserRoles();
 	}
 
 	@Override
 	public List<User> getAllUser() {
         logger.debug("getAllUser");
-		return null;
+		return mongoOperation.findAll(User.class);
 	}
 
 }
