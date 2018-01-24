@@ -1,5 +1,6 @@
 package pfq.storage.server.model;
 
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,29 +8,30 @@ import java.util.List;
 
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 @Document(collection = "user")
 @SuppressWarnings("serial")
 public class User implements Serializable, Cloneable {
 
 	@Indexed
-	String id;
-	String name;
-	String login;
-	String foldercode;
-	String email;
-    String passwordHash;
-	Date dateAdd;
-	AuthRole role;
-	List<Role> userRoles;
+	private String id;
+	private String name;
+	private String login;
+	private String foldercode;
+	private String email;
+	private String passwordHash;
+	private Date   dateAdd;
+	private List<Role> userRoles;
+
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
 
-	public User() {
-		super();
+	private User() {
 		this.userRoles = new ArrayList<Role>();
 	}
 
@@ -37,16 +39,8 @@ public class User implements Serializable, Cloneable {
 		return id;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public String getFoldercode() {
@@ -61,50 +55,81 @@ public class User implements Serializable, Cloneable {
 		return dateAdd;
 	}
 
-	public void setDateAdd(Date dateAdd) {
-		this.dateAdd = dateAdd;
-	}
-
 	public String getLogin() {
 		return login;
-	}
-
-	public void setLogin(String login) {
-		this.login = login;
 	}
 
 	public List<Role> getUserRoles() {
 		return userRoles;
 	}
-
-	public void setUserRoles(List<Role> userRoles) {
-		this.userRoles = userRoles;
+	
+	public String[] getUserRolesArray() {
+		return (String[]) userRoles.toArray();
 	}
 
 	public String getEmail() {
 		return email;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
 	public String getPasswordHash() {
 		return passwordHash;
 	}
-
-	public void setPasswordHash(String passwordHash) {
-		this.passwordHash = passwordHash;
-	}
-
-	public AuthRole getRole() {
-		return role;
-	}
-
-	public void setRole(AuthRole role) {
-		this.role = role;
-	}
 	
+    public static Builder newBuilder() {
+        return new User().new Builder();
+    }
+	
+	public class Builder {
+		
+	    private Builder() {}
+	    
+		public Builder setPassword(String password) {
+			User.this.passwordHash = new BCryptPasswordEncoder().encode(password);
+			return this;
+		}
+		
+		public Builder setEmail(String email) {
+			User.this.email = email;
+			return this;
+		}
+		
+		public Builder setUserRoles(Role role) {
+			User.this.userRoles.add(role);
+			return this;
+		}
+		
+		public Builder setLogin(String login) {
+			User.this.login = login;
+			return this;
+		}
+		
+		public Builder setDateAdd(Date dateAdd) {
+			User.this.dateAdd = dateAdd;
+			return this;
+		}
+		
+		public Builder setName(String name) {
+			User.this.name = name;
+			return this;
+		}
+		
+		
+		public User build() {
+            return User.this;
+        }
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Login :" + this.name);
+		sb.append(" ");
+		sb.append("Pass :" + this.passwordHash);
+		return sb.toString();
+	}
+    
+	
+    
 	
 
 }

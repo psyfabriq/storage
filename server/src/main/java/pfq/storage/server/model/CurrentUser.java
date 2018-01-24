@@ -1,13 +1,16 @@
 package pfq.storage.server.model;
 
+import java.util.List;
+
 import org.springframework.security.core.authority.AuthorityUtils;
+
 
 @SuppressWarnings("serial")
 public class CurrentUser extends org.springframework.security.core.userdetails.User{
 	private User user;
 
     public CurrentUser(User user) {
-        super(user.getEmail(), user.getPasswordHash(), AuthorityUtils.createAuthorityList(user.getRole().toString()));
+        super(user.getEmail(), user.getPasswordHash(), AuthorityUtils.createAuthorityList(user.getUserRolesArray()));
         this.user = user;
     }
 
@@ -15,8 +18,8 @@ public class CurrentUser extends org.springframework.security.core.userdetails.U
         return user.getId();
     }
 
-    public AuthRole getRole() {
-        return user.getRole();
+    public List<Role> getRole() {
+        return user.getUserRoles();
     }
 
     @Override
