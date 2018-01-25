@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -23,6 +24,7 @@ public class User implements Serializable, Cloneable {
 	private String email;
 	private String passwordHash;
 	private Date   dateAdd;
+	@DBRef(lazy = true)
 	private List<Role> userRoles;
 
 

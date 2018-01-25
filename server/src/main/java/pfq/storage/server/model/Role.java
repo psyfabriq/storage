@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "role")
@@ -15,6 +16,7 @@ public class Role implements Serializable,Cloneable {
 	@Indexed
 	private String id;
 	private String name;
+	@DBRef(lazy = true)
 	private List<User> users;
 	
 	public enum Enum {
@@ -40,7 +42,7 @@ public class Role implements Serializable,Cloneable {
 		return name;
 	}
 
-	public Collection<User> getUsers() {
+	public List<User> getUsers() {
 		return users;
 	}
 
