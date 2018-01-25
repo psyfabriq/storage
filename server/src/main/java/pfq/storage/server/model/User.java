@@ -64,7 +64,11 @@ public class User implements Serializable, Cloneable {
 	}
 	
 	public String[] getUserRolesArray() {
-		return (String[]) userRoles.toArray();
+		List<String> l = new ArrayList<String>();
+		for (Role r : userRoles) {
+			l.add(r.getName());
+		}
+		return l.toArray(new String[l.size()]);
 	}
 
 	public String getEmail() {

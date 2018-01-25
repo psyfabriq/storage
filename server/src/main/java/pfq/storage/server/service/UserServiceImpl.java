@@ -4,6 +4,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,5 +53,20 @@ public class UserServiceImpl implements UserService {
 	public List<User> listUser() {
         logger.debug("listUser");
 		return userDao.getAllUser();
+	}
+
+	@Override
+	public Optional<User> getUserById(String id) {
+		return userDao.findUserByID(id);
+	}
+
+	@Override
+	public Optional<User> getUserByEmail(String email) {
+		return null;
+	}
+
+	@Override
+	public Optional<User> getUserByLogin(String login) {
+		return userDao.findUser(login);
 	}
 }

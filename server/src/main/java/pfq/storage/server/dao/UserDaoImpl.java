@@ -1,10 +1,10 @@
 package pfq.storage.server.dao;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.BasicQuery;
@@ -15,7 +15,6 @@ import pfq.storage.server.AppUtil;
 import pfq.storage.server.PFQloger;
 import pfq.storage.server.model.Role;
 import pfq.storage.server.model.User;
-import pfq.storage.server.repository.UserRepository;
 
 @Repository
 public class UserDaoImpl implements UserDAO {
@@ -27,8 +26,7 @@ public class UserDaoImpl implements UserDAO {
 	@Autowired
 	MongoOperations mongoOperation;
 
-	@Autowired
-	UserRepository userRepository;
+
 
 	@Override
 	public boolean addUser(User user) {

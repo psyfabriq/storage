@@ -17,15 +17,15 @@ public class PostConstructExampleBean {
  
     @PostConstruct
     public void init() {
-    	if(!userDao.checkHasUser("admin")) {
+    	if(!userDao.checkHasUser("Admin")) {
 			 System.out.println("Not Check Admin User");
 			 Role r = new Role();
 			 r.setName(Role.Enum.ADMIN.toString());
 			 User au = User.newBuilder()
-					  .setLogin("admin")
+					  .setLogin("Admin")
 					  .setName("Admin")
 					  .setEmail("admin@system.com")
-					  .setPassword("admin")
+					  .setPassword("Admin")
 					  .setUserRoles(new Role().setName(Role.Enum.USER.toString()))
 					  .setUserRoles(new Role().setName(Role.Enum.ADMIN.toString()))
 					  .build();	
