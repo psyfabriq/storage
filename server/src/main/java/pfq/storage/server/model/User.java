@@ -11,6 +11,8 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Document(collection = "user")
 @SuppressWarnings("serial")
@@ -22,8 +24,10 @@ public class User implements Serializable, Cloneable {
 	private String login;
 	private String foldercode;
 	private String email;
+	@JsonIgnore
 	private String passwordHash;
 	private Date   dateAdd;
+	
 	@DBRef(lazy = true)
 	private List<Role> userRoles;
 
@@ -65,6 +69,7 @@ public class User implements Serializable, Cloneable {
 		return userRoles;
 	}
 	
+	@JsonIgnore
 	public String[] getUserRolesArray() {
 		List<String> l = new ArrayList<String>();
 		for (Role r : userRoles) {

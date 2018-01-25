@@ -9,6 +9,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Document(collection = "role")
 @SuppressWarnings("serial")
 public class Role implements Serializable,Cloneable {
@@ -16,6 +18,8 @@ public class Role implements Serializable,Cloneable {
 	@Indexed
 	private String id;
 	private String name;
+	
+	@JsonIgnore
 	@DBRef(lazy = true)
 	private List<User> users;
 	
