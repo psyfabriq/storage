@@ -6,6 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -196,6 +199,8 @@ public class AppUtil {
        
         return map;
     }
+    
+    
     
     public static void setError(String errmessage){
         error.append(errmessage);

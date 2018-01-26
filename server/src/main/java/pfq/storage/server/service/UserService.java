@@ -9,6 +9,7 @@ import pfq.storage.server.model.User;
 public interface UserService {
     public String add(Map<String, Object> map);
     public String remove(Map<String, Object> map);
+    public String edit(Map<String, Object> map);
     public String getUser(Map<String, Object> map);
     public String getAllUser(Map<String, Object> map);
     public Optional<User>getUserById(String id);

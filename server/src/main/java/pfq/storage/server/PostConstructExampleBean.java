@@ -1,5 +1,7 @@
 package pfq.storage.server;
 
+import java.util.UUID;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +50,7 @@ public class PostConstructExampleBean {
 					  .setLogin("Admin")
 					  .setName("Admin")
 					  .setEmail("admin@system.com")
+					  .setFoldercode(UUID.randomUUID().toString())
 					  .setPassword("Admin")
 					  .setUserRoles(ra)
 					  .setUserRoles(ru)

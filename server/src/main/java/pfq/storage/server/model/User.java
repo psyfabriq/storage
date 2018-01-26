@@ -32,6 +32,7 @@ public class User implements Serializable, Cloneable {
 	private List<Role> userRoles;
 
 
+
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return super.clone();
@@ -40,7 +41,8 @@ public class User implements Serializable, Cloneable {
 	private User() {
 		this.userRoles = new ArrayList<Role>();
 	}
-
+	
+	
 	public String getId() {
 		return id;
 	}
@@ -53,9 +55,6 @@ public class User implements Serializable, Cloneable {
 		return foldercode;
 	}
 
-	public void setFoldercode(String foldercode) {
-		this.foldercode = foldercode;
-	}
 
 	public Date getDateAdd() {
 		return dateAdd;
@@ -89,10 +88,21 @@ public class User implements Serializable, Cloneable {
     public static Builder newBuilder() {
         return new User().new Builder();
     }
+    
+    @JsonIgnore
+    public Builder getBuilder() {
+        return this.new Builder();
+    }
 	
 	public class Builder {
 		
-	    private Builder() {}
+	    private Builder() { }
+	    public  Builder(User u) { }
+	    
+		public Builder setId(String id) {
+			User.this.id = id;
+			return this;
+		}
 	    
 		public Builder setPassword(String password) {
 			User.this.passwordHash = new BCryptPasswordEncoder().encode(password);
@@ -121,6 +131,11 @@ public class User implements Serializable, Cloneable {
 		
 		public Builder setName(String name) {
 			User.this.name = name;
+			return this;
+		}
+		
+		public Builder setFoldercode(String foldercode) {
+			User.this.foldercode = foldercode;
 			return this;
 		}
 		

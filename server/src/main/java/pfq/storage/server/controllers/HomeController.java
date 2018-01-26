@@ -9,4 +9,9 @@ public class HomeController {
 	public String getHomePage() {
 		return "home";
 	}
+	
+	@RequestMapping("/admin")
+	public String getAdminPage() {
+		return "admin";
+	}
 }
