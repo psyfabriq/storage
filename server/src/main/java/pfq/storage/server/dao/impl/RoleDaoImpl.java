@@ -1,4 +1,4 @@
-package pfq.storage.server.dao;
+package pfq.storage.server.dao.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import pfq.storage.server.AppUtil;
 import pfq.storage.server.PFQloger;
+import pfq.storage.server.dao.RoleDAO;
 import pfq.storage.server.model.Role;
 import pfq.storage.server.model.User;
 

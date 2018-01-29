@@ -17,6 +17,7 @@ public interface UserDAO {
     boolean checkHasUserByID(String ID);
     Optional<User>  findUser(String login);
     Optional<User>  findUserByID(String id);
+    Optional<User>  findUserByEmail (String email);
     Optional<User>  findUserByQueryOne(String query);
     List<User> findUserByQueryList(String query);
     List<User> findUserByQueryList(Query query);

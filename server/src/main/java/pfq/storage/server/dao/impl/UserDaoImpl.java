@@ -1,4 +1,4 @@
-package pfq.storage.server.dao;
+package pfq.storage.server.dao.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import pfq.storage.server.AppUtil;
 import pfq.storage.server.PFQloger;
+import pfq.storage.server.dao.UserDAO;
 import pfq.storage.server.model.Role;
 import pfq.storage.server.model.User;
 
@@ -151,6 +152,14 @@ public class UserDaoImpl implements UserDAO {
 	public List<User> getAllUser() {
 		logger.debug("getAllUser");
 		return mongoOperation.findAll(User.class);
+	}
+
+	@Override
+	public Optional<User> findUserByEmail(String email) {
+		
+		BasicQuery querycargo = new BasicQuery("{$or:[{email:'" + email + "'}]}");
+		tmp = mongoOperation.findOne(querycargo, User.class);
+		return Optional.of(tmp);
 	}
 
 }

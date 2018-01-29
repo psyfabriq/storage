@@ -1,4 +1,4 @@
-package pfq.storage.server.service;
+package pfq.storage.server.service.impl;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -18,6 +18,7 @@ import pfq.storage.server.ResponseStatus;
 import pfq.storage.server.dao.RoleDAO;
 import pfq.storage.server.dao.UserDAO;
 import pfq.storage.server.model.User;
+import pfq.storage.server.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
