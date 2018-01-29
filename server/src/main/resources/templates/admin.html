@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"
-	class=" backgroundsize bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d csstransitions no-flexboxtweener fontface inlinesvg localstorage multiplebgs preserve3d sessionstorage smil svgclippaths svgfilters svgforeignobject canvas todataurljpeg todataurlpng todataurlwebp">
+<html ng-app="XSCMS_ADMIN_DASHBOARD" class=" backgroundsize bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d csstransitions no-flexboxtweener fontface inlinesvg localstorage multiplebgs preserve3d sessionstorage smil svgclippaths svgfilters svgforeignobject canvas todataurljpeg todataurlpng todataurlwebp" >
 <head>
 <meta charset="utf-8"></meta>
 <meta name="viewport"
@@ -11,36 +10,36 @@
 <title layout:fragment="title">PFQ FileServer (Administrative)</title>
 <!-- Vendor styles-->
 <!-- Animate.CSS-->
-<link rel="stylesheet" href="vendor/animate.css/animate.css"></link>
+<link rel="stylesheet" href="../vendor/animate.css/animate.css"></link>
 <!-- Bootstrap-->
 <link rel="stylesheet"
-	href="vendor/bootstrap/dist/css/bootstrap.min.css"></link>
+	href="../vendor/bootstrap/dist/css/bootstrap.min.css"></link>
 <!-- Ionicons-->
-<link rel="stylesheet" href="vendor/ionicons/css/ionicons.css"></link>
+<link rel="stylesheet" href="../vendor/ionicons/css/ionicons.css"></link>
 <!-- Material Colors-->
-<link rel="stylesheet" href="vendor/material-colors/dist/colors.css"></link>
+<link rel="stylesheet" href="../vendor/material-colors/dist/colors.css"></link>
 <!-- Datepicker-->
 <link rel="stylesheet"
-	href="vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css"></link>
+	href="../vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css"></link>
 <!-- Select2-->
-<link rel="stylesheet" href="vendor/select2/dist/css/select2.css"></link>
+<link rel="stylesheet" href="../vendor/select2/dist/css/select2.css"></link>
 <!-- Clockpicker-->
 <link rel="stylesheet"
-	href="vendor/clockpicker/dist/bootstrap-clockpicker.css"></link>
+	href="../vendor/clockpicker/dist/bootstrap-clockpicker.css"></link>
 <!-- Range Slider-->
 <link rel="stylesheet"
-	href="vendor/nouislider/distribute/nouislider.min.css"></link>
+	href="../vendor/nouislider/distribute/nouislider.min.css"></link>
 <!-- ColorPicker-->
 <link rel="stylesheet"
-	href="vendor/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css"></link>
+	href="../vendor/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css"></link>
 <!-- Multiselect-->
-<link rel="stylesheet" href="vendor/multiselect/css/multi-select.css"></link>
+<link rel="stylesheet" href="../vendor/multiselect/css/multi-select.css"></link>
 <!-- Application styles-->
-<link rel="stylesheet" href="css/app.css"></link>
+<link rel="stylesheet" href="../css/app.css"></link>
 </head>
 <body
 	class="pace-done footer-fixed theme-gradient-header-1 modal-backdrop-soft modal-open sidebar-cover"
-	style="opacity: 1;">
+	style="opacity: 1;" >
 	<div class="pace  pace-inactive">
 		<div class="pace-progress" data-progress-text="100%"
 			data-progress="99" style="transform: translate3d(100%, 0px, 0px);">
@@ -125,8 +124,8 @@
 				<div class="float-left pt-4 text-muted sidebar-close">
 					<em class="ion-arrow-left-c icon-lg"></em>
 				</div>
-				<a class="brand-header-logo" href="#"> <!-- Logo Imageimg(src="img/logo.png", alt="logo")
-            --> <span class="brand-header-logo-text">PFQ
+				<a class="brand-header-logo" href="#"> 
+            <span class="brand-header-logo-text">PFQ
 						FileServer</span></a>
 			</div>
 			<div class="sidebar-content">
@@ -136,8 +135,8 @@
 						<a href="#"><img class="rounded-circle thumb64"
 							src="img/user/01.jpg" alt="Profile"></img></a>
 						<div class="mt-3">
-							<div class="lead">User name</div>
-							<div class="text-thin">Organization</div>
+							<div class="lead">${user.name}</div>
+							<div class="text-thin">${user.email}</div>
 						</div>
 					</div>
 				</div>
@@ -146,24 +145,27 @@
 						<li class="ms-hover">
 							<div class="sidebar-nav-heading">MENU</div>
 						</li>
-						<li><a href="dashboard.html"><span
+						<li><a href="#"><span
 								class="float-right nav-label"></span><span class="nav-icon"><em
 									class="ion-ios-keypad-outline"></em></span><span>My Drive</span></a></li>
-						<li class="ms-hover"><a href="kanban.html"><span
+						<li class="ms-hover"><a href="#available"><span
 								class="float-right nav-label"></span><span class="nav-icon"><em
 									class="ion-ios-people"></em></span><span>Available to me</span></a></li>
-						<li><a href="widgets.html"><span
+						<li><a href="#resent"><span
 								class="float-right nav-label"></span><span
 								class="nav-icon"><em class="ion-android-time"></em></span><span>Recent</span></a></li>
-						<li><a href="widgets.html"><span
+						<li><a href="#favorite"><span
 								class="nav-icon"><em class="ion-android-star"></em></span><span>Favorite</span></a></li>
-						<li><a href="widgets.html"><span
+						<li><a href="#trash_bin"><span
 								class="float-right nav-label"></span><span
 								class="nav-icon"><em class="ion-trash-a"></em></span><span>Trash
 									bin</span></a></li>
-						<li class="ms-hover"><a href="kanban.html"><span
+						<li class="ms-hover"><a href="#settings"><span
 								class="float-right nav-label"></span><span class="nav-icon"><em
 									class="ion-ios-gear-outline"></em></span><span>Settings</span></a></li>
+						<li class="ms-hover"><a href="#create_user"><span
+								class="float-right nav-label"></span><span class="nav-icon"><em
+									class="ion-person-add"></em></span><span>Create user</span></a></li>			
 					</ul>
 				</nav>
 			</div>
@@ -172,16 +174,17 @@
 		<!-- Main section-->
 		<main class="main-container"> <!-- Page content-->
 		<section class="section-container">
-			<div class="container-fluid"></div>
+			<div class="container-fluid">
+			   
+			                 <div ng-view=""></div>
+			
+			</div>
 		</section>
 		<!-- Page footer--> <footer class="footer-container">
 			<div class="d-flex justify-content-between fh">
-				<a class="footer-icon" href="#"><em class="ion-chatboxes"></em><span>Messages</span></a><a
-					class="footer-icon" href="#"><em class="ion-document-text"></em><span>Widgets</span></a><a
-					class="footer-icon footer-icon-lg" href="#"><em
-					class="ion-home"></em><span>Dashboard</span></a><a class="footer-icon"
-					href="#"><em class="ion-map"></em><span>Maps</span></a><a
-					class="footer-icon" href="#"><em class="ion-pie-graph"></em><span>Charts</span></a>
+			    <a class="footer-icon" href="#"><em class="ion-pie-graph"></em><span>Charts</span></a>
+				<a class="footer-icon footer-icon-lg" href="#"><em class="ion-home"></em><span>Dashboard</span></a>
+				<a class="footer-icon" href="#"><em class="ion-chatboxes"></em><span>Messages</span></a>
 			</div>
 		</footer> </main>
 	</div>
@@ -211,35 +214,41 @@
 	<!-- End Search template-->
 
 	<!-- Modernizr-->
-	<script src="vendor/modernizr/modernizr.custom.js"></script>
+	<script src="../vendor/modernizr/modernizr.custom.js"></script>
 	<!-- PaceJS-->
-	<script src="vendor/pace/pace.min.js"></script>
+	<script src="../vendor/pace/pace.min.js"></script>
 	<!-- jQuery-->
-	<script src="vendor/jquery/dist/jquery.js"></script>
+	<script src="../vendor/jquery/dist/jquery.js"></script>
 	<!-- Bootstrap-->
-	<script src="vendor/popper.js/dist/umd/popper.min.js"></script>
-	<script src="vendor/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="../vendor/popper.js/dist/umd/popper.min.js"></script>
+	<script src="../vendor/bootstrap/dist/js/bootstrap.js"></script>
 	<!-- Material Colors-->
-	<script src="vendor/material-colors/dist/colors.js"></script>
+	<script src="../vendor/material-colors/dist/colors.js"></script>
 	<!-- Screenfull-->
-	<script src="vendor/screenfull/dist/screenfull.js"></script>
+	<script src="../vendor/screenfull/dist/screenfull.js"></script>
 	<!-- jQuery Localize-->
-	<script src="vendor/jquery-localize-i18n/dist/jquery.localize.js"></script>
+	<script src="../vendor/jquery-localize-i18n/dist/jquery.localize.js"></script>
 	<!-- Datepicker-->
-	<script src="vendor/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+	<script src="../vendor/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 	<!-- Select2-->
-	<script src="vendor/select2/dist/js/select2.js"></script>
+	<script src="../vendor/select2/dist/js/select2.js"></script>
 	<!-- Clockpicker-->
-	<script src="vendor/clockpicker/dist/bootstrap-clockpicker.js"></script>
+	<script src="../vendor/clockpicker/dist/bootstrap-clockpicker.js"></script>
 	<!-- Range Slider-->
-	<script src="vendor/nouislider/distribute/nouislider.js"></script>
+	<script src="../vendor/nouislider/distribute/nouislider.js"></script>
 	<!-- ColorPicker-->
 	<script
-		src="vendor/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js"></script>
+		src="../vendor/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js"></script>
 	<!-- Multiselect-->
-	<script src="vendor/multiselect/js/jquery.multi-select.js"></script>
+	<script src="../vendor/multiselect/js/jquery.multi-select.js"></script>
 	<!-- App script-->
-	<script src="js/app.js"></script>
+	<script src="../js/angular.js"></script>
+	<script src="../js/additionals.js"></script>
+	<script src="../js/mdr-file.min.js"></script>
+	<script src="../js/angular-base64-upload.js"></script>
+	<script src="../js/admin_script.js"></script>
+	<script src="../js/filemanager.js"></script>
+	<script src="../js/app.js"></script>
 
 	<div
 		class="colorpicker dropdown-menu colorpicker-2x colorpicker-hidden colorpicker-with-alpha colorpicker-right">

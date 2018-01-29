@@ -20,7 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		        .antMatchers("/css/**", "/js/**", "/vendor/**", "/img/**").permitAll()
+		        .antMatchers("/css/**", "/js/**", "/vendor/**", "/img/**", "/template/**", "/file/**").permitAll()
 		        .antMatchers("/admin/**").hasAuthority("ADMIN")
 		        .antMatchers("/").hasAuthority("USER")
 				.anyRequest().fullyAuthenticated()
@@ -29,6 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and().logout().logoutUrl("/logout").deleteCookies("remember-me")
 				.logoutSuccessUrl("/login").permitAll()
 				.and().rememberMe();
+		 http.httpBasic();
+		 http.csrf().disable();
 	}
 	
 	 @Override
