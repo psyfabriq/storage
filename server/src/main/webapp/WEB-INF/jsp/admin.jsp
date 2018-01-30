@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html ng-app="XSCMS_ADMIN_DASHBOARD" class=" backgroundsize bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d csstransitions no-flexboxtweener fontface inlinesvg localstorage multiplebgs preserve3d sessionstorage smil svgclippaths svgfilters svgforeignobject canvas todataurljpeg todataurlpng todataurlwebp" >
 <head>
 <meta charset="utf-8"></meta>
@@ -131,8 +133,8 @@
 						<a href="#"><img class="rounded-circle thumb64"
 							src="img/user/01.jpg" alt="Profile"></img></a>
 						<div class="mt-3">
-							<div class="lead">${session.username}</div>
-							<div class="text-thin">${session.useremail}</div>
+							<div class="lead">${username}</div>
+							<div class="text-thin">${useremail}</div>
 						</div>
 					</div>
 				</div>

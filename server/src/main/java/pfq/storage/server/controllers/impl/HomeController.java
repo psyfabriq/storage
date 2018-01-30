@@ -5,6 +5,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import pfq.storage.server.model.CurrentUser;
@@ -17,19 +18,19 @@ public class HomeController {
 	SystemInfoServiceImpl systemInfoService;
 	
 	@RequestMapping("/")
-	public String getHomePage(HttpServletRequest request,HttpSession session) {
+	public String getHomePage(HttpServletRequest request,Model model) {
 		CurrentUser cu = systemInfoService.getCurrentUser(request);
-		session.setAttribute("username", cu.getName());
-		session.setAttribute("useremail", cu.getEmail());
+		model.addAttribute("username", cu.getName());
+		model.addAttribute("useremail", cu.getEmail());
 
 		return "home";
 	}
 	
 	@RequestMapping("/admin")
-	public String getAdminPage(HttpServletRequest request,HttpSession session) {
+	public String getAdminPage(HttpServletRequest request,Model model) {
 		CurrentUser cu = systemInfoService.getCurrentUser(request);
-		session.setAttribute("username", cu.getName());
-		session.setAttribute("useremail", cu.getEmail());
+		model.addAttribute("username", cu.getName());
+		model.addAttribute("useremail", cu.getEmail());
 		return "admin";
 	}
 }
