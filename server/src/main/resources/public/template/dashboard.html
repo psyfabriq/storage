@@ -75,10 +75,10 @@
 									data-ng-click="fileNavigator.upDir()">&crarr;</button></li>
 						</ol>
 						<div data-ng-if="viewTemplate === 'main-icons'"
-							ng-include="'../servicepages/?do&type=4e8b5ec3-d101-ce80&what=getpage'"
+							ng-include="'/main-icons.html'"
 							class="main-navigation"></div>
 						<div data-ng-if="viewTemplate === 'main-table'"
-							ng-include="'../servicepages/?do&type=	9808af45-85de-3d97&what=getpage'"
+							ng-include="'/main-table.html'"
 							class="main-navigation"></div>
 
 					</div>
@@ -91,6 +91,88 @@
                   </div>
                 </div>
 
+<!--###################################################################TEMPLATES ###########################################################################-->
+<script type="text/ng-template" id="/main-icons.html" class="ng-scope">
+
+<div class="iconset" >
+    <div class="col-120" id="item_[[$index]]" data-ng-repeat="item in fileNavigator.fileList | filter: query | orderBy: orderProp" data-ng-show="!fileNavigator.requesting && !fileNavigator.error" >
+
+        <a  href="" class="thumbnail text-center"  data-ng-click="smartClick(item)" ng-right-click="smartRightClick(item,$event)" title="[[item.model.name]] ([[item.model.sizeKb()]]kb)" >
+            <div class="item-icon" >
+                <i class="glyphicon glyphicon-folder-open" data-ng-show="item.model.type === 'dir'"></i>
+                <i class="glyphicon glyphicon-file" data-ng-show="item.model.type === 'file' && item.model.isimage === false"></i>
+                <i class="glyphicon glyphicon-file" data-ng-show="item.model.type === 'file' && item.model.isimage === false"></i>
+                <img ng-src="[[item.model.url]]" data-ng-show="item.model.type === 'file' && item.model.isimage === true" class="img-thumbnail" style="height=32; width=32;">
+            </div>
+
+            [[item.model.name | strLimit : 11 ]]
+        </a>
+    </div>
+    <div class="alert alert-warning" data-ng-show="fileNavigator.requesting">
+        [["loading" | translate]]...
+    </div>
+    <div class="alert alert-warning" data-ng-show="!fileNavigator.requesting && fileNavigator.fileList.length < 1 && !fileNavigator.error">
+        [["no_files_in_folder" | translate]]...
+    </div>
+    <div class="alert alert-danger" data-ng-show="!fileNavigator.requesting && fileNavigator.error">
+        [[ fileNavigator.error ]]
+    </div>
+</div>
+
+
+</script>
+<script type="text/ng-template" id="/main-table.html" class="ng-scope">
+
+<table class="table table-striped table-hover mb0 table-files">
+    <thead>
+        <tr>
+            <th>[["name" | translate]]</th>
+            <th class="hidden-xs">[["size" | translate]]</th>
+            <th class="hidden-sm hidden-xs">[["date" | translate]]</th>
+            <th class="text-right">[["actions" | translate]]</th>
+        </tr>
+    </thead>
+    <tbody class="file-item">
+        <tr data-ng-show="fileNavigator.requesting">
+            <td colspan="4">
+                [["loading" | translate]]...
+            </td>
+        </tr>
+        <tr data-ng-show="!fileNavigator.requesting && fileNavigator.fileList.length < 1 && !fileNavigator.error">
+            <td colspan="4">
+                [["no_files_in_folder" | translate]]...
+            </td>
+        </tr>
+        <tr data-ng-show="!fileNavigator.requesting && fileNavigator.error">
+            <td colspan="4">
+                [[ fileNavigator.error ]]
+            </td>
+        </tr>
+
+        <tr data-ng-repeat="item in fileNavigator.fileList | filter: query | orderBy: orderProp" data-ng-show="!fileNavigator.requesting">
+            <td>
+                <a href="" data-ng-click="smartClick(item)" ng-right-click="smartRightClick(item)" title="[[item.model.name]] ([[item.model.sizeKb()]]kb)">
+                    <i class="glyphicon glyphicon-folder-close" data-ng-show="item.model.type === 'dir'"></i>
+                    <i class="glyphicon glyphicon-file" data-ng-show="item.model.type === 'file'"></i>
+                    [[item.model.name | strLimit : 64]]
+                </a>
+            </td>
+            <td class="hidden-xs">
+                [[item.model.sizeKb()]]kb
+            </td>
+            <td class="hidden-sm hidden-xs">
+                [[item.model.date.toString()]]
+            </td>
+            <td class="text-right">
+                <div ng-include="'/item-toolbar.html'"></div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+</script>
+<!--###################################################################ENDTEMPLATES ###########################################################################-->
 
 
 

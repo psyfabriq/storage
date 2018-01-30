@@ -4,8 +4,8 @@
 
 var app = angular.module('XSCMS_ADMIN_DASHBOARD');
 
-app.controller('FileManagerCtrl', [ '$scope', '$translate', '$cookies', '$config', 'item', 'fileNavigator', 'fileUploader', 'TemplateService','$modal','$popover',
-    function($scope, $translate, $cookies, $config, Item, FileNavigator, FileUploader ,TemplateService, $modal, $popover) {
+app.controller('FileManagerCtrl', [ '$scope', '$translate', '$cookies', '$config', 'item', 'fileNavigator', 'fileUploader', '$modal','$popover',
+    function($scope, $translate, $cookies, $config, Item, FileNavigator, FileUploader , $modal, $popover) {
 
     $scope.appName = $config.appName;
     $scope.orderProp = ['model.type', 'model.name'];
@@ -317,13 +317,14 @@ app.service('fileNavigator', ['$http', '$config', 'item', function ($http, $conf
         self.fileList = [];
         self.error = '';
 
-
+/*
         $http.post($config.Url, data).success(function(data) {
             self.fileList = [];
             angular.forEach(data.result, function(file) {
                 self.fileList.push(new Item(file, self.currentPath));
 
             });
+         
             self.requesting = false;
             self.buildTree(path);
 
@@ -337,6 +338,7 @@ app.service('fileNavigator', ['$http', '$config', 'item', function ($http, $conf
             self.requesting = false;
             typeof error === 'function' && error(data);
         });
+           */
     };
 
     FileNavigator.prototype.buildTree = function(path) {
@@ -426,12 +428,14 @@ app.service('fileUploader', ['$http', '$config','DoService', function ($http, $c
 
         var params={who:$config.who, what:'itemupload',filelist:fileList,destination:'/' + path.join('/')}
         self.requesting = true;
+        /*
         var res=DoService.doPost(params,'service');
 
         res.success(function(data, status, headers, config) {
             self.requesting = false;
             typeof success === 'function' && success(data);
         }).error(function(data, status, headers, config) {self.requesting = false; typeof error === 'function' && error(data);});
+        */
     };
 }]);
 
@@ -505,6 +509,7 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
         if (self.tempModel.name.trim()) {
             self.inprocess = true;
             self.error = '';
+            /*
             $http.post($config.Url, data).success(function(data) {
                 self.defineCallback(data, success, error);
             }).error(function(data) {
@@ -515,6 +520,8 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
             }).finally(function() {
                 self.inprocess = false;
             });
+            */
+            self.inprocess = false;
         }
         return self;
     };
@@ -531,6 +538,7 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
         if (self.tempModel.name.trim()) {
             self.inprocess = true;
             self.error = '';
+            /*
             $http.post($config.Url, data).success(function(data) {
                 self.defineCallback(data, success, error);
             }).error(function(data) {
@@ -541,6 +549,8 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
             }).finally(function() {
                 self.inprocess = false;
             });
+            */
+            self.inprocess = false;
         }
         return self;
     };
@@ -557,6 +567,7 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
         if (self.tempModel.name.trim()) {
             self.inprocess = true;
             self.error = '';
+            /*
             $http.post($config.Url, data).success(function(data) {
                 self.defineCallback(data, success, error);
             }).error(function(data) {
@@ -567,6 +578,8 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
             }).finally(function() {
                 self.inprocess = false;
             });
+            */
+            self.inprocess = false;
         }
         return self;
     };
@@ -583,6 +596,7 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
         if (self.tempModel.name.trim()) {
             self.inprocess = true;
             self.error = '';
+            /*
             $http.post($config.Url, data).success(function(data) {
                 self.defineCallback(data, success, error);
             }).error(function(data) {
@@ -593,6 +607,8 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
             }).finally(function() {
                 self.inprocess = false;
             });
+            */
+            self.inprocess = false;
         }
         return self;
     };
@@ -610,6 +626,7 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
         if (true) {
             self.inprocess = true;
             self.error = '';
+            /*
             $http.post($config.Url, data).success(function(data) {
                 self.defineCallback(data, success, error);
             }).error(function(data) {
@@ -619,7 +636,8 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
                 typeof error === 'function' && error(data);
             }).finally(function() {
                 self.inprocess = false;
-            });
+            });*/
+            self.inprocess = false;
         }
         return self;
     };
@@ -656,6 +674,7 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
         };
         self.inprocess = true;
         self.error = '';
+        /*
         $http.post($config.Url, data).success(function(data) {
             self.tempModel.content = self.model.content = data.result;
             self.defineCallback(data, success, error);
@@ -667,6 +686,8 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
         }).finally(function() {
             self.inprocess = false;
         });
+        */
+        self.inprocess = false;
         return self;
     };
 
@@ -680,6 +701,7 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
         };
         self.inprocess = true;
         self.error = '';
+        /*
         $http.post($config.Url, data).success(function(data) {
             self.defineCallback(data, success, error);
         }).error(function(data) {
@@ -690,6 +712,8 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
         }).finally(function() {
             self.inprocess = false;
         });
+        */
+        self.inprocess = false;
         return self;
     };
 
@@ -704,7 +728,7 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
         };
         self.inprocess = true;
         self.error = '';
-
+        /*
         $http.post($config.Url, data).success(function(data) {
             self.defineCallback(data, success, error);
         }).error(function(data) {
@@ -715,6 +739,8 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
         }).finally(function() {
             self.inprocess = false;
         });
+        */
+        self.inprocess = false;
         return self;
     };
 
@@ -729,6 +755,7 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
         };
         self.inprocess = true;
         self.error = '';
+        /*
         $http({
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -744,6 +771,8 @@ app.factory('item', ['$http', '$translate', '$config', 'chmod', function($http, 
         }).finally(function() {
             self.inprocess = false;
         });
+        */
+        self.inprocess = false;
         return self;
     };
 

@@ -8,34 +8,30 @@
 <meta name="keywords"
 	content="app, responsive, jquery, bootstrap, dashboard, admin"></meta>
 <title layout:fragment="title">PFQ FileServer (Administrative)</title>
-<!-- Vendor styles-->
-<!-- Animate.CSS-->
+
+
+
 <link rel="stylesheet" href="../vendor/animate.css/animate.css"></link>
-<!-- Bootstrap-->
 <link rel="stylesheet"
 	href="../vendor/bootstrap/dist/css/bootstrap.min.css"></link>
-<!-- Ionicons-->
 <link rel="stylesheet" href="../vendor/ionicons/css/ionicons.css"></link>
-<!-- Material Colors-->
 <link rel="stylesheet" href="../vendor/material-colors/dist/colors.css"></link>
-<!-- Datepicker-->
 <link rel="stylesheet"
 	href="../vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css"></link>
-<!-- Select2-->
 <link rel="stylesheet" href="../vendor/select2/dist/css/select2.css"></link>
-<!-- Clockpicker-->
 <link rel="stylesheet"
 	href="../vendor/clockpicker/dist/bootstrap-clockpicker.css"></link>
-<!-- Range Slider-->
 <link rel="stylesheet"
 	href="../vendor/nouislider/distribute/nouislider.min.css"></link>
-<!-- ColorPicker-->
 <link rel="stylesheet"
 	href="../vendor/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.css"></link>
-<!-- Multiselect-->
 <link rel="stylesheet" href="../vendor/multiselect/css/multi-select.css"></link>
-<!-- Application styles-->
+<!-- <link rel="stylesheet" href="../css/angular-strap.css"></link> -->
+<link rel="stylesheet" href="../css/filemanager.css"></link>
 <link rel="stylesheet" href="../css/app.css"></link>
+
+
+
 </head>
 <body
 	class="pace-done footer-fixed theme-gradient-header-1"
@@ -145,25 +141,25 @@
 						<li class="ms-hover">
 							<div class="sidebar-nav-heading">MENU</div>
 						</li>
-						<li><a href="#"><span
+						<li><a href="#!"><span
 								class="float-right nav-label"></span><span class="nav-icon"><em
 									class="ion-ios-keypad-outline"></em></span><span>My Drive</span></a></li>
-						<li class="ms-hover"><a href="#available"><span
+						<li class="ms-hover"><a href="#!available"><span
 								class="float-right nav-label"></span><span class="nav-icon"><em
 									class="ion-ios-people"></em></span><span>Available to me</span></a></li>
-						<li><a href="#resent"><span
+						<li><a href="#!resent"><span
 								class="float-right nav-label"></span><span
 								class="nav-icon"><em class="ion-android-time"></em></span><span>Recent</span></a></li>
-						<li><a href="#favorite"><span
+						<li><a href="#!favorite"><span
 								class="nav-icon"><em class="ion-android-star"></em></span><span>Favorite</span></a></li>
-						<li><a href="#trash_bin"><span
+						<li><a href="#!trash_bin"><span
 								class="float-right nav-label"></span><span
 								class="nav-icon"><em class="ion-trash-a"></em></span><span>Trash
 									bin</span></a></li>
-						<li class="ms-hover"><a href="#settings"><span
+						<li class="ms-hover"><a href="#!settings"><span
 								class="float-right nav-label"></span><span class="nav-icon"><em
 									class="ion-ios-gear-outline"></em></span><span>Settings</span></a></li>
-						<li class="ms-hover"><a href="#create_user"><span
+						<li class="ms-hover"><a href="#!create_user"><span
 								class="float-right nav-label"></span><span class="nav-icon"><em
 									class="ion-person-add"></em></span><span>Create user</span></a></li>			
 					</ul>
@@ -213,132 +209,33 @@
 	</div>
 	<!-- End Search template-->
 
-	<!-- Modernizr-->
 	<script src="../vendor/modernizr/modernizr.custom.js"></script>
-	<!-- PaceJS-->
 	<script src="../vendor/pace/pace.min.js"></script>
-	<!-- jQuery-->
 	<script src="../vendor/jquery/dist/jquery.js"></script>
-	<!-- Bootstrap-->
 	<script src="../vendor/popper.js/dist/umd/popper.min.js"></script>
 	<script src="../vendor/bootstrap/dist/js/bootstrap.js"></script>
-	<!-- Material Colors-->
 	<script src="../vendor/material-colors/dist/colors.js"></script>
-	<!-- Screenfull-->
 	<script src="../vendor/screenfull/dist/screenfull.js"></script>
-	<!-- jQuery Localize-->
 	<script src="../vendor/jquery-localize-i18n/dist/jquery.localize.js"></script>
-	<!-- Datepicker-->
 	<script src="../vendor/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-	<!-- Select2-->
 	<script src="../vendor/select2/dist/js/select2.js"></script>
-	<!-- Clockpicker-->
 	<script src="../vendor/clockpicker/dist/bootstrap-clockpicker.js"></script>
-	<!-- Range Slider-->
 	<script src="../vendor/nouislider/distribute/nouislider.js"></script>
-	<!-- ColorPicker-->
-	<script
-		src="../vendor/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js"></script>
-	<!-- Multiselect-->
+	<script src="../vendor/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js"></script>
 	<script src="../vendor/multiselect/js/jquery.multi-select.js"></script>
+	
 	<!-- App script-->
+	
 	<script src="../js/angular.js"></script>
-	<script src="../js/additionals.js"></script>
-	<script src="../js/mdr-file.min.js"></script>
-	<script src="../js/angular-base64-upload.js"></script>
+	<script src="../js/angular-additions.js"></script>
+	<script src="../js/ng-file-upload.min.js"></script>
+	
 	<script src="../js/admin_script.js"></script>
+	
 	<script src="../js/filemanager.js"></script>
+	
+	
 	<script src="../js/app.js"></script>
-
-	<div
-		class="colorpicker dropdown-menu colorpicker-2x colorpicker-hidden colorpicker-with-alpha colorpicker-right">
-		<div class="colorpicker-saturation"
-			style="background-color: rgb(0, 41, 255);">
-			<i style="top: 38.4314px; left: 119.417px;"><b></b></i>
-		</div>
-		<div class="colorpicker-hue">
-			<i style="top: 72.0867px;"></i>
-		</div>
-		<div class="colorpicker-alpha"
-			style="background-color: rgb(83, 103, 206);">
-			<i style="top: 0px;"></i>
-		</div>
-		<div class="colorpicker-color"
-			style="background-color: rgb(83, 103, 206);">
-			<div style="background-color: rgb(83, 103, 206);"></div>
-		</div>
-		<div class="colorpicker-selectors"></div>
-	</div>
-	<div
-		class="colorpicker dropdown-menu colorpicker-hidden colorpicker-with-alpha colorpicker-right">
-		<div class="colorpicker-saturation"
-			style="background-color: rgb(0, 41, 255);">
-			<i style="top: 19.2157px; left: 59.7087px;"><b></b></i>
-		</div>
-		<div class="colorpicker-hue">
-			<i style="top: 36.0434px;"></i>
-		</div>
-		<div class="colorpicker-alpha"
-			style="background-color: rgb(83, 103, 206);">
-			<i style="top: 0px;"></i>
-		</div>
-		<div class="colorpicker-color"
-			style="background-color: rgb(83, 103, 206);">
-			<div style="background-color: rgb(83, 103, 206);"></div>
-		</div>
-		<div class="colorpicker-selectors"></div>
-	</div>
-	<div
-		class="colorpicker dropdown-menu colorpicker-hidden colorpicker-right">
-		<div class="colorpicker-saturation"
-			style="background-color: rgb(0, 41, 255);">
-			<i style="top: 19.2157px; left: 59.7087px;"><b></b></i>
-		</div>
-		<div class="colorpicker-hue">
-			<i style="top: 36.0434px;"></i>
-		</div>
-		<div class="colorpicker-alpha"
-			style="background-color: rgb(83, 103, 206);">
-			<i style="top: 0px;"></i>
-		</div>
-		<div class="colorpicker-color"
-			style="background-color: rgb(83, 103, 206);">
-			<div style="background-color: rgb(83, 103, 206);"></div>
-		</div>
-		<div class="colorpicker-selectors"></div>
-	</div>
-	<div
-		class="colorpicker dropdown-menu colorpicker-hidden colorpicker-right">
-		<div class="colorpicker-saturation"
-			style="background-color: rgb(0, 255, 0);">
-			<i style="top: 27.8431px; left: 50px;"><b></b></i>
-		</div>
-		<div class="colorpicker-hue">
-			<i style="top: 66.6667px;"></i>
-		</div>
-		<div class="colorpicker-alpha"
-			style="background-color: rgb(92, 184, 92);">
-			<i style="top: 0px;"></i>
-		</div>
-		<div class="colorpicker-color"
-			style="background-color: rgb(92, 184, 92);">
-			<div style="background-color: rgb(92, 184, 92);"></div>
-		</div>
-		<div class="colorpicker-selectors colorpicker-visible">
-			<i class="colorpicker-selectors-color"
-				style="background-color: rgb(119, 119, 119);"></i><i
-				class="colorpicker-selectors-color"
-				style="background-color: rgb(51, 122, 183);"></i><i
-				class="colorpicker-selectors-color"
-				style="background-color: rgb(92, 184, 92);"></i><i
-				class="colorpicker-selectors-color"
-				style="background-color: rgb(91, 192, 222);"></i><i
-				class="colorpicker-selectors-color"
-				style="background-color: rgb(240, 173, 78);"></i><i
-				class="colorpicker-selectors-color"
-				style="background-color: rgb(217, 83, 79);"></i>
-		</div>
-	</div>
 </body>
 </html>
 
