@@ -12,7 +12,7 @@ app.factory('DoService', function ($http) {
     var doGet = function(params,type){
         var res =$http({
           method: 'GET',
-          url: '../'+type+'/?do',
+          url: '../'+type,
           params: params
         });
         return res;
@@ -21,7 +21,7 @@ app.factory('DoService', function ($http) {
     var doPost = function(params,type){
         var res = $http({
               method: "post",
-              url: '../'+type+'/?do',
+              url: '../'+type,
               data: params
           });
         return res;

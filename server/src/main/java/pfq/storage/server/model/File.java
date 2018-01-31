@@ -75,15 +75,14 @@ public class File implements Serializable, Cloneable {
         return this.new Builder();
     }
     
+    public static Builder newBuilder() {
+        return new File().new Builder();
+    }
 
 
 	public class Builder {
     	private Builder() { }
     	
-        	public Builder setId(String id) {
-        		File.this.id = id;
-    			return this;
-    		}
 
 
     		public Builder setName(String name) {

@@ -35,9 +35,13 @@ public interface FileManagerControllerI {
     @ResponseBody
     public ResponseEntity<String> itemCompress(@RequestBody String json, HttpServletResponse response);
     
-    @RequestMapping(value = "/item-edit-file", method = RequestMethod.POST,headers="Accept=*/*",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/item-move-file", method = RequestMethod.POST,headers="Accept=*/*",consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<String> itemEditFile(@RequestBody String json, HttpServletResponse response);
+    public ResponseEntity<String> itemMoveFile(@RequestBody String json, HttpServletResponse response);
+    
+    @RequestMapping(value = "/item-rename-file", method = RequestMethod.POST,headers="Accept=*/*",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> itemRenameFile(@RequestBody String json, HttpServletResponse response);
     
     @RequestMapping(value = "/get-list-directory", method = RequestMethod.POST,headers="Accept=*/*",consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,15 +66,22 @@ public class FileManagerController implements FileManagerControllerI {
 	}
 
 	@Override
-	public ResponseEntity<String> itemEditFile(String json, HttpServletResponse response) {
+	public ResponseEntity<String> itemMoveFile(String json, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public ResponseEntity<String> itemRenameFile(String json, HttpServletResponse response) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+
 	@Override
 	public ResponseEntity<String> getListDirectory(String json, HttpServletResponse response) {
 		// TODO Auto-generated method stub
-		return null;
+		return new ResponseEntity<String>("test", head,HttpStatus.OK);
 	}
 
 }

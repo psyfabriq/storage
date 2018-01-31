@@ -154,14 +154,14 @@
 								class="nav-icon"><em class="ion-android-time"></em></span><span>Recent</span></a></li>
 						<li><a href="#!favorite"><span
 								class="nav-icon"><em class="ion-android-star"></em></span><span>Favorite</span></a></li>
-						<li><a href="#!trash_bin"><span
+						<li><a href="#!trash-bin"><span
 								class="float-right nav-label"></span><span
 								class="nav-icon"><em class="ion-trash-a"></em></span><span>Trash
 									bin</span></a></li>
 						<li class="ms-hover"><a href="#!settings"><span
 								class="float-right nav-label"></span><span class="nav-icon"><em
 									class="ion-ios-gear-outline"></em></span><span>Settings</span></a></li>
-						<li class="ms-hover"><a href="#!create_user"><span
+						<li class="ms-hover"><a href="#!create-user"><span
 								class="float-right nav-label"></span><span class="nav-icon"><em
 									class="ion-person-add"></em></span><span>Create user</span></a></li>			
 					</ul>
