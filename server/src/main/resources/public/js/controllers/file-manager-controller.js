@@ -324,7 +324,7 @@ app.service('fileNavigator', ['$http', '$config', 'item', function ($http, $conf
                 self.fileList.push(new Item(file, self.currentPath));
 
             });
-         
+
             self.requesting = false;
             self.buildTree(path);
 

@@ -34,8 +34,6 @@ app.factory('DoService', function ($http) {
 });
 
 
-
-
 app.config(function($routeProvider) {
 
 		$routeProvider
@@ -43,13 +41,13 @@ app.config(function($routeProvider) {
 		// route for the home page
 		.when('/', {
 			templateUrl : '../template/dashboard.html',
-			controller : 'dashController'
+			controller : 'FileManagerCtrl'
 		})
 
 		// route for the about page
 		.when('/available', {
 			templateUrl : '../template/available.html',
-			controller : 'availableController'
+			controller : 'AvailableController'
 		})
 
 		// route for the contact page
@@ -85,38 +83,38 @@ app.config(function($routeProvider) {
 
 app.controller('dashController', function($scope) {
 	$scope.message = 'DASHBOARD';
-	console.log($scope.message); 
-	
+	console.log($scope.message);
+
 });
 
 app.controller('availableController', function($scope) {
 	$scope.message = 'AVAILABLE';
-	console.log($scope.message); 
+	console.log($scope.message);
 });
 
 app.controller('resentController', function($scope) {
 	$scope.message = 'RESENT';
-	console.log($scope.message); 
+	console.log($scope.message);
 });
 
 app.controller('favoriteController', function($scope) {
 	$scope.message = 'FAVORITE';
-	console.log($scope.message); 
+	console.log($scope.message);
 });
 
 app.controller('trashController', function($scope) {
 	$scope.message = 'TRASH';
-	console.log($scope.message); 
+	console.log($scope.message);
 });
 
 app.controller('settingsController', function($scope) {
 	$scope.message = 'SETTINGS';
-	console.log($scope.message); 
+	console.log($scope.message);
 });
 
 app.controller('userController', function($scope) {
 	$scope.message = 'USER';
-	console.log($scope.message); 
+	console.log($scope.message);
 });
 
 })(window.angular);

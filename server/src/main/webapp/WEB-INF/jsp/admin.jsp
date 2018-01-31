@@ -122,7 +122,7 @@
 				<div class="float-left pt-4 text-muted sidebar-close">
 					<em class="ion-arrow-left-c icon-lg"></em>
 				</div>
-				<a class="brand-header-logo" href="#"> 
+				<a class="brand-header-logo" href="#">
             <span class="brand-header-logo-text">PFQ
 						FileServer</span></a>
 			</div>
@@ -163,7 +163,7 @@
 									class="ion-ios-gear-outline"></em></span><span>Settings</span></a></li>
 						<li class="ms-hover"><a href="#!create-user"><span
 								class="float-right nav-label"></span><span class="nav-icon"><em
-									class="ion-person-add"></em></span><span>Create user</span></a></li>			
+									class="ion-person-add"></em></span><span>Create user</span></a></li>
 					</ul>
 				</nav>
 			</div>
@@ -173,9 +173,9 @@
 		<main class="main-container"> <!-- Page content-->
 		<section class="section-container">
 			<div class="container-fluid">
-			   
+
 			                 <div ng-view=""></div>
-			
+
 			</div>
 		</section>
 		<!-- Page footer--> <footer class="footer-container">
@@ -211,36 +211,10 @@
 	</div>
 	<!-- End Search template-->
 
-	<script src="../vendor/modernizr/modernizr.custom.js"></script>
-	<script src="../vendor/pace/pace.min.js"></script>
-	<script src="../vendor/jquery/dist/jquery.js"></script>
-	<script src="../vendor/popper.js/dist/umd/popper.min.js"></script>
-	<script src="../vendor/bootstrap/dist/js/bootstrap.js"></script>
-	<script src="../vendor/material-colors/dist/colors.js"></script>
-	<script src="../vendor/screenfull/dist/screenfull.js"></script>
-	<script src="../vendor/jquery-localize-i18n/dist/jquery.localize.js"></script>
-	<script src="../vendor/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-	<script src="../vendor/select2/dist/js/select2.js"></script>
-	<script src="../vendor/clockpicker/dist/bootstrap-clockpicker.js"></script>
-	<script src="../vendor/nouislider/distribute/nouislider.js"></script>
-	<script src="../vendor/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.js"></script>
-	<script src="../vendor/multiselect/js/jquery.multi-select.js"></script>
-	
-	<!-- App script-->
-	
-	<script src="../js/angular.js"></script>
-	<script src="../js/angular-additions.js"></script>
-	<script src="../js/ng-file-upload.min.js"></script>
-	
-	<script src="../js/admin_script.js"></script>
-	
-	<script src="../js/filemanager.js"></script>
-	
-	
-	<script src="../js/app.js"></script>
+  <script  src="../loader/require.js"></script>
+  <script  src="../loader/main.js"></script>
+
+
+
 </body>
 </html>
-
-
-
-

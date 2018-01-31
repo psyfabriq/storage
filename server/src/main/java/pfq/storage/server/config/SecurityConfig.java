@@ -16,11 +16,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
     private UserDetailsService userDetailsService;
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		        .antMatchers("/css/**", "/js/**", "/vendor/**", "/img/**", "/template/**", "/file/**", "/403","/file/**").permitAll()
+		        .antMatchers("/css/**", "/js/**", "/vendor/**", "/img/**", "/loader/**", "/template/**", "/file/**", "/403","/file/**").permitAll()
 		        .antMatchers("/admin/**").hasAuthority("ADMIN")
 		        .antMatchers("/").hasAuthority("USER")
 				.anyRequest().fullyAuthenticated()
@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		 http.httpBasic();
 		 http.csrf().disable();
 	}
-	
+
 	 @Override
 	    public void configure(AuthenticationManagerBuilder auth) throws Exception {
 	        auth
