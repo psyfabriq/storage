@@ -211,9 +211,25 @@
 	</div>
 	<!-- End Search template-->
 
-  <script  src="../loader/require.js"></script>
-  <script  src="../loader/main.js"></script>
+  <script  src="../vendor/jquery/dist/jquery.js"></script>
+  <script  src="../vendor/bootstrap/dist/js/bootstrap.js"></script>
+	<script  src="../vendor/popper.js/dist/umd/popper.min.js"></script>
+	<script  src="../vendor/screenfull/dist/screenfull.js"></script>
+	<script  src="../js/angular.js"></script>
+	<script  src="../js/angular-additions.js"></script>
+	<script  src="../js/admin_script.js"></script>
 
+
+
+  <script  src="../js/app.js"></script>
+
+	<script  src="../js/controllers/available-controller.js"></script>
+	<script  src="../js/controllers/favorite-controller.js"></script>
+	<script  src="../js/controllers/file-manager-controller.js"></script>
+	<script  src="../js/controllers/resent-controller.js"></script>
+	<script  src="../js/controllers/settings-controller.js"></script>
+	<script  src="../js/controllers/trash-controller.js"></script>
+	<script  src="../js/controllers/user-controller.js"></script>
 
 
 </body>

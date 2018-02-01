@@ -53,68 +53,33 @@ app.config(function($routeProvider) {
 		// route for the contact page
 		.when('/resent', {
 			templateUrl : '../template/resent.html',
-			controller : 'resentController'
+			controller : 'ResentController'
 		})
 
 		// route for the contact page
 		.when('/favorite', {
 			templateUrl : '../template/favorite.html',
-			controller : 'favoriteController'
+			controller : 'FavoriteController'
 		})
 
 		// route for the contact page
 		.when('/trash-bin', {
 			templateUrl : '../template/trash_bin.html',
-			controller : 'trashController'
+			controller : 'TrashController'
 		})
 
 		// route for the contact page
 		.when('/settings', {
 			templateUrl : '../template/settings.html',
-			controller : 'settingsController'
+			controller : 'SettingsController'
 		})
 
 		// route for the contact page
 		.when('/create-user', {
 			templateUrl : '../template/create_user.html',
-			controller : 'userController'
+			controller : 'UserController'
 		});
 	});
 
-app.controller('dashController', function($scope) {
-	$scope.message = 'DASHBOARD';
-	console.log($scope.message);
-
-});
-
-app.controller('availableController', function($scope) {
-	$scope.message = 'AVAILABLE';
-	console.log($scope.message);
-});
-
-app.controller('resentController', function($scope) {
-	$scope.message = 'RESENT';
-	console.log($scope.message);
-});
-
-app.controller('favoriteController', function($scope) {
-	$scope.message = 'FAVORITE';
-	console.log($scope.message);
-});
-
-app.controller('trashController', function($scope) {
-	$scope.message = 'TRASH';
-	console.log($scope.message);
-});
-
-app.controller('settingsController', function($scope) {
-	$scope.message = 'SETTINGS';
-	console.log($scope.message);
-});
-
-app.controller('userController', function($scope) {
-	$scope.message = 'USER';
-	console.log($scope.message);
-});
 
 })(window.angular);
