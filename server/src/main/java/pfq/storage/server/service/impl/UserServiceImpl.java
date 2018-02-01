@@ -66,18 +66,22 @@ public class UserServiceImpl implements UserService {
 	public String getUser(Map<String, Object> map) {
         logger.debug("getUser");
         StringBuilder result = new StringBuilder();
-        User u = userDao.findUser((String) map.get("login")).get();
-        if (u != null) {
+        System.out.println(map.get("login"));
+        
+        Optional<User> u = userDao.findUser((String)map.get("login"));
+	
+        if (u.isPresent()) {
         	Map<String, Object> mapo = new HashMap<String, Object>();
-        	 mapo.put("id", u.getId());
-             mapo.put("login", u.getLogin());
-             mapo.put("name", u.getName());
-             mapo.put("email", u.getEmail());
+        	 //mapo.put("id", u.getId());
+             mapo.put("login", u.get().getLogin());
+             mapo.put("name", u.get().getName());
+             mapo.put("email", u.get().getEmail());
              result.append(AppUtil.getResponseJson(mapo, ResponseStatus.OK));
         	
         }else {
-        	result.append(AppUtil.getResponseJson("Not found Cargo !!",ResponseStatus.ERROR));
+        	result.append(AppUtil.getResponseJson("Not found User !!",ResponseStatus.ERROR));
         }
+       
 		return result.toString();
 	}
 

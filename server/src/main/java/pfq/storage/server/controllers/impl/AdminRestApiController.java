@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,39 +44,52 @@ public class AdminRestApiController implements AdminRestApiControllerI {
 	
     
     /*
-     * @see /all-user-get GET No Parameters
+     * @see /all-users-get GET No Parameters
      */
     @Override
     public @ResponseBody List<User> allUser(ModelMap model) {
         return userService.listUser();
     }
 
-
+     /*
+     * @see /add-user POST {"login":"######","email":"#####","name":"######","password":"#####"}
+     */
 	@Override
 	public ResponseEntity<String> addUser(String json, HttpServletResponse response) {
+		
+		System.out.println("addUser");
 		map = AppUtil.getValues(json);
 		return new ResponseEntity<String>(userService.add(map), head,HttpStatus.OK);
 	}
 
-
+    /*
+    * @see /rm-user POST {"login":"######","email":"#####"}
+    */
 	@Override
 	public ResponseEntity<String> removeUser(String json, HttpServletResponse response) {
 		map = AppUtil.getValues(json);
 		return new ResponseEntity<String>(userService.remove(map), head,HttpStatus.OK);
 	}
 
-
+    /*
+    * @see /edit-user POST {"login":"######","email":"#####","name":"######","password":"#####","old_password":"#####"}
+    */
 	@Override
 	public ResponseEntity<String> editUser(String json, HttpServletResponse response) {
 		map = AppUtil.getValues(json);
 		return new ResponseEntity<String>(userService.edit(map), head,HttpStatus.OK);
 	}
 
-
+    /*
+    * @see /get-user POST {"login":"######","email":"#####"}
+    */
 	@Override
-	public ResponseEntity<String> getUser(String json, HttpServletResponse response) {
+	public ResponseEntity<String> getUser(@RequestBody String json, HttpServletResponse response) {
 		map = AppUtil.getValues(json);
+		System.out.println(map);
+
 		return new ResponseEntity<String>(userService.getUser(map), head,HttpStatus.OK);
+		//return new ResponseEntity<String>("test", head,HttpStatus.OK);
 	}
 
 }

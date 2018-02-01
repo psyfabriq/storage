@@ -102,7 +102,7 @@ public class UserDaoImpl implements UserDAO {
 
 		BasicQuery querycargo = new BasicQuery("{$or:[{login:'" + login + "'}]}");
 		tmp = mongoOperation.findOne(querycargo, User.class);
-		return Optional.of(tmp);
+		return Optional.ofNullable(tmp);
 	}
 
 	@Override

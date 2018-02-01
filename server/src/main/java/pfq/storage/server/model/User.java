@@ -24,6 +24,7 @@ public class User implements Serializable, Cloneable {
 	private String login;
 	private String foldercode;
 	private String email;
+	//private 
 	@JsonIgnore
 	private String passwordHash;
 	private Date   dateAdd;

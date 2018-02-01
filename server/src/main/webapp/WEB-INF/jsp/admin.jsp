@@ -212,8 +212,9 @@
 	<!-- End Search template-->
 
   <script  src="../vendor/jquery/dist/jquery.js"></script>
-  <script  src="../vendor/bootstrap/dist/js/bootstrap.js"></script>
 	<script  src="../vendor/popper.js/dist/umd/popper.min.js"></script>
+
+  <script  src="../vendor/bootstrap/dist/js/bootstrap.js"></script>
 	<script  src="../vendor/screenfull/dist/screenfull.js"></script>
 	<script  src="../js/angular.js"></script>
 	<script  src="../js/angular-additions.js"></script>
