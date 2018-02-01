@@ -34,3 +34,4 @@ public class HomeController {
 		return "admin";
 	}
 }
+//https://github.com/StarterSquad/startersquad.com/tree/master/examples/angularjs-requirejs-2
