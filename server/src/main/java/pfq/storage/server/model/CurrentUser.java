@@ -27,6 +27,16 @@ public class CurrentUser extends org.springframework.security.core.userdetails.U
 	public String getEmail() {
 		return user.getEmail();
 	}
+	
+	public boolean checkHasRole(String rolename) {
+		List<Role> r = user.getUserRoles();
+		for (Role role : r) {
+			if(role.getName().equals(rolename)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	@Override
 	public String toString() {

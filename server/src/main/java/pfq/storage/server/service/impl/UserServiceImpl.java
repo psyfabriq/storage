@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String add(Map<String, Object> map) {
         logger.debug("add");
+        if(!userDao.checkHasUser((String)map.get("login"),(String)map.get("email"))) {
         User u = User.newBuilder().setLogin((String) map.get("login"))
         		                  .setEmail((String) map.get("email"))
         		                  .setName((String) map.get("name"))
@@ -42,7 +43,11 @@ public class UserServiceImpl implements UserService {
         		                  .setUserRoles(roleDao.findRole("USER").get())
         		                  .setIsActive(false)
         		                  .build();
-		return AppUtil.getResponseJson(userDao.addUser(u));
+         return AppUtil.getResponseJson(userDao.addUser(u));
+        }else {
+			return AppUtil.getResponseJson("Has another user with login or email !!",ResponseStatus.ERROR);
+		}
+		
 	}
   
 	@Override

@@ -18,18 +18,18 @@
               <div>
                 <md-input-container>
                   <label>Login</label>
-                  <input ng-model="user.login">
+                  <input ng-model="data.login">
                 </md-input-container>
 
                 <md-input-container>
                   <label>Email</label>
-                  <input ng-model="user.email" type="email">
+                  <input ng-model="data.email" type="email">
                 </md-input-container>
               </div>
 
               <md-input-container>
                 <label>Password</label>
-                <input ng-model="user.password">
+                <input ng-model="data.password">
               </md-input-container>
 
             </md-content>
@@ -41,12 +41,12 @@
                   <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
                       <label>User name</label>
-                      <input ng-model="user.name">
+                      <input ng-model="data.name">
                     </md-input-container>
 
                     <md-input-container>
                       <label>Enter date</label>
-                      <md-datepicker ng-model="user.dateAdd"></md-datepicker>
+                      <md-datepicker ng-model="data.dateAdd"></md-datepicker>
                     </md-input-container>
                   </div>
 
@@ -61,10 +61,10 @@
 
     <md-dialog-actions layout="row">
       <span flex></span>
-      <md-button ng-click="answer('true')">
+      <md-button ng-click="answer()">
        Apply
       </md-button>
-      <md-button ng-click="answer('false')">
+      <md-button ng-click="answer()">
       Cancel
       </md-button>
     </md-dialog-actions>

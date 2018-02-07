@@ -3,6 +3,12 @@
   var app = angular.module('XSCMS_ADMIN_DASHBOARD');
   app.controller('UserController', [ '$scope', '$translate', '$cookies', '$http', '$timeout','$mdDialog', function($scope, $translate, $cookies, $http, $timeout, $mdDialog ) {
 
+    var config = {
+     headers : {
+         'Content-Type': 'application/json;'
+     }
+    };
+
    $scope.selected = [];
    $scope.customFullscreen = false;
    $scope.query = {
@@ -22,7 +28,7 @@
 
       $scope.getUsers = function () {
 
-        $http.get('../admin/api/all-users-get')
+               $http.get('../admin/api/all-users-get')
                 .then(function(response) {
                   $scope.users.data  = response.data;
                   $scope.users.count = $scope.users.data.length;
@@ -33,6 +39,10 @@
                 .finally(function() {
                   console.log("finally finished gists");
                 });
+
+                $scope.promise = $timeout(function () {
+
+                }, 2000);
 
         //$scope.promise = $nutrition.desserts.get($scope.query, success).$promise;
       };
@@ -54,8 +64,18 @@
             clickOutsideToClose:true,
             fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
           })
-          .then(function(answer) {
-            $scope.status = 'You said the information was "' + answer + '".';
+          .then(function(data) {
+            $http.post('../admin/api/add-user', data, config)
+                      .then(function(response) {
+                            $scope.getUsers();
+                          })
+                          .catch(function(response) {
+                            console.error('Error add user ', response.status, response.data);
+                          })
+                          .finally(function() {
+                            console.log("finally finished add user");
+                          });
+          //  console.log(answer);
           }, function() {
             $scope.status = 'You cancelled the dialog.';
           });
@@ -63,6 +83,7 @@
 
 
         function DialogController($scope, $mdDialog) {
+          $scope.data={};
           $scope.hide = function() {
             $mdDialog.hide();
           };
@@ -71,15 +92,12 @@
             $mdDialog.cancel();
           };
 
-          $scope.answer = function(answer) {
-            $mdDialog.hide(answer);
+          $scope.answer = function() {
+            $mdDialog.hide($scope.data);
           };
         }
 
-      $scope.promise = $timeout(function () {
-         $scope.getUsers();
-      }, 2000);
-    //
+    $scope.getUsers();
 
   }]);
 

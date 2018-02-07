@@ -75,6 +75,17 @@ public class UserDaoImpl implements UserDAO {
 	}
 	
 	@Override
+	public boolean checkHasUser(String login, String email) {
+		logger.debug("checkHasUser");
+        Boolean result = false;
+		BasicQuery querycargo = new BasicQuery("{$or:[{login:'" + login + "'},{email:'" + email + "'}]}");
+		tmp = mongoOperation.findOne(querycargo, User.class);
+		
+		result = tmp!=null?true:false; 
+	    return result;
+	}
+	
+	@Override
 	public boolean checkHasUser(String login, String email, String neid) {
 		logger.debug("checkHasUser");
         Boolean result = false;
@@ -104,6 +115,8 @@ public class UserDaoImpl implements UserDAO {
 		tmp = mongoOperation.findOne(querycargo, User.class);
 		return Optional.of(tmp);
 	}
+	
+	
 
 	@Override
 	public Optional<User> findUserByID(String id) {

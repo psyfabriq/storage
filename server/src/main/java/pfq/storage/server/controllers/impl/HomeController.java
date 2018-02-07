@@ -22,16 +22,20 @@ public class HomeController {
 		CurrentUser cu = systemInfoService.getCurrentUser(request);
 		model.addAttribute("username", cu.getName());
 		model.addAttribute("useremail", cu.getEmail());
-
-		return "home";
+		
+	    if (cu.checkHasRole("ADMIN")) {
+	    	return "admin";
+	    }else {return "home";}
+		
 	}
-	
+	/*
 	@RequestMapping("/admin")
 	public String getAdminPage(HttpServletRequest request,Model model) {
 		CurrentUser cu = systemInfoService.getCurrentUser(request);
 		model.addAttribute("username", cu.getName());
 		model.addAttribute("useremail", cu.getEmail());
-		return "admin";
+		
 	}
+	*/
 }
 //https://github.com/StarterSquad/startersquad.com/tree/master/examples/angularjs-requirejs-2

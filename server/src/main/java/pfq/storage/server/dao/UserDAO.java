@@ -14,6 +14,7 @@ public interface UserDAO {
     boolean editUser(User user);
     boolean deleteUser(User user);
     boolean checkHasUser(String login);
+    boolean checkHasUser(String login,String email);
     boolean checkHasUser(String login,String email, String neid);
     boolean checkHasUserByID(String ID);
     Optional<User>  findUser(String login);
