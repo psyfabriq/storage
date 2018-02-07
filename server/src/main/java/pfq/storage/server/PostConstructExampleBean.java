@@ -11,6 +11,7 @@ import pfq.storage.server.dao.RoleDAO;
 import pfq.storage.server.dao.UserDAO;
 import pfq.storage.server.model.Role;
 import pfq.storage.server.model.User;
+import pfq.storage.server.model.exception.UserBuildException;
 
 @Component
 public class PostConstructExampleBean {
@@ -46,22 +47,30 @@ public class PostConstructExampleBean {
 			 Role r = new Role();
 			 r.setName(Role.Enum.ADMIN.toString());
 			 
-			 User au = User.newBuilder()
-					  .setLogin("Admin")
-					  .setName("Admin")
-					  .setEmail("admin@system.com")
-					  .setFoldercode(UUID.randomUUID().toString())
-					  .setPassword("Admin")
-					  .setUserRoles(ra)
-					  .setUserRoles(ru)
-					  .setIsActive(true)
-					  .build();	
-			 System.out.println(au.toString());
-			 userDao.addUser(au);
-			 ru.setUsers(au);
-			 ra.setUsers(au);
-			 roleDao.editRole(ra);
-			 roleDao.editRole(ru);
+			 User au;
+			try {
+				
+				au = User.newBuilder()
+						  .setLogin("Admin")
+						  .setName("Admin")
+						  .setEmail("admin@system.com")
+						  .setFoldercode(UUID.randomUUID().toString())
+						  .setPassword("Admin")
+						  .setUserRoles(ra)
+						  .setUserRoles(ru)
+						  .setIsActive(true)
+						  .build();
+				 System.out.println(au.toString());
+				 userDao.addUser(au);
+				 ru.setUsers(au);
+				 ra.setUsers(au);
+				 roleDao.editRole(ra);
+				 roleDao.editRole(ru);
+				 
+			} catch (UserBuildException e) {
+				e.printStackTrace();
+			}	
+			
 		}
     }
 }

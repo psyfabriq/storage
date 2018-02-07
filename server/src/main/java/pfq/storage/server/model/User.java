@@ -13,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import pfq.storage.server.model.exception.UserBuildException;
+
 
 @Document(collection = "user")
 @SuppressWarnings("serial")
@@ -159,7 +161,21 @@ public class User implements Serializable, Cloneable {
 		}
 		
 		
-		public User build() {
+		public User build() throws UserBuildException {
+			
+			if ("".equals(User.this.name)||User.this.name == null) {
+				throw new UserBuildException("Name is empty!");
+			}
+			if ("".equals(User.this.login)||User.this.login == null) {
+				throw new UserBuildException("Login is empty!");
+			}
+			if ("".equals(User.this.email)||User.this.email == null) {
+				throw new UserBuildException("Email is empty!");
+			}
+			if ("".equals(User.this.foldercode)||User.this.foldercode == null) {
+				throw new UserBuildException("Folder name is empty!");
+			}
+			
             return User.this;
         }
 	}

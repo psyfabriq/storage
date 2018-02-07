@@ -18,6 +18,7 @@ import pfq.storage.server.ResponseStatus;
 import pfq.storage.server.dao.RoleDAO;
 import pfq.storage.server.dao.UserDAO;
 import pfq.storage.server.model.User;
+import pfq.storage.server.model.exception.UserBuildException;
 import pfq.storage.server.service.UserService;
 
 @Service
@@ -35,15 +36,23 @@ public class UserServiceImpl implements UserService {
 	public String add(Map<String, Object> map) {
         logger.debug("add");
         if(!userDao.checkHasUser((String)map.get("login"),(String)map.get("email"))) {
-        User u = User.newBuilder().setLogin((String) map.get("login"))
-        		                  .setEmail((String) map.get("email"))
-        		                  .setName((String) map.get("name"))
-        		                  .setPassword((String) map.get("password"))
-        		                  .setFoldercode(UUID.randomUUID().toString())
-        		                  .setUserRoles(roleDao.findRole("USER").get())
-        		                  .setIsActive(false)
-        		                  .build();
-         return AppUtil.getResponseJson(userDao.addUser(u));
+        	
+       
+		try {
+			 User u = User.newBuilder().setLogin((String) map.get("login"))
+					                  .setEmail((String) map.get("email"))
+					                  .setName((String) map.get("name"))
+					                  .setPassword((String) map.get("password"))
+					                  .setFoldercode(UUID.randomUUID().toString())
+					                  .setUserRoles(roleDao.findRole("USER").get())
+					                  .setIsActive(false)
+					                  .build();
+			return AppUtil.getResponseJson(userDao.addUser(u));
+		} catch (UserBuildException e) {
+			return AppUtil.getResponseJson(e.toString(),ResponseStatus.ERROR);
+		}
+         
+         
         }else {
 			return AppUtil.getResponseJson("Has another user with login or email !!",ResponseStatus.ERROR);
 		}
@@ -53,7 +62,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String remove(Map<String, Object> map) {
         logger.debug("remove");
-		return  AppUtil.getResponseJson(userDao.deleteUser(userDao.findUser((String) map.get("login")).get()));
+        Optional<User> ou = userDao.findUser((String) map.get("login"),(String) map.get("email"));
+        if(ou.isPresent()) {
+        	return  AppUtil.getResponseJson(userDao.deleteUser(ou.get()));
+        }else {
+        	return AppUtil.getResponseJson("Not found User !!",ResponseStatus.ERROR);
+        }
+		
 	}
 	
 	@Override
@@ -62,12 +77,17 @@ public class UserServiceImpl implements UserService {
 		if(ou.isPresent()) {
 			
 		if(!userDao.checkHasUser((String)map.get("login"),(String)map.get("email"),(String)map.get("id"))) {
-			User u = ou.get().getBuilder()
-					.setLogin((String) map.get("login"))
-	                .setEmail((String) map.get("email"))
-	                .setName((String) map.get("name"))
-	                .setPassword((String) map.get("password"))
-	                .build();
+			User u;
+			try {
+				u = ou.get().getBuilder()
+						.setLogin((String) map.get("login"))
+				        .setEmail((String) map.get("email"))
+				        .setName((String) map.get("name"))
+				        .setPassword((String) map.get("password"))
+				        .build();
+			} catch (UserBuildException e) {
+				return AppUtil.getResponseJson(e.toString(),ResponseStatus.ERROR);
+			}
 			return AppUtil.getResponseJson(userDao.editUser(u));
 		}else {
 			return AppUtil.getResponseJson("Has another user with login or email !!",ResponseStatus.ERROR);

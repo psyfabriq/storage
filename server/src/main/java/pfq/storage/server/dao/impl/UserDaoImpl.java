@@ -113,7 +113,15 @@ public class UserDaoImpl implements UserDAO {
 		logger.debug("findUser");
 		BasicQuery querycargo = new BasicQuery("{$or:[{login:'" + login + "'},{email:'" + login + "'}]}");
 		tmp = mongoOperation.findOne(querycargo, User.class);
-		return Optional.of(tmp);
+		return Optional.ofNullable(tmp);
+	}
+	
+	@Override
+	public Optional<User> findUser(String login, String email) {
+		logger.debug("findUser");
+		BasicQuery querycargo = new BasicQuery("{$or:[{login:'" + login + "'},{email:'" + email + "'}]}");
+		tmp = mongoOperation.findOne(querycargo, User.class);
+		return Optional.ofNullable(tmp);
 	}
 	
 	
@@ -123,7 +131,7 @@ public class UserDaoImpl implements UserDAO {
 		logger.debug("findUserByID");
 		BasicQuery querycargo = new BasicQuery("{$or:[{_id:'" + id + "'}]}");
 		tmp = mongoOperation.findOne(querycargo, User.class);
-		return Optional.of(tmp);
+		return Optional.ofNullable(tmp);
 	}
 
 	/*

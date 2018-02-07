@@ -42,7 +42,6 @@ public class AdminRestApiController implements AdminRestApiControllerI {
         head.add("Content-type",MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
     }
 	
-    
     /*
      * @see /all-users-get GET No Parameters
      */
