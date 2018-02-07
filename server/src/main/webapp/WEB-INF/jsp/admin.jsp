@@ -30,6 +30,7 @@
 <link rel="stylesheet" href="../vendor/multiselect/css/multi-select.css"></link>
 <!-- <link rel="stylesheet" href="../css/angular-strap.css"></link> -->
 <link rel="stylesheet" href="../css/filemanager.css"></link>
+<link rel="stylesheet" href="../css/angular-material.css"></link>
 <link rel="stylesheet" href="../css/app.css"></link>
 
 
@@ -161,9 +162,9 @@
 						<li class="ms-hover"><a href="#!settings"><span
 								class="float-right nav-label"></span><span class="nav-icon"><em
 									class="ion-ios-gear-outline"></em></span><span>Settings</span></a></li>
-						<li class="ms-hover"><a href="#!create-user"><span
+						<li class="ms-hover"><a href="#!settings-user"><span
 								class="float-right nav-label"></span><span class="nav-icon"><em
-									class="ion-person-add"></em></span><span>Create user</span></a></li>
+									class="ion-person-add"></em></span><span>Settings user</span></a></li>
 					</ul>
 				</nav>
 			</div>

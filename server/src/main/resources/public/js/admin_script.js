@@ -1,11 +1,11 @@
 (function(angular) {
   'use strict';
 
-var app = angular.module('XSCMS_ADMIN_DASHBOARD',  [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ngAnimate', 'ngTable', 'angular-growl', 'pascalprecht.translate', 'mdr.file', 'mgcrea.ngStrap']);
+var app = angular.module('XSCMS_ADMIN_DASHBOARD',  [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ngAnimate', 'ngTable', 'angular-growl', 'pascalprecht.translate', 'mdr.file','ngMaterial', 'md.data.table']);
 
 app.config(function($interpolateProvider) {
-    $interpolateProvider.startSymbol('[[');
-    $interpolateProvider.endSymbol(']]');
+  //  $interpolateProvider.startSymbol('[[');
+  //  $interpolateProvider.endSymbol(']]');
 });
 
 app.factory('DoService', function ($http) {
@@ -75,8 +75,8 @@ app.config(function($routeProvider) {
 		})
 
 		// route for the contact page
-		.when('/create-user', {
-			templateUrl : '../template/create_user.html',
+		.when('/settings-user', {
+			templateUrl : '../template/settings_user.html',
 			controller : 'UserController'
 		});
 	});

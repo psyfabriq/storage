@@ -1,0 +1,65 @@
+<div class="card mb-3" id="cardDemo14">
+                  <div class="card-header">Users settings</div>
+                  <div class="card-body h-scroll">
+                    <md-toolbar class="md-table-toolbar md-default">
+                        <div class="md-toolbar-tools">
+                          <span>List users</span>
+                          <div flex="" class="flex"></div>
+                          <button class="md-icon-button md-button md-ink-ripple btn btn-outline-success text-md" ng-click="addUser($event)"  >
+                            <i class="ion-plus"></i>
+                          </button>
+                        </div>
+                      </md-toolbar>
+
+                      <md-toolbar class="md-table-toolbar alternate" ng-show=" selected.length">
+                        <div class="md-toolbar-tools">
+
+
+                          <span>{{selected.length}} {{selected.length > 1 ? 'items' : 'item'}} selected</span>
+                          <span flex="" class="flex"></span>
+                          <button class="md-icon-button md-button md-ink-ripple btn btn-outline-success text-md" ng-click="editUser()"  >
+                            <i class="ion-edit"></i>
+                          </button>
+            							<button class="md-icon-button md-button md-ink-ripple btn btn-outline-warning text-md" ng-click="offUsers()"  >
+            								<i class="ion-ios-pause"></i>
+            							</button>
+            							<button class=" md-icon-button md-button md-ink-ripple btn btn-outline-danger text-md" ng-click="deleteUsers()" >
+            								<i class="ion-trash-a"></i>
+            							</button>
+
+                        </div>
+                      </md-toolbar>
+
+                      <!-- exact table from live demo -->
+                      <md-table-container>
+                        <table md-table md-row-select multiple ng-model="selected" md-progress="promise">
+                          <thead md-head md-order="query.order" md-on-reorder="getUsers">
+                            <tr md-row>
+                              <th md-column md-order-by="nameToLower"><span>Name</span></th>
+                              <th md-column md-order-by="calories.value"><span>Login</span></th>
+                              <th md-column >Folder</th>
+                              <th md-column >Email</th>
+                              <th md-column >Roles</th>
+                            </tr>
+                          </thead>
+                          <tbody md-body>
+                            <tr md-row md-select="user" md-select-id="name" md-auto-select ng-repeat="user in users.data">
+                              <td md-cell>{{user.name}}</td>
+                              <td md-cell>{{user.login}}</td>
+                              <td md-cell>{{user.foldercode}}</td>
+                              <td md-cell>{{user.email}}</td>
+                              <td md-cell><md-chips ng-model="user.userRoles" md-max-chips="3" readonly="true" md-removable="false" >
+
+                                <md-chip-template>
+                                  <strong>{{$chip.name}}</strong>
+                                </md-chip-template>
+
+                              </md-chips> </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </md-table-container>
+
+                      <md-table-pagination md-limit="query.limit" md-limit-options="[5, 10, 15]" md-page="query.page" md-total="{{users.count}}" md-on-paginate="getUsers" md-page-select></md-table-pagination>
+                  </div>
+                </div>
