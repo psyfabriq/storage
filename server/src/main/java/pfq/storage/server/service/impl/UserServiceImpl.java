@@ -40,6 +40,7 @@ public class UserServiceImpl implements UserService {
         		                  .setPassword((String) map.get("password"))
         		                  .setFoldercode(UUID.randomUUID().toString())
         		                  .setUserRoles(roleDao.findRole("USER").get())
+        		                  .setIsActive(false)
         		                  .build();
 		return AppUtil.getResponseJson(userDao.addUser(u));
 	}
@@ -52,14 +53,24 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public String edit(Map<String, Object> map) {
-		User u = userDao.findUserByID((String) map.get("id")).get().getBuilder()
-				.setLogin((String) map.get("login"))
-                .setEmail((String) map.get("email"))
-                .setName((String) map.get("name"))
-                .setPassword((String) map.get("password"))
-                .build();
-		
-		return AppUtil.getResponseJson(userDao.editUser(u));
+		Optional<User> ou = userDao.findUserByID((String) map.get("id"));
+		if(ou.isPresent()) {
+			
+		if(!userDao.checkHasUser((String)map.get("login"),(String)map.get("email"),(String)map.get("id"))) {
+			User u = ou.get().getBuilder()
+					.setLogin((String) map.get("login"))
+	                .setEmail((String) map.get("email"))
+	                .setName((String) map.get("name"))
+	                .setPassword((String) map.get("password"))
+	                .build();
+			return AppUtil.getResponseJson(userDao.editUser(u));
+		}else {
+			return AppUtil.getResponseJson("Has another user with login or email !!",ResponseStatus.ERROR);
+		}
+
+		}else {
+			return AppUtil.getResponseJson("Not found User !!",ResponseStatus.ERROR);
+		}
 	}
 
 	@Override

@@ -27,6 +27,7 @@ public class User implements Serializable, Cloneable {
 	//private 
 	@JsonIgnore
 	private String passwordHash;
+	private boolean isActive;
 	private Date   dateAdd;
 	
 	@DBRef(lazy = true)
@@ -86,7 +87,11 @@ public class User implements Serializable, Cloneable {
 		return passwordHash;
 	}
 	
-    public static Builder newBuilder() {
+    public boolean isActive() {
+		return isActive;
+	}
+
+	public static Builder newBuilder() {
         return new User().new Builder();
     }
     
@@ -106,22 +111,28 @@ public class User implements Serializable, Cloneable {
 		}
 	    
 		public Builder setPassword(String password) {
-			User.this.passwordHash = new BCryptPasswordEncoder().encode(password);
+			if(password!=null) {
+			     User.this.passwordHash = new BCryptPasswordEncoder().encode(password);
+			}
 			return this;
 		}
 		
 		public Builder setEmail(String email) {
+			if(email!=null) {
 			User.this.email = email;
+			}
 			return this;
 		}
 		
 		public Builder setUserRoles(Role role) {
-			User.this.userRoles.add(role);
+			   User.this.userRoles.add(role);
 			return this;
 		}
 		
 		public Builder setLogin(String login) {
-			User.this.login = login;
+			if(login!=null) {
+			   User.this.login = login;
+			}
 			return this;
 		}
 		
@@ -131,12 +142,19 @@ public class User implements Serializable, Cloneable {
 		}
 		
 		public Builder setName(String name) {
+			if(name!=null) {
 			User.this.name = name;
+			}
 			return this;
 		}
 		
 		public Builder setFoldercode(String foldercode) {
 			User.this.foldercode = foldercode;
+			return this;
+		}
+		
+		public Builder setIsActive(boolean isActive) {
+			User.this.isActive = isActive;
 			return this;
 		}
 		

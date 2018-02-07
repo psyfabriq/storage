@@ -54,6 +54,7 @@ public class PostConstructExampleBean {
 					  .setPassword("Admin")
 					  .setUserRoles(ra)
 					  .setUserRoles(ru)
+					  .setIsActive(true)
 					  .build();	
 			 System.out.println(au.toString());
 			 userDao.addUser(au);

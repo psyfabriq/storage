@@ -14,13 +14,14 @@ public interface UserDAO {
     boolean editUser(User user);
     boolean deleteUser(User user);
     boolean checkHasUser(String login);
+    boolean checkHasUser(String login,String email, String neid);
     boolean checkHasUserByID(String ID);
     Optional<User>  findUser(String login);
     Optional<User>  findUserByID(String id);
-    Optional<User>  findUserByEmail (String email);
-    Optional<User>  findUserByQueryOne(String query);
-    List<User> findUserByQueryList(String query);
-    List<User> findUserByQueryList(Query query);
+    //Optional<User>  findUserByEmail (String email);
+    //Optional<User>  findUserByQueryOne(String query);
+    //List<User> findUserByQueryList(String query);
+    //List<User> findUserByQueryList(Query query);
     List<Role> getListRole(String login);
     List<Role> getListRoleByID(String id);
     List<User> getAllUser();

@@ -23,7 +23,7 @@ public class SystemInfoServiceImpl implements SystemInfoService{
 	@Override
 	public CurrentUser getCurrentUser(HttpServletRequest request) {
 		this.principal = request.getUserPrincipal();
-		return new CurrentUser(userDao.findUserByEmail(principal.getName()).get());
+		return new CurrentUser(userDao.findUser(principal.getName()).get());
 	}
 
 }

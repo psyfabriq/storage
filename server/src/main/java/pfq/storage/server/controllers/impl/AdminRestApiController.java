@@ -55,7 +55,7 @@ public class AdminRestApiController implements AdminRestApiControllerI {
      * @see /add-user POST {"login":"######","email":"#####","name":"######","password":"#####"}
      */
 	@Override
-	public ResponseEntity<String> addUser(String json, HttpServletResponse response) {
+	public ResponseEntity<String> addUser(@RequestBody String json, HttpServletResponse response) {
 		
 		System.out.println("addUser");
 		map = AppUtil.getValues(json);
@@ -66,16 +66,16 @@ public class AdminRestApiController implements AdminRestApiControllerI {
     * @see /rm-user POST {"login":"######","email":"#####"}
     */
 	@Override
-	public ResponseEntity<String> removeUser(String json, HttpServletResponse response) {
+	public ResponseEntity<String> removeUser(@RequestBody String json, HttpServletResponse response) {
 		map = AppUtil.getValues(json);
 		return new ResponseEntity<String>(userService.remove(map), head,HttpStatus.OK);
 	}
 
     /*
-    * @see /edit-user POST {"login":"######","email":"#####","name":"######","password":"#####","old_password":"#####"}
+    * @see /edit-user POST {"login":"######","email":"#####","name":"######","password":"#####","old_email:"#####", "old_password":"#####", "old_login":"#####", "old_name":"#####"}
     */
 	@Override
-	public ResponseEntity<String> editUser(String json, HttpServletResponse response) {
+	public ResponseEntity<String> editUser(@RequestBody String json, HttpServletResponse response) {
 		map = AppUtil.getValues(json);
 		return new ResponseEntity<String>(userService.edit(map), head,HttpStatus.OK);
 	}

@@ -44,17 +44,8 @@ public class UserDaoImpl implements UserDAO {
 	@Override
 	public boolean editUser(User user) {
 		logger.debug("editUser");
-		boolean result = false;
-
-		BasicQuery querycargo = new BasicQuery(
-				"{$or:[{_id:'" + user.getId() + "'}," + "{login:'" + user.getLogin() + "'}]}");
-
-		tmp = mongoOperation.findOne(querycargo, User.class);
-		if (tmp != null) {
-			result = true;
-		}
-
-		return result;
+		mongoOperation.save(user);
+		return true;
 	}
 
 	@Override
@@ -76,8 +67,18 @@ public class UserDaoImpl implements UserDAO {
 	public boolean checkHasUser(String login) {
 		logger.debug("checkHasUser");
         Boolean result = false;
-		BasicQuery querycargo = new BasicQuery(
-				"{$or:[{login:'" + login + "'}]}");
+		BasicQuery querycargo = new BasicQuery("{$or:[{login:'" + login + "'},{email:'" + login + "'}]}");
+		tmp = mongoOperation.findOne(querycargo, User.class);
+		
+		result = tmp!=null?true:false; 
+	    return result;
+	}
+	
+	@Override
+	public boolean checkHasUser(String login, String email, String neid) {
+		logger.debug("checkHasUser");
+        Boolean result = false;
+		BasicQuery querycargo = new BasicQuery("{$or:[{login:'" + login + "'},{email:'" + email + "'}],_id:{'$ne': '"+neid+"'}}");
 		tmp = mongoOperation.findOne(querycargo, User.class);
 		
 		result = tmp!=null?true:false; 
@@ -99,10 +100,9 @@ public class UserDaoImpl implements UserDAO {
 	@Override
 	public Optional<User> findUser(String login) {
 		logger.debug("findUser");
-
-		BasicQuery querycargo = new BasicQuery("{$or:[{login:'" + login + "'}]}");
+		BasicQuery querycargo = new BasicQuery("{$or:[{login:'" + login + "'},{email:'" + login + "'}]}");
 		tmp = mongoOperation.findOne(querycargo, User.class);
-		return Optional.ofNullable(tmp);
+		return Optional.of(tmp);
 	}
 
 	@Override
@@ -113,6 +113,7 @@ public class UserDaoImpl implements UserDAO {
 		return Optional.of(tmp);
 	}
 
+	/*
 	@Override
 	public Optional<User> findUserByQueryOne(String query) {
 		logger.debug("findUserByQueryOne");
@@ -135,7 +136,7 @@ public class UserDaoImpl implements UserDAO {
 		List<User> ltmp = mongoOperation.find(query, User.class);
 		return ltmp;
 	}
-
+*/
 	@Override
 	public List<Role> getListRole(String login) {
 		logger.debug("getListRole");
@@ -154,6 +155,7 @@ public class UserDaoImpl implements UserDAO {
 		return mongoOperation.findAll(User.class);
 	}
 
+	/*
 	@Override
 	public Optional<User> findUserByEmail(String email) {
 		
@@ -161,5 +163,6 @@ public class UserDaoImpl implements UserDAO {
 		tmp = mongoOperation.findOne(querycargo, User.class);
 		return Optional.of(tmp);
 	}
+	*/
 
 }
