@@ -43,18 +43,13 @@
                       <label>User name</label>
                       <input ng-model="data.name">
                     </md-input-container>
-
-                    <md-input-container>
-                      <label>Enter date</label>
-                      <md-datepicker ng-model="data.dateAdd"></md-datepicker>
-                    </md-input-container>
                   </div>
-
-
+                  <div layout-gt-xs="row">
+                        <lf-ng-md-file-input lf-files="data.files"   accept="image/*" progress lf-remove-label="Trash" lf-browse-label="Browse..." ></lf-ng-md-file-input>
+                  </div>
                 </form>
               </div>
             </md-content>
-
           </div>
 
       </md-dialog-content>

@@ -27,21 +27,18 @@
       }
 
       $scope.getUsers = function () {
-
-               $http.get('../admin/api/all-users-get')
-                .then(function(response) {
-                  $scope.users.data  = response.data;
-                  $scope.users.count = $scope.users.data.length;
-                })
-                .catch(function(response) {
-                  console.error('Gists error', response.status, response.data);
-                })
-                .finally(function() {
-                  console.log("finally finished gists");
-                });
-
                 $scope.promise = $timeout(function () {
-
+                  $http.get('../admin/api/all-users-get')
+                   .then(function(response) {
+                     $scope.users.data  = response.data;
+                     $scope.users.count = $scope.users.data.length;
+                   })
+                   .catch(function(response) {
+                     console.error('Gists error', response.status, response.data);
+                   })
+                   .finally(function() {
+                     console.log("finally finished gists");
+                   });
                 }, 2000);
 
         //$scope.promise = $nutrition.desserts.get($scope.query, success).$promise;
@@ -52,7 +49,19 @@
       };
 
       $scope.deleteUsers = function () {
+        angular.forEach($scope.selected, function(item, index) {
+          $http.post('../admin/api/rm-user', item, config)
+                    .then(function(response) {
 
+                        })
+                        .catch(function(response) {
+                          console.error('Server error ', response.status, response.data);
+                        })
+                        .finally(function() {
+                          console.log("finally finished rm user");
+                        });
+        });
+          $scope.getUsers();
       };
 
       $scope.addUser = function(ev) {
@@ -70,7 +79,7 @@
                             $scope.getUsers();
                           })
                           .catch(function(response) {
-                            console.error('Error add user ', response.status, response.data);
+                            console.error('Server error ', response.status, response.data);
                           })
                           .finally(function() {
                             console.log("finally finished add user");

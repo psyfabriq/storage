@@ -1,5 +1,6 @@
 package pfq.storage.server;
 
+import java.util.Date;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
@@ -59,6 +60,7 @@ public class PostConstructExampleBean {
 						  .setUserRoles(ra)
 						  .setUserRoles(ru)
 						  .setIsActive(true)
+						  .setIsAdministrative(true)
 						  .build();
 				 System.out.println(au.toString());
 				 userDao.addUser(au);

@@ -17,7 +17,7 @@
 
                           <span>{{selected.length}} {{selected.length > 1 ? 'items' : 'item'}} selected</span>
                           <span flex="" class="flex"></span>
-                          <button class="md-icon-button md-button md-ink-ripple btn btn-outline-success text-md" ng-click="editUser()"  >
+                          <button class="md-icon-button md-button md-ink-ripple btn btn-outline-success text-md" ng-click="editUser()" ng-show="selected.length == 1" >
                             <i class="ion-edit"></i>
                           </button>
             							<button class="md-icon-button md-button md-ink-ripple btn btn-outline-warning text-md" ng-click="offUsers()"  >

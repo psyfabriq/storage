@@ -30,6 +30,7 @@ public class User implements Serializable, Cloneable {
 	@JsonIgnore
 	private String passwordHash;
 	private boolean isActive;
+	private boolean isAdministrative;
 	private Date   dateAdd;
 	
 	@DBRef(lazy = true)
@@ -44,6 +45,7 @@ public class User implements Serializable, Cloneable {
 
 	private User() {
 		this.userRoles = new ArrayList<Role>();
+		this.dateAdd   = new Date();
 	}
 	
 	
@@ -72,6 +74,10 @@ public class User implements Serializable, Cloneable {
 		return userRoles;
 	}
 	
+	public boolean isAdministrative() {
+		return isAdministrative;
+	}
+
 	@JsonIgnore
 	public String[] getUserRolesArray() {
 		List<String> l = new ArrayList<String>();
@@ -137,12 +143,12 @@ public class User implements Serializable, Cloneable {
 			}
 			return this;
 		}
-		
-		public Builder setDateAdd(Date dateAdd) {
-			User.this.dateAdd = dateAdd;
+		/*
+		public Builder setDateAdd() {
+			User.this.dateAdd = new Date();
 			return this;
 		}
-		
+		*/
 		public Builder setName(String name) {
 			if(name!=null) {
 			User.this.name = name;
@@ -157,6 +163,11 @@ public class User implements Serializable, Cloneable {
 		
 		public Builder setIsActive(boolean isActive) {
 			User.this.isActive = isActive;
+			return this;
+		}
+		
+		public Builder setIsAdministrative(boolean isAdm) {
+			User.this.isAdministrative = isAdm;
 			return this;
 		}
 		

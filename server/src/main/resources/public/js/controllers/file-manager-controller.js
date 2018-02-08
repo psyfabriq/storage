@@ -4,8 +4,8 @@
 
 var app = angular.module('XSCMS_ADMIN_DASHBOARD');
 
-app.controller('FileManagerCtrl', [ '$scope', '$translate', '$cookies', '$config', 'item', 'fileNavigator', 'fileUploader', '$modal','$popover',
-    function($scope, $translate, $cookies, $config, Item, FileNavigator, FileUploader , $modal, $popover) {
+app.controller('FileManagerCtrl', [ '$scope', '$translate', '$cookies', '$config', 'item', 'fileNavigator', 'fileUploader', '$mdDialog',
+    function($scope, $translate, $cookies, $config, Item, FileNavigator, FileUploader , $mdDialog) {
 
     $scope.appName = $config.appName;
     $scope.orderProp = ['model.type', 'model.name'];
@@ -24,10 +24,10 @@ app.controller('FileManagerCtrl', [ '$scope', '$translate', '$cookies', '$config
     $scope.photo={};
 
 
-    var TokenModal = {};
-    var ContextPopover = null;
+    //var TokenModal = {};
+    //var ContextPopover = null;
    // var myPopover = $popover(element, {title: 'My Title', content: 'My Content', trigger: 'manual'});
-
+/*
    $scope.modal = {
       "title": "Title",
       "content": "Hello Modal<br />This is a multiline message!",
@@ -35,7 +35,7 @@ app.controller('FileManagerCtrl', [ '$scope', '$translate', '$cookies', '$config
       "keyboard": false
     };
 
-
+*/
     $scope.setTemplate = function(name) {
         console.log(name);
         $scope.viewTemplate = $cookies.viewTemplate = name;
@@ -58,6 +58,7 @@ app.controller('FileManagerCtrl', [ '$scope', '$translate', '$cookies', '$config
     };
 
     $scope.initModal=function(tpl,item){
+      /*
        // console.log(item);
         if (ContextPopover) {
            ContextPopover.hide();
@@ -66,7 +67,7 @@ app.controller('FileManagerCtrl', [ '$scope', '$translate', '$cookies', '$config
         if(TokenModal.$isShown===true){
             TokenModal.$promise.then(TokenModal.hide);
         }
-
+*/
         switch (tpl) {
            case 'mdelete':
                $scope.ModalTpl   ="/modal-delete.html";
@@ -104,11 +105,12 @@ app.controller('FileManagerCtrl', [ '$scope', '$translate', '$cookies', '$config
         }
 
         $scope.touch(item);
-        TokenModal = $modal({scope: $scope, template: $scope.ModalTpl, placement:'center',backdrop:false,show:false,keyboard:false,animation:'am-fade'});
-
+      //  TokenModal = $modal({scope: $scope, template: $scope.ModalTpl, placement:'center',backdrop:false,show:false,keyboard:false,animation:'am-fade'});
+/*
         if(TokenModal.$isShown===false){
             TokenModal.$promise.then(TokenModal.show);
         }
+        */
     };
 
 
@@ -124,13 +126,14 @@ app.controller('FileManagerCtrl', [ '$scope', '$translate', '$cookies', '$config
        else {
           element= angular.element($event.target).parent();
        }
-
+       /*
         if (ContextPopover) {
            ContextPopover.hide();
         }
+        */
         $scope.touch(item);
-        ContextPopover = $popover(element, {title: '', placement:'bottom', contentTemplate:'/item-context-menu.html', html: true, trigger: 'manual', scope:$scope});
-        ContextPopover.$promise.then(ContextPopover.show);
+        //ContextPopover = $popover(element, {title: '', placement:'bottom', contentTemplate:'/item-context-menu.html', html: true, trigger: 'manual', scope:$scope});
+        //ContextPopover.$promise.then(ContextPopover.show);
 
     };
 
@@ -154,13 +157,13 @@ app.controller('FileManagerCtrl', [ '$scope', '$translate', '$cookies', '$config
 
     $scope.edit = function(item) {
         item.edit(function() {
-            TokenModal.hide();
+          //  TokenModal.hide();
         });
     };
 
     $scope.changePermissions = function(item) {
         item.changePermissions(function() {
-            TokenModal.hide();
+          //  TokenModal.hide();
         });
     };
 
@@ -172,7 +175,7 @@ app.controller('FileManagerCtrl', [ '$scope', '$translate', '$cookies', '$config
         }
         item.copy(function() {
             $scope.fileNavigator.refresh();
-            TokenModal.hide();
+            //TokenModal.hide();
         });
     };
 
@@ -197,7 +200,7 @@ app.controller('FileManagerCtrl', [ '$scope', '$translate', '$cookies', '$config
     $scope.remove = function(item) {
         item.remove(function() {
             $scope.fileNavigator.refresh();
-            TokenModal.hide();
+          //  TokenModal.hide();
         });
     };
 
@@ -211,7 +214,7 @@ app.controller('FileManagerCtrl', [ '$scope', '$translate', '$cookies', '$config
         }
         item.rename(function() {
             $scope.fileNavigator.refresh();
-            TokenModal.hide();
+            //TokenModal.hide();
         });
 
     };
@@ -223,7 +226,7 @@ app.controller('FileManagerCtrl', [ '$scope', '$translate', '$cookies', '$config
         if (name && !$scope.fileNavigator.fileNameExists(name)) {
             item.createFolder(function() {
                 $scope.fileNavigator.refresh();
-                TokenModal.hide();
+              //  TokenModal.hide();
             });
         } else {
             $scope.temp.error = $translate.instant('error_invalid_filename');
@@ -235,7 +238,7 @@ app.controller('FileManagerCtrl', [ '$scope', '$translate', '$cookies', '$config
         $scope.fileUploader.upload($scope.uploadFileList,
             $scope.fileNavigator.currentPath, function() {
             $scope.fileNavigator.refresh();
-            TokenModal.hide();
+            //TokenModal.hide();
             $scope.uploadFileList=[];
         });
     };
@@ -420,7 +423,7 @@ app.service('fileNavigator', ['$http', '$config', 'item', function ($http, $conf
     return FileNavigator;
 }]);
 
-app.service('fileUploader', ['$http', '$config','DoService', function ($http, $config, DoService) {
+app.service('fileUploader', ['$http', '$config', function ($http, $config) {
     var self = this;
 
     self.requesting = false;

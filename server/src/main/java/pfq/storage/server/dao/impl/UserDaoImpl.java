@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.BasicQuery;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import pfq.storage.server.AppUtil;
@@ -16,6 +15,7 @@ import pfq.storage.server.PFQloger;
 import pfq.storage.server.dao.UserDAO;
 import pfq.storage.server.model.Role;
 import pfq.storage.server.model.User;
+import pfq.storage.server.service.impl.QBuilder;
 
 @Repository
 public class UserDaoImpl implements UserDAO {
@@ -26,7 +26,9 @@ public class UserDaoImpl implements UserDAO {
 
 	@Autowired
 	MongoOperations mongoOperation;
-
+	
+	@Autowired
+	QBuilder qb;
 
 
 	@Override
@@ -52,8 +54,15 @@ public class UserDaoImpl implements UserDAO {
 	public boolean deleteUser(User user) {
 		logger.debug("deleteUser");
 		boolean result = false;
-		BasicQuery querycargo = new BasicQuery(
-				"{$or:[{_id:'" + user.getId() + "'}," + "{login:'" + user.getLogin() + "'}]}");
+		
+		String query = qb.getBuilder()
+		  .append("{$or:[{_id:'")
+		  .append(user.getId())
+		  .append("'},{login:")
+		  .append(QBuilder.LowerCase(user.getLogin()))
+		  .append("}]}").build();
+
+		BasicQuery querycargo = new BasicQuery(query);
 		tmp = mongoOperation.findOne(querycargo, User.class);
 		if (tmp != null) {
 			result = true;
@@ -67,9 +76,15 @@ public class UserDaoImpl implements UserDAO {
 	public boolean checkHasUser(String login) {
 		logger.debug("checkHasUser");
         Boolean result = false;
-		BasicQuery querycargo = new BasicQuery("{$or:[{login:'" + login + "'},{email:'" + login + "'}]}");
-		tmp = mongoOperation.findOne(querycargo, User.class);
+		String query = qb.getBuilder()
+				  .append("{$or:[{login:")
+				  .append(QBuilder.LowerCase(login))
+				  .append("},{email:")
+				  .append(QBuilder.LowerCase(login))
+				  .append("}]}").build();
 		
+		BasicQuery querycargo = new BasicQuery(query);
+		tmp = mongoOperation.findOne(querycargo, User.class);
 		result = tmp!=null?true:false; 
 	    return result;
 	}
@@ -78,9 +93,14 @@ public class UserDaoImpl implements UserDAO {
 	public boolean checkHasUser(String login, String email) {
 		logger.debug("checkHasUser");
         Boolean result = false;
-		BasicQuery querycargo = new BasicQuery("{$or:[{login:'" + login + "'},{email:'" + email + "'}]}");
+		String query = qb.getBuilder()
+				  .append("{$or:[{login:")
+				  .append(QBuilder.LowerCase(login))
+				  .append("},{email:")
+				  .append(QBuilder.LowerCase(email))
+				  .append("}]}").build();
+		BasicQuery querycargo = new BasicQuery(query);
 		tmp = mongoOperation.findOne(querycargo, User.class);
-		
 		result = tmp!=null?true:false; 
 	    return result;
 	}
@@ -89,19 +109,30 @@ public class UserDaoImpl implements UserDAO {
 	public boolean checkHasUser(String login, String email, String neid) {
 		logger.debug("checkHasUser");
         Boolean result = false;
-		BasicQuery querycargo = new BasicQuery("{$or:[{login:'" + login + "'},{email:'" + email + "'}],_id:{'$ne': '"+neid+"'}}");
+		String query = qb.getBuilder()
+				  .append("{$or:[{login:")
+				  .append(QBuilder.LowerCase(login))
+				  .append("},{email:")
+				  .append(QBuilder.LowerCase(email))
+				  .append("}],_id:")
+				  .append(QBuilder.Besides(neid))
+				  .append("}")
+				  .build();
+		BasicQuery querycargo = new BasicQuery(query);
 		tmp = mongoOperation.findOne(querycargo, User.class);
-		
 		result = tmp!=null?true:false; 
 	    return result;
-	}
+	} 
 
 	@Override
 	public boolean checkHasUserByID(String ID) {
 		logger.debug("checkHasUserByID");
         Boolean result = false;
-		BasicQuery querycargo = new BasicQuery(
-				"{$or:[{_id:'" + ID + "'}]}");
+        String query = qb.getBuilder()
+				  .append("{$or:[{_id:'")
+				  .append(ID)
+				  .append("'}]}").build();
+		BasicQuery querycargo = new BasicQuery(query);
 		tmp = mongoOperation.findOne(querycargo, User.class);
 		
 		result = tmp!=null?true:false; 
@@ -111,7 +142,13 @@ public class UserDaoImpl implements UserDAO {
 	@Override
 	public Optional<User> findUser(String login) {
 		logger.debug("findUser");
-		BasicQuery querycargo = new BasicQuery("{$or:[{login:'" + login + "'},{email:'" + login + "'}]}");
+		String query = qb.getBuilder()
+				  .append("{$or:[{login:")
+				  .append(QBuilder.LowerCase(login))
+				  .append("},{email:")
+				  .append(QBuilder.LowerCase(login))
+				  .append("}]}").build();
+		BasicQuery querycargo = new BasicQuery(query);
 		tmp = mongoOperation.findOne(querycargo, User.class);
 		return Optional.ofNullable(tmp);
 	}
@@ -119,7 +156,13 @@ public class UserDaoImpl implements UserDAO {
 	@Override
 	public Optional<User> findUser(String login, String email) {
 		logger.debug("findUser");
-		BasicQuery querycargo = new BasicQuery("{$or:[{login:'" + login + "'},{email:'" + email + "'}]}");
+		String query = qb.getBuilder()
+				  .append("{$or:[{login:")
+				  .append(QBuilder.LowerCase(login))
+				  .append("},{email:")
+				  .append(QBuilder.LowerCase(email))
+				  .append("}]}").build();
+		BasicQuery querycargo = new BasicQuery(query);
 		tmp = mongoOperation.findOne(querycargo, User.class);
 		return Optional.ofNullable(tmp);
 	}
@@ -129,7 +172,11 @@ public class UserDaoImpl implements UserDAO {
 	@Override
 	public Optional<User> findUserByID(String id) {
 		logger.debug("findUserByID");
-		BasicQuery querycargo = new BasicQuery("{$or:[{_id:'" + id + "'}]}");
+        String query = qb.getBuilder()
+				  .append("{$or:[{_id:'")
+				  .append(QBuilder.LowerCase(id))
+				  .append("'}]}").build();
+		BasicQuery querycargo = new BasicQuery(query);
 		tmp = mongoOperation.findOne(querycargo, User.class);
 		return Optional.ofNullable(tmp);
 	}
