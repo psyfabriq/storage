@@ -10,6 +10,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import pfq.storage.server.AppUtil;
@@ -22,15 +24,20 @@ import pfq.storage.server.model.exception.UserBuildException;
 import pfq.storage.server.service.UserService;
 
 @Service
+@PropertySource(value = "classpath:application.properties")
 public class UserServiceImpl implements UserService {
 	
     private Logger logger = PFQloger.getLogger(UserService.class, Level.ALL);
 	
 	@Autowired
-    UserDAO userDao;
+    private UserDAO userDao;
 	
 	@Autowired
-    RoleDAO roleDao;
+    private RoleDAO roleDao;
+	
+	  
+	@Value("${pfq.paths.uploadedFiles}")
+	private String uploadFolder;
 
 	@Override
 	public String add(Map<String, Object> map) {

@@ -1,11 +1,14 @@
 package pfq.storage.server;
 
+import java.io.File;
 import java.util.Date;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import pfq.storage.server.dao.RoleDAO;
@@ -15,6 +18,7 @@ import pfq.storage.server.model.User;
 import pfq.storage.server.model.exception.UserBuildException;
 
 @Component
+@PropertySource(value = "classpath:application.properties")
 public class PostConstructExampleBean {
  
     @Autowired
@@ -22,6 +26,9 @@ public class PostConstructExampleBean {
     
     @Autowired
     private RoleDAO roleDao;
+    
+	@Value("${pfq.paths.uploadedFiles}")
+	private String uploadFolder;
  
     @PostConstruct
     public void init() {
@@ -29,6 +36,19 @@ public class PostConstructExampleBean {
     	Role ru;
     	Role ra;
     	
+    	File theDir = new File(uploadFolder);
+
+    	if (!theDir.exists()) {
+    	    System.out.println("creating directory: " + theDir.getName());
+    	    try{
+    	        theDir.mkdir();
+    	        System.out.println("DIR created");
+    	    } 
+    	    catch(SecurityException se){
+    	    	System.out.println(se.toString());
+    	    }        
+
+    	}
     	
     	if(!roleDao.checkHasRole(Role.Enum.USER.toString())) {
     		ru = new Role();

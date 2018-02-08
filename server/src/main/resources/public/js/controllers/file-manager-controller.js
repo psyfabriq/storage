@@ -220,6 +220,7 @@ app.controller('FileManagerCtrl', [ '$scope', '$translate', '$cookies', '$config
     };
 
     $scope.createFolder = function(item) {
+      console.log("createFolder");
         name = item.tempModel.name && item.tempModel.name.trim();
         item.tempModel.type = 'dir';
         item.tempModel.path = $scope.fileNavigator.currentPath;
@@ -309,8 +310,6 @@ app.service('fileNavigator', ['$http', '$config', 'item', function ($http, $conf
         var self = this;
         var path = self.currentPath.join('/');
         var data = {
-            who: $config.who,
-            what:"listdirectory",
             mode: "list",
             onlyFolders: false,
             path: '/' + path
