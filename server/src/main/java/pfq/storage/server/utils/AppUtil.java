@@ -1,4 +1,4 @@
-package pfq.storage.server;
+package pfq.storage.server.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

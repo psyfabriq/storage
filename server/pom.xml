@@ -70,7 +70,13 @@
 			<version>1.16.20</version>
 			<scope>provided</scope>
 		</dependency>
-
+        
+        		<!-- Apache Commons Configuration -->
+		<dependency>
+			<groupId>commons-configuration</groupId>
+			<artifactId>commons-configuration</artifactId>
+			<version>1.10</version>
+		</dependency>
 
 
 

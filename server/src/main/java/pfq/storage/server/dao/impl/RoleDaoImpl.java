@@ -11,11 +11,11 @@ import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-import pfq.storage.server.AppUtil;
-import pfq.storage.server.PFQloger;
 import pfq.storage.server.dao.RoleDAO;
 import pfq.storage.server.model.Role;
 import pfq.storage.server.model.User;
+import pfq.storage.server.utils.AppUtil;
+import pfq.storage.server.utils.PFQloger;
 
 @Repository
 public class RoleDaoImpl implements RoleDAO {

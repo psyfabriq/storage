@@ -1,7 +1,8 @@
 package pfq.storage.server;
 
-import java.io.File;
-import java.util.Date;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
@@ -16,6 +17,8 @@ import pfq.storage.server.dao.UserDAO;
 import pfq.storage.server.model.Role;
 import pfq.storage.server.model.User;
 import pfq.storage.server.model.exception.UserBuildException;
+import pfq.storage.server.utils.ApplicationProperties;
+import pfq.storage.server.utils.OSValidator;
 
 @Component
 @PropertySource(value = "classpath:application.properties")
@@ -29,26 +32,17 @@ public class PostConstructExampleBean {
     
 	@Value("${pfq.paths.uploadedFiles}")
 	private String uploadFolder;
+	
+	@Autowired
+	ApplicationProperties applicationProperties;
  
     @PostConstruct
     public void init() {
     
     	Role ru;
     	Role ra;
-    	
-    	File theDir = new File(uploadFolder);
 
-    	if (!theDir.exists()) {
-    	    System.out.println("creating directory: " + theDir.getName());
-    	    try{
-    	        theDir.mkdir();
-    	        System.out.println("DIR created");
-    	    } 
-    	    catch(SecurityException se){
-    	    	System.out.println(se.toString());
-    	    }        
-
-    	}
+    	checkUploadFolder();
     	
     	if(!roleDao.checkHasRole(Role.Enum.USER.toString())) {
     		ru = new Role();
@@ -93,6 +87,27 @@ public class PostConstructExampleBean {
 				e.printStackTrace();
 			}	
 			
+		}
+    }
+    
+    private void checkUploadFolder() {
+    	
+    	if (!Files.exists(Paths.get(uploadFolder))) {
+			try {
+				Files.createDirectories(Paths.get(uploadFolder));
+			} catch (IOException e1) {
+				//System.out.println(OSValidator.getCurrentSystemUser());
+				System.out.println(OSValidator.getCurrentSystemUserHome());
+				applicationProperties.setProperty("pfq.paths.uploadedFiles", OSValidator.getCurrentSystemUserHome()
+						                                                     +OSValidator.getOSSeparator()
+						                                                     +"pfq"
+						                                                     +OSValidator.getOSSeparator()
+						                                                     +"upload");
+				applicationProperties.save();
+				uploadFolder = applicationProperties.getProperty("pfq.paths.uploadedFiles");
+				checkUploadFolder();
+				//e1.printStackTrace();
+			}
 		}
     }
 }

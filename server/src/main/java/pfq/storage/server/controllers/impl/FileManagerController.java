@@ -13,8 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import pfq.storage.server.PFQloger;
 import pfq.storage.server.controllers.FileManagerControllerI;
+import pfq.storage.server.utils.PFQloger;
 
 @RestController
 @RequestMapping("/file/api/")

@@ -1,4 +1,4 @@
-package pfq.storage.server;
+package pfq.storage.server.utils;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;

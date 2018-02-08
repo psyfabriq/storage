@@ -10,12 +10,12 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.stereotype.Repository;
 
-import pfq.storage.server.AppUtil;
-import pfq.storage.server.PFQloger;
 import pfq.storage.server.dao.UserDAO;
 import pfq.storage.server.model.Role;
 import pfq.storage.server.model.User;
 import pfq.storage.server.service.impl.QBuilder;
+import pfq.storage.server.utils.AppUtil;
+import pfq.storage.server.utils.PFQloger;
 
 @Repository
 public class UserDaoImpl implements UserDAO {
