@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -16,15 +18,17 @@ import org.springframework.stereotype.Service;
 
 import pfq.storage.server.dao.RoleDAO;
 import pfq.storage.server.dao.UserDAO;
+import pfq.storage.server.model.Role;
 import pfq.storage.server.model.User;
 import pfq.storage.server.model.exception.UserBuildException;
 import pfq.storage.server.service.UserService;
 import pfq.storage.server.utils.AppUtil;
+import pfq.storage.server.utils.ApplicationProperties;
+import pfq.storage.server.utils.OSValidator;
 import pfq.storage.server.utils.PFQloger;
 import pfq.storage.server.utils.ResponseStatus;
 
 @Service
-@PropertySource(value = "classpath:application.properties")
 public class UserServiceImpl implements UserService {
 	
     private Logger logger = PFQloger.getLogger(UserService.class, Level.ALL);
@@ -35,9 +39,22 @@ public class UserServiceImpl implements UserService {
 	@Autowired
     private RoleDAO roleDao;
 	
+	@Autowired
+	private ApplicationProperties applicationProperties;
 	  
-	@Value("${pfq.paths.uploadedFiles}")
+
 	private String uploadFolder;
+	
+    @PostConstruct
+    public void init() {
+    	if(OSValidator.isUnix()) {
+			this.uploadFolder = applicationProperties.getProperty("pfq.paths.uploadedFilesNix");
+		}else if (OSValidator.isWindows()) {
+			this.uploadFolder = applicationProperties.getProperty("pfq.paths.uploadedFilesWin");
+		}
+    }
+	
+
 
 	@Override
 	public String add(Map<String, Object> map) {
@@ -46,15 +63,26 @@ public class UserServiceImpl implements UserService {
         	
        
 		try {
+			 Role ru = roleDao.findRole("USER").get();
 			 User u = User.newBuilder().setLogin((String) map.get("login"))
 					                  .setEmail((String) map.get("email"))
 					                  .setName((String) map.get("name"))
 					                  .setPassword((String) map.get("password"))
 					                  .setFoldercode(UUID.randomUUID().toString())
-					                  .setUserRoles(roleDao.findRole("USER").get())
+					                  .setUserRoles(ru)
 					                  .setIsActive(false)
 					                  .build();
-			return AppUtil.getResponseJson(userDao.addUser(u));
+			 
+			 if(userDao.addUser(u)) {
+				 ru.setUsers(u);
+				 roleDao.editRole(ru);
+				 AppUtil.createFolder(uploadFolder+OSValidator.getOSSeparator()+u.getFoldercode()); 
+				 return AppUtil.getResponseJson(true);
+				 
+			 }else {
+				 return AppUtil.getResponseJson(false);
+			 }
+			 
 		} catch (UserBuildException e) {
 			return AppUtil.getResponseJson(e.toString(),ResponseStatus.ERROR);
 		}

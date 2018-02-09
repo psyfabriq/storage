@@ -1,5 +1,8 @@
 package pfq.storage.server.utils;
 
+import org.springframework.stereotype.Component;
+
+
 public class OSValidator {
 	private static String OS = System.getProperty("os.name").toLowerCase();
 
