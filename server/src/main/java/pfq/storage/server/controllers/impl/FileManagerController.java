@@ -25,15 +25,15 @@ import pfq.storage.server.utils.PFQloger;
 @RestController
 @RequestMapping("/file/api/")
 public class FileManagerController implements FileManagerControllerI {
-	
+
 	private Logger logger = PFQloger.getLogger(FileManagerController.class, Level.ALL);
 	private static final HttpHeaders head = new HttpHeaders();
 	private Map<String, Object> map;
 	private String result = "{}";
-	
+
 	@Autowired
 	SystemInfoService systemInfoService;
-	
+
 	@Autowired
 	FileService fileService;
 
@@ -41,68 +41,109 @@ public class FileManagerController implements FileManagerControllerI {
 		super();
 		head.add("Content-type", MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
 	}
-	
-	private void prepare(String json , HttpServletRequest request) {
+
+	private void prepare(String json, HttpServletRequest request) {
 		map = AppUtil.getValues(json);
 		systemInfoService.getCurrentUser(request);
 	}
 
 	@Override
-	public ResponseEntity<String> addFolder(@RequestBody String json, HttpServletRequest request, HttpServletResponse response ) {
-		prepare(json,request);
-		if(systemInfoService.access()) {result = fileService.addFolder(map);}
-		return new ResponseEntity<String>(result, head, systemInfoService.access()?HttpStatus.OK:HttpStatus.NOT_ACCEPTABLE);
-	}
-	
-
-
-	@Override
-	public ResponseEntity<String> itemCopy(@RequestBody String json, HttpServletRequest request, HttpServletResponse response) {
-		prepare(json,request);
-		return null;
+	public ResponseEntity<String> addFolder(@RequestBody String json, HttpServletRequest request,
+			HttpServletResponse response) {
+		prepare(json, request);
+		if (systemInfoService.access()) {
+			result = fileService.addFolder(map);
+		}
+		return new ResponseEntity<String>(result, head,
+				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
 	}
 
 	@Override
-	public ResponseEntity<String> itemDelete(@RequestBody String json, HttpServletRequest request, HttpServletResponse response) {
-		prepare(json,request);
-		return null;
+	public ResponseEntity<String> itemCopy(@RequestBody String json, HttpServletRequest request,
+			HttpServletResponse response) {
+		prepare(json, request);
+		if (systemInfoService.access()) {
+			result = fileService.addFolder(map);
+		}
+		return new ResponseEntity<String>(result, head,
+				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
 	}
 
 	@Override
-	public ResponseEntity<String> itemUpload(@RequestBody String json, HttpServletRequest request, HttpServletResponse response) {
-		prepare(json,request);
-		return null;
+	public ResponseEntity<String> itemDelete(@RequestBody String json, HttpServletRequest request,
+			HttpServletResponse response) {
+		prepare(json, request);
+		if (systemInfoService.access()) {
+			result = fileService.addFolder(map);
+		}
+		return new ResponseEntity<String>(result, head,
+				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
 	}
 
 	@Override
-	public ResponseEntity<String> itemDownload(@RequestBody String json, HttpServletRequest request, HttpServletResponse response) {
-		prepare(json,request);
-		return null;
+	public ResponseEntity<String> itemUpload(@RequestBody String json, HttpServletRequest request,
+			HttpServletResponse response) {
+		prepare(json, request);
+		if (systemInfoService.access()) {
+			result = fileService.addFolder(map);
+		}
+		return new ResponseEntity<String>(result, head,
+				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
 	}
 
 	@Override
-	public ResponseEntity<String> itemCompress(@RequestBody String json, HttpServletRequest request, HttpServletResponse response) {
-		prepare(json,request);
-		return null;
+	public ResponseEntity<String> itemDownload(@RequestBody String json, HttpServletRequest request,
+			HttpServletResponse response) {
+		prepare(json, request);
+		if (systemInfoService.access()) {
+			result = fileService.addFolder(map);
+		}
+		return new ResponseEntity<String>(result, head,
+				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
 	}
 
 	@Override
-	public ResponseEntity<String> itemMoveFile(@RequestBody String json, HttpServletRequest request, HttpServletResponse response) {
-		prepare(json,request);
-		return null;
-	}
-	
-	@Override
-	public ResponseEntity<String> itemRenameFile(@RequestBody String json, HttpServletRequest request, HttpServletResponse response) {
-		prepare(json,request);
-		return null;
+	public ResponseEntity<String> itemCompress(@RequestBody String json, HttpServletRequest request,
+			HttpServletResponse response) {
+		prepare(json, request);
+		if (systemInfoService.access()) {
+			result = fileService.addFolder(map);
+		}
+		return new ResponseEntity<String>(result, head,
+				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
 	}
 
+	@Override
+	public ResponseEntity<String> itemMoveFile(@RequestBody String json, HttpServletRequest request,
+			HttpServletResponse response) {
+		prepare(json, request);
+		if (systemInfoService.access()) {
+			result = fileService.addFolder(map);
+		}
+		return new ResponseEntity<String>(result, head,
+				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
+	}
 
 	@Override
-	public ResponseEntity<String> getListDirectory(@RequestBody String json, HttpServletRequest request, HttpServletResponse response) {
-		prepare(json,request);
-		return new ResponseEntity<String>("test", head,HttpStatus.OK);
+	public ResponseEntity<String> itemRenameFile(@RequestBody String json, HttpServletRequest request,
+			HttpServletResponse response) {
+		prepare(json, request);
+		if (systemInfoService.access()) {
+			result = fileService.addFolder(map);
+		}
+		return new ResponseEntity<String>(result, head,
+				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
+	}
+
+	@Override
+	public ResponseEntity<String> getListDirectory(@RequestBody String json, HttpServletRequest request,
+			HttpServletResponse response) {
+		prepare(json, request);
+		if (systemInfoService.access()) {
+			result = fileService.getListDirectory(map);
+		}
+		return new ResponseEntity<String>(result, head,
+				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
 	}
 
 }

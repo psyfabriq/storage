@@ -27,4 +27,6 @@ public interface FileDAO {
     Optional<Folder>  findFolder(String folderpath);
     boolean checkHasFolder(String folderpath);
     boolean checkHasFolderByID(String ID);
+    List<Folder> getAllFolders(Folder parrent);
+    List<Folder> getAllFolders();
 }

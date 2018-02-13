@@ -87,8 +87,16 @@ public class FileServiceImpl  implements FileService{
 
 	@Override
 	public String getListDirectory(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
+		//String parrent = !map.containsKey("parrent")?"null":(String)map.get("parrent");
+		if(map.containsKey("parrent")) {
+			Optional<Folder> parrent = fileDAO.findFolder((String)map.get("parrent"));
+			if(parrent.isPresent()) {
+				return AppUtil.getResponseJson(fileDAO.getAllFolders(parrent.get()),ResponseStatus.OK);
+			}else {return AppUtil.getResponseJson("Parrent folder not found ",ResponseStatus.ERROR);}
+		}else {
+			return AppUtil.getResponseJson(fileDAO.getAllFolders(),ResponseStatus.OK);
+		}
+
 	}
 
 }

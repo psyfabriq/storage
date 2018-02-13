@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
@@ -141,6 +142,26 @@ public class FileDaoImpl implements FileDAO{
 	public boolean checkHasFolderByID(String ID) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public List<Folder> getAllFolders(Folder parrent) {
+
+			Query query = new Query();
+			query.addCriteria(Criteria.where("parrent").is(parrent));
+			
+			return  mongoOperation.find(query, Folder.class);
+
+	}
+	
+	@Override
+	public List<Folder> getAllFolders() {
+		
+		String querys = qb.getBuilder().append("{parrent:null}").build();
+		BasicQuery query = new BasicQuery(querys);
+
+		return  mongoOperation.find(query, Folder.class);
+
 	}
 
 }
