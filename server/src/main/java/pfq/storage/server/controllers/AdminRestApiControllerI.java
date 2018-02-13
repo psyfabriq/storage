@@ -2,6 +2,7 @@ package pfq.storage.server.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.MediaType;
@@ -21,17 +22,17 @@ public interface AdminRestApiControllerI {
     
     @RequestMapping(value = "/add-user", method = RequestMethod.POST,headers="Accept=*/*",consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<String> addUser(@RequestBody String json, HttpServletResponse response);
+    public ResponseEntity<String> addUser(@RequestBody String json, HttpServletRequest request, HttpServletResponse response);
     
     @RequestMapping(value = "/rm-user", method = RequestMethod.POST,headers="Accept=*/*",consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<String> removeUser(@RequestBody String json, HttpServletResponse response);
+    public ResponseEntity<String> removeUser(@RequestBody String json, HttpServletRequest request, HttpServletResponse response);
     
     @RequestMapping(value = "/edit-user", method = RequestMethod.POST,headers="Accept=*/*",consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<String> editUser(@RequestBody String json, HttpServletResponse response);
+    public ResponseEntity<String> editUser(@RequestBody String json, HttpServletRequest request, HttpServletResponse response);
     
     @RequestMapping(value = "/get-user", method = RequestMethod.POST,headers="Accept=*/*",consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<String> getUser(@RequestBody String json, HttpServletResponse response);
+    public ResponseEntity<String> getUser(@RequestBody String json, HttpServletRequest request, HttpServletResponse response);
 }

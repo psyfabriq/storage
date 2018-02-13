@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.mongodb.core.query.Query;
 
 import pfq.storage.server.model.File;
+import pfq.storage.server.model.Folder;
 
 public interface FileDAO {
 	boolean addFile(File file);
@@ -19,4 +20,11 @@ public interface FileDAO {
     List<File> findFileByQueryList(String query);
     List<File> findFileByQueryList(Query query);
     List<File> getAllFiles(String folderpath);
+    
+	boolean addFolder(Folder folder);
+    boolean editFolder(Folder folder);
+    boolean deleteFolder(Folder folder);
+    Optional<Folder>  findFolder(String folderpath);
+    boolean checkHasFolder(String folderpath);
+    boolean checkHasFolderByID(String ID);
 }

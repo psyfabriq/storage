@@ -119,4 +119,11 @@ public class PostConstructExampleBean {
 			}
 		}
     }
+
+	public String getUploadFolder() {
+		return uploadFolder;
+	}
+    
+    
+    
 }

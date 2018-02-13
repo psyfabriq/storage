@@ -28,6 +28,10 @@ public class CurrentUser extends org.springframework.security.core.userdetails.U
 		return user.getEmail();
 	}
 	
+	public String getWorkFolder() {
+		return user.getFoldercode();
+	}
+	
 	public boolean checkHasRole(String rolename) {
 		List<Role> r = user.getUserRoles();
 		for (Role role : r) {

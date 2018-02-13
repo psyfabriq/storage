@@ -6,5 +6,8 @@ import pfq.storage.server.model.CurrentUser;
 
 public interface SystemInfoService {
     public CurrentUser getCurrentUser(HttpServletRequest request);
+    public String getCurrentUserFolder();
+    public String getLocalPath();
+    public boolean access();
 
 }

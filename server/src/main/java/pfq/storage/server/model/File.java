@@ -18,17 +18,26 @@ public class File implements Serializable, Cloneable {
 	private String   id;
 	private String   name;
 	private String   rights;
+	private String   mimeType;
 	private long     size;
 	private Date     time;
-	private TypeFile type;
-	private boolean  isimage;
 	private String   path;
+	private boolean  isImage;
 	
 	
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
+	
+	
+
+
+	private File() {
+		super();	
+		}
+
+
 
 
 	public String getId() {
@@ -55,22 +64,23 @@ public class File implements Serializable, Cloneable {
 		return time;
 	}
 
-
-	public TypeFile getType() {
-		return type;
-	}
-
-
-	public boolean isIsimage() {
-		return isimage;
-	}
-
-
 	public String getPath() {
 		return path;
 	}
 	
-    @JsonIgnore
+	
+	
+    public String getMimeType() {
+		return mimeType;
+	}
+
+
+	public boolean isImage() {
+		return isImage;
+	}
+
+
+	@JsonIgnore
     public Builder getBuilder() {
         return this.new Builder();
     }
@@ -108,17 +118,6 @@ public class File implements Serializable, Cloneable {
     			return this;
     		}
 
-
-    		public Builder setType(TypeFile type) {
-    			File.this.type = type;
-    			return this;
-    		}
-
-
-    		public Builder setIsimage(boolean isimage) {
-    			File.this.isimage = isimage;
-    			return this;
-    		}
 
 
     		public Builder setPath(String path) {
