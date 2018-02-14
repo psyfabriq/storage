@@ -43,16 +43,29 @@ public class SystemInfoServiceImpl implements SystemInfoService{
 	public String getCurrentUserFolder() {
 		return PCEB.getUploadFolder()+OSValidator.getOSSeparator()+currentUser.getWorkFolder();
 	}
+	
+	@Override
+	public String getWorkFolder() {
+		return OSValidator.getOSSeparator()+currentUser.getWorkFolder();
+	}
+
 
 	@Override
 	public String getLocalPath() {
 		return PCEB.getUploadFolder()+OSValidator.getOSSeparator();
 	}
-
+	
+	@Override
+	public String getCurrentUserID() {
+		return currentUser.getId();
+	}
 
 	@Override
 	public boolean access() {
 		return this.principal!=null?true:false;
 	}
+
+
+
 
 }

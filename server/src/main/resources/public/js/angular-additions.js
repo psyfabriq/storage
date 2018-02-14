@@ -116,375 +116,251 @@ angular.module("pascalprecht.translate",["ng"]).run(["$translate",function(a){va
 
 //########################################################## ANGULAR FILE MANAGER
 
-(function(){
-	  'use strict';
-
-
-
-	  angular.module('mdr.file',  ['ab-base64'])
-	  .directive('mdrFile', ['$compile', function($compile){
-	    /**
-	    * @param url {string}
-	    * @param model {object}
-	    * @param data {object}
-	    * @param headers {object}
-	    * @param size {number}
-	    * @param limit {number}
-	    * @param formats {array, string}
-	    * @param text {string}
-	    * @param multiple {boolean}
-	    * @param disabled {boolean}
-	    */
-
-	    var linker = function(scope, element, attrs)
-	    {
-
-
-	      if (scope.multiple) {
-	        element.find('input').attr('multiple', 'multiple');
-	      }
-
-	      if (scope.disabled) {
-	       element.find('.mdr-file-dad').addClass('disabled');
-	      }
-
-	      $compile(element.contents())(scope);
-	    };
-
-	    return {
-	      restrict: 'E',
-	      link: linker,
-	      controller: 'FileCtrl',
-	      scope: {
-	        size: '=',
-	        limit: '=',
-	        formats: '=',
-	        disabled: '=',
-	        multiple: '=',
-	        text: '@',
-	        files: '=',
-	        onefile: '=?',
-	        peview: '=?'
-
-	      },
-	      template:
-	      '<div class="mdr-file-dad" id="fileId_{{$id}}">' +
-	        '<div class="mdr-file-dad-text">' +
-	          '<h3><span class="glyphicon glyphicon-cloud-upload"></span>{{text}}</h3>' +
-	        '</div>' +
-	        '<input type="file" name="file" onchange="angular.element(this).scope().upload(this)" ng-disabled="disabled">' +
-	        '<div class=" mdr-file-dad-content">'+
-	          '<div  ng-class="onefile ? \'col-xs-12\' : \'col-xs-12 col-sm-6 col-md-4\'"  ng-repeat="itemc in listpreview">' +
-	            '<div class="thumbnail">' +
-	              '<span ng-if="itemc.icon" class="glyphicon glyphicon-file"></span> <img ng-if="!itemc.icon" src="[[itemc.src]]">'+
-	            '</div>' +
-	          '</div>'+
-	          '<button type="button" class="close" aria-label="Close" ng-click="clearContent()"><span aria-hidden="true">&times;</span></button>' +
-	        '</div>' +
-	      '</div>'
-	    };
-
-	  }])
-	  .controller('FileCtrl', ['$scope', '$element', '$attrs','base64', function($scope, $element, $attrs, base64) {
-
-	    console.log($scope.peview);
-	    if(typeof($scope.onefile)=='undefined') {$scope.onefile=false;}
-	    if(typeof($scope.listpreview)=='undefined') {$scope.listpreview=[];}
-	    if(typeof($scope.peview)!=='undefined') {$scope.listpreview.push($scope.peview);}
-	    // OPTIONS
-	    $scope.text = 'Drag or click here';
-
-	    $scope.count = {
-	      send: 0,
-	      complete: 0,
-	      invalid: 0,
-	      error: 0
-	    };
-
-
-
-	    /**  Drag and Drop
-	    |- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	    */
-	    $element.bind('dragenter', function (e){
-	      e.stopPropagation();
-	      e.preventDefault();
-	      var parent = $(e.target).parent();
-	      parent.addClass('mdr-file-dad-text-hover');
-	    });
-
-	    $element.bind('dragleave', function (e){
-	      e.stopPropagation();
-	      e.preventDefault();
-	      var parent = $(e.target).parent();
-	      parent.removeClass('mdr-file-dad-text-hover');
-	    });
-
-	    $element.bind('dragover', function (e){
-	      e.stopPropagation();
-	      e.preventDefault();
-	    });
-
-	    $element.bind('drop', function (e){
-	      e.stopPropagation();
-	      e.preventDefault();
-
-	      var parent = $(e.target).parent();
-	      parent.removeClass('mdr-file-dad-text-hover');
-	      // Se obtienen los archivos
-	      var files = e.originalEvent.dataTransfer.files;
-	      // Se envian los archivos
-	      uploadFiles(files);
-	    });
-
-	    /** Events
-	    * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	    */
-	    $scope.clearContent = function()
-	    {
-	      $('#fileId_'+ $scope.$id +' .mdr-file-dad-content div').fadeOut('slow', function() { $(this).remove(); });
-	      $("#fileId_"+ $scope.$id +' .mdr-file-dad-content button').fadeOut('slow');
-	    };
-
-	    $scope.upload = function(element)
-	    {
-	      // Se obtienen los archivos
-	      var files = element.files;
-	      // Se envian los archivos
-	      uploadFiles(files);
-	    };
-
-	    /** Methods
-	    * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	    */
-	    function uploadFiles(files)
-	    {
-	      $scope.count = {
-	        send: 0,
-	        complete: 0,
-	        invalid: 0,
-	        error: 0
-	      };
-	      console.log(files);
-
-
-	      if( validMultiple(files) ) {
-	        if ( validLimit(files) ) {
-	          $.each(files, function(k, v){
-	             var reader = new FileReader();
-	             //reader.readAsDataURL(v);
-
-	             reader.onload = function (e) {
-	                 var validFile = isValid(v);
-	                 if (validFile.resp) {
-	                     if ($scope.files !== undefined) {
-	                          createPreview(v, k);
-	                          var fileObject = {};
-	                              fileObject.filetype = v.type;
-	                              fileObject.filename = v.name;
-	                              fileObject.filesize = v.size;
-	                              fileObject.isnew    = true;
-	                              fileObject.base64   =  _arrayBufferToBase64(reader.result);
-	                         if( $scope.onefile === false){
-	                          $scope.files.push(fileObject);
-	                         }else{$scope.files=fileObject}
-	                      }
-	                 }
-	             }
-
-	              reader.readAsArrayBuffer(v);
-
-	          });
-	        }
-	      }
-
-
-
-	      $('#fileId_'+ $scope.$id +' input').replaceWith($('#fileId_'+ $scope.$id +' input').val('').clone(true));
-	    }
-
-	   function  _arrayBufferToBase64( buffer ) { //http://stackoverflow.com/questions/9267899/arraybuffer-to-base64-encoded-string
-	    var binary = '';
-	    var bytes = new Uint8Array( buffer );
-	    var len = bytes.byteLength;
-	    for (var i = 0; i < len; i++) {
-	        binary += String.fromCharCode( bytes[ i ] );
-	    }
-	    return btoa( binary );
-	  };
-
-	    // SE CREA EL PREVIEW
-	    function createPreview(v,k)
-	    {
-
-	      if ( $scope.onefile!==false){
-	          //console.log($scope.onefile);
-	          $scope.listpreview = [];
-	      }
-	      var reader = new FileReader();
-	      reader.readAsDataURL(v);
-	      reader.onload = function (e) {
-	          var validFile = isValid(v);
-	          var icon = validFile.icon;
-	          var messages = validFile.messages;
-	          var url = e.target.result;
-	          var humanSize = bytesToSize(v.size);
-
-	          var itemc={icon:icon , src:url};
-	          $scope.listpreview.push(itemc);
-
-	          if (messages !== undefined) {
-	            messages.forEach(function(msg){
-	              $("#fileId_"+ $scope.$id +' .mdr-file-dad-content .preview-'+ k +' .thumbnail .caption').append('<p class="text-danger">'+ msg +'</p>');
-	            });
-	          }
-	      }
-
-	    }
-
-
-	    // VALID FUNCTIONS
-	    function isValid(file)
-	    {
-	      var messages = [];
-	      var icon = false;
-
-	      var ext = validExt(file);
-	      var size = validSize(file);
-
-	      if (ext.icon || size.icon) {
-	        icon = true;
-	      }
-
-	      if (!ext.resp) {
-	        messages.push(ext.msg);
-	      }
-	      if (!size.resp) {
-	        messages.push(size.msg);
-	      }
-
-	      if ( ext.resp && size.resp ) {
-	        return { resp: true,  icon: icon };
-	      }
-
-	      return { resp: false, icon: icon, messages: messages};
-	    }
-
-
-	    function validExt(file)
-	    {
-	      // Img previe or icon
-	      var icon = true;
-
-	      // Se decide si se va mostrar el preview o un icono
-	      if (file.type == 'image/jpeg' || file.type == 'image/png' || file.type == 'image/svg+xml' || file.type == 'image/gif') {
-	        icon = false;
-	      }
-
-	      if ($scope.formats === undefined) {
-	        return { resp: true, icon: icon, msg: '' };
-	      }
-
-	      // Extencion del archivo
-	      var fileExtension = file.name.substring(file.name.lastIndexOf('.') + 1).toLowerCase();
-	      // extensiones aceptadas
-	      var formats = $scope.formats;
-
-	      // Si los formatos son de tipo string se convierte en array (stringToArray)
-	      if (typeof formats == 'string') {
-	        formats = formats.split(',');
-	      }
-
-	      // Si existe la extencion entre las extenciones validas
-	      for (var i = 0; i < formats.length; i++) {
-	        if (fileExtension == formats[i].trim()) {
-	          return { resp: true, icon: icon, msg: ''};
-	        }
-	      }
-
-	      return { resp: false, icon: icon, msg: 'File type '+ fileExtension +' not allowed' };
-	    }
-
-
-	    function validSize(file)
-	    {
-	      // Img previe or icon
-	      var icon = false;
-	      // Tamaño del archivo
-	      var size = file.size;
-
-	      // Se decide si se va mostrar el preview o un icono
-	      if (size > (5 * 1000) * 1024) {
-	        icon = true;
-	      }
-
-	      if ($scope.size === undefined) {
-	        return { resp: true, icon: icon };
-	      }
-
-	      // Tamaño maximo
-	      var maxSize = ($scope.size * 1000) * 1024;
-
-
-	      if (size < maxSize) {
-	        return { resp: true, icon: icon};
-	      }
-
-	      return { resp: false, icon: icon, msg: 'File exceeds size '+ $scope.size +'MB'};
-	    }
-
-	    function validLimit(files)
-	    {
-	      if ($scope.limit === undefined) {
-	        return true;
-	      }
-	      if ($scope.limit < files.length) {
-	        alert('Max files upload is '+ $scope.limit);
-	        return false;
-	      }
-	      return true;
-	    }
-
-	    // Se valida si el imput es multiple
-	    function validMultiple(files)
-	    {
-	      if (files.length == 1) {
-	        return true;
-	      } else if (files.length > 1) {
-	        if ($scope.multiple) {
-	          return true;
-	        }
-	      }
-	      alert('One file for time');
-	      return false;
-	    }
-
-	    // Convierte los bits en 'Bytes', 'KB', 'MB', 'GB', 'TB'
-	    function bytesToSize(bytes)
-	    {
-	      var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-	      if (bytes === 0) return 'n/a';
-	      var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-	      if (i === 0) return bytes + ' ' + sizes[i];
-	      return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
-	    }
-
-	    /*
-	    |- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	    |   watch
-	    |- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-	    */
-	    $scope.$watchCollection('count', function(newValue, oldValue)
-	    {
-	      if (newValue.send == newValue.complete && (newValue.invalid > 0 || newValue.error > 0)) {
-	        $("#fileId_"+ $scope.$id +' .mdr-file-dad-content button').fadeIn('slow');
-	      }
-	    });
-
-
-	  }]);
-
-	})();
+	(function (angular, undefined) {
+	var module = angular.module('PFQTreeView', []);
+
+	module.value('treeViewDefaults', {
+		foldersProperty: 'folders',
+		filesProperty: 'files',
+		displayProperty: 'name',
+		collapsible: true
+	});
+
+	module.directive('treeView', ['$q', 'treeViewDefaults', function ($q, treeViewDefaults) {
+		return {
+			restrict: 'A',
+			scope: {
+				treeView: '=treeView',
+				treeViewOptions: '=treeViewOptions'
+			},
+			replace: true,
+			template:
+				'<div class="tree">' +
+					'<div tree-view-node="treeView">' +
+					'</div>' +
+				'</div>',
+			controller: ['$scope', function ($scope) {
+				var self = this,
+					selectedNode,
+					selectedFile;
+
+				var options = angular.extend({}, treeViewDefaults, $scope.treeViewOptions);
+
+				self.selectNode = function (node, breadcrumbs) {
+					if (selectedFile) {
+						selectedFile = undefined;
+					}
+					selectedNode = node;
+
+					if (typeof options.onNodeSelect === "function") {
+						options.onNodeSelect(node, breadcrumbs);
+					}
+				};
+
+				self.selectFile = function (file, breadcrumbs) {
+					if (selectedNode) {
+						selectedNode = undefined;
+					}
+					selectedFile = file;
+
+					if (typeof options.onNodeSelect === "function") {
+						options.onNodeSelect(file, breadcrumbs);
+					}
+				};
+
+				self.isSelected = function (node) {
+					return node === selectedNode || node === selectedFile;
+				};
+
+				/*
+				self.addNode = function (event, name, parent) {
+					if (typeof options.onAddNode === "function") {
+						options.onAddNode(event, name, parent);
+					}
+				};
+				self.removeNode = function (node, index, parent) {
+					if (typeof options.onRemoveNode === "function") {
+						options.onRemoveNode(node, index, parent);
+					}
+				};
+
+				self.renameNode = function (event, node, name) {
+					if (typeof options.onRenameNode === "function") {
+						return options.onRenameNode(event, node, name);
+					}
+					return true;
+				};
+				*/
+				self.getOptions = function () {
+					return options;
+				};
+			}]
+		};
+	}]);
+
+	module.directive('treeViewNode', ['$q', '$compile', function ($q, $compile) {
+		return {
+			restrict: 'A',
+			require: '^treeView',
+			link: function (scope, element, attrs, controller) {
+
+				var options = controller.getOptions(),
+					foldersProperty = options.foldersProperty,
+					filesProperty = options.filesProperty,
+					displayProperty = options.displayProperty,
+					collapsible = options.collapsible;
+				//var isEditing = false;
+
+				scope.expanded = collapsible == false;
+				//scope.newNodeName = '';
+				//scope.addErrorMessage = '';
+				//scope.editName = '';
+				//scope.editErrorMessage = '';
+
+				scope.getFolderIconClass = function () {
+					return 'icon-folder' + (scope.expanded && scope.hasChildren() ? '-open' : '');
+				};
+
+				scope.getFileIconClass = typeof options.mapIcon === 'function'
+					? options.mapIcon
+					: function (file) {
+						return 'icon-file';
+					};
+
+				scope.hasChildren = function () {
+					var node = scope.node;
+					return Boolean(node && (node[foldersProperty] && node[foldersProperty].length) || (node[filesProperty] && node[filesProperty].length));
+				};
+
+				scope.selectNode = function (event) {
+					event.preventDefault();
+					//if (isEditing) return;
+
+					if (collapsible) {
+						toggleExpanded();
+					}
+
+					var breadcrumbs = [];
+					var nodeScope = scope;
+					while (nodeScope.node) {
+						breadcrumbs.push(nodeScope.node[displayProperty]);
+						nodeScope = nodeScope.$parent;
+					}
+					controller.selectNode(scope.node, breadcrumbs.reverse());
+				};
+
+				scope.selectFile = function (file, event) {
+					event.preventDefault();
+					//if (isEditing) return;
+
+					var breadcrumbs = [file[displayProperty]];
+					var nodeScope = scope;
+					while (nodeScope.node) {
+						breadcrumbs.push(nodeScope.node[displayProperty]);
+						nodeScope = nodeScope.$parent;
+					}
+					controller.selectFile(file, breadcrumbs.reverse());
+				};
+
+				scope.isSelected = function (node) {
+					return controller.isSelected(node);
+				};
+
+				/*
+				scope.addNode = function () {
+					var addEvent = {
+						commit: function (error) {
+							if (error) {
+								scope.addErrorMessage = error;
+							}
+							else {
+								scope.newNodeName = '';
+								scope.addErrorMessage = '';
+							}
+						}
+					};
+					controller.addNode(addEvent, scope.newNodeName, scope.node);
+				};
+
+				scope.isEditing = function () {
+					return isEditing;
+				};
+				scope.canRemove = function () {
+					return !(scope.hasChildren());
+				};
+
+				scope.remove = function (event, index) {
+					event.stopPropagation();
+					controller.removeNode(scope.node, index, scope.$parent.node);
+				};
+				scope.edit = function (event) {
+				    isEditing = true;
+				    controller.editingScope = scope;
+					//expanded = false;
+					scope.editName = scope.node[displayProperty];
+					event.stopPropagation();
+				};
+				scope.canEdit = function () {
+				    return !controller.editingScope || scope == controller.editingScope;
+				};
+				scope.canAdd = function () {
+				    return !isEditing && scope.canEdit();
+				};
+				scope.rename = function (event) {
+					event.stopPropagation();
+					var renameEvent = {
+						commit: function (error) {
+							if (error) {
+								scope.editErrorMessage = error;
+							}
+							else {
+								scope.cancelEdit();
+							}
+						}
+					};
+					controller.renameNode(renameEvent, scope.node, scope.editName);
+				};
+				scope.cancelEdit = function (event) {
+					if (event) {
+						event.stopPropagation();
+					}
+					isEditing = false;
+					scope.editName = '';
+					scope.editErrorMessage = '';
+					controller.editingScope = undefined;
+				};
+				*/
+
+				function toggleExpanded() {
+					//if (!scope.hasChildren()) return;
+					scope.expanded = !scope.expanded;
+				}
+
+				function render() {
+					var template =
+						'<div class="tree-folder" ng-repeat="node in ' + attrs.treeViewNode + '.' + foldersProperty + '">' +
+							'<a href="#" class="tree-folder-header inline" ng-click="selectNode($event)" ng-class="{ selected: isSelected(node) }">' +
+								'<i class="icon-folder-close" ng-class="getFolderIconClass()"></i> ' +
+								'<span class="tree-folder-name">{{ node.' + displayProperty + ' }}</span> ' +
+							'</a>' +
+							'<div class="tree-folder-content"'+ (collapsible ? ' ng-show="expanded"' : '') + '>' +
+								'<div tree-view-node="node">' +
+								'</div>' +
+							'</div>' +
+						'</div>' +
+						'<a href="#" class="tree-item" ng-repeat="file in ' + attrs.treeViewNode + '.' + filesProperty + '" ng-click="selectFile(file, $event)" ng-class="{ selected: isSelected(file) }">' +
+							'<span class="tree-item-name"><i ng-class="getFileIconClass(file)"></i> {{ file.' + displayProperty + ' }}</span>' +
+						'</a>';
+
+					//Rendering template.
+					element.html('').append($compile(template)(scope));
+				}
+
+				render();
+			}
+		};
+	}]);
+})(angular);
 
 //##########################################################END ANGULAR FILE MANAGER
 
