@@ -218,13 +218,13 @@ angular.module("pascalprecht.translate",["ng"]).run(["$translate",function(a){va
 				//scope.editErrorMessage = '';
 
 				scope.getFolderIconClass = function () {
-					return 'icon-folder' + (scope.expanded && scope.hasChildren() ? '-open' : '');
+					return 'ion-ios-folder' + (scope.expanded && scope.hasChildren() ? '-outline' : '');
 				};
 
 				scope.getFileIconClass = typeof options.mapIcon === 'function'
 					? options.mapIcon
 					: function (file) {
-						return 'icon-file';
+						return 'ion-ios-paper';
 					};
 
 				scope.hasChildren = function () {
@@ -340,7 +340,7 @@ angular.module("pascalprecht.translate",["ng"]).run(["$translate",function(a){va
 					var template =
 						'<div class="tree-folder" ng-repeat="node in ' + attrs.treeViewNode + '.' + foldersProperty + '">' +
 							'<a href="#" class="tree-folder-header inline" ng-click="selectNode($event)" ng-class="{ selected: isSelected(node) }">' +
-								'<i class="icon-folder-close" ng-class="getFolderIconClass()"></i> ' +
+								'<i class="ion-close" ng-class="getFolderIconClass()"></i> ' +
 								'<span class="tree-folder-name">{{ node.' + displayProperty + ' }}</span> ' +
 							'</a>' +
 							'<div class="tree-folder-content"'+ (collapsible ? ' ng-show="expanded"' : '') + '>' +

@@ -20,12 +20,14 @@
   	width: auto;
   	min-height: 20px;
   }
+  /*
   .tree .tree-folder .tree-folder-header {
   	position: relative;
   	height: 20px;
   	line-height: 20px;
   	cursor: pointer;
   }
+  */
   .tree .tree-folder .tree-folder-header:hover,
   .tree .tree-folder .tree-folder-header:focus,
   .tree .tree-item:hover,

@@ -1,7 +1,7 @@
 (function(angular) {
   'use strict';
 
-var app = angular.module('XSCMS_ADMIN_DASHBOARD',  [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ngAnimate', 'ngTable', 'angular-growl', 'pascalprecht.translate', 'ngMaterial', 'md.data.table','lfNgMdFileInput']);
+var app = angular.module('XSCMS_ADMIN_DASHBOARD',  [ 'ngRoute', 'ngCookies', 'ngSanitize', 'ngAnimate', 'ngTable', 'angular-growl', 'pascalprecht.translate', 'ngMaterial', 'md.data.table','lfNgMdFileInput','PFQTreeView']);
 
 app.config(function($interpolateProvider) {
   //  $interpolateProvider.startSymbol('[[');

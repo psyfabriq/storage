@@ -1,36 +1,84 @@
-           <div class="cardbox"  data-ng-controller="FileManagerCtrl">
-                  <div class="cardbox-heading">
-                    <div class="total float-right">
 
-                           <button class="mb-4 btn btn-outline-info"
-								ng-click="initModal('mnewfolder')">
-								<i class="glyphicon glyphicon-plus"></i> {{"create_folder" |
-								translate}}
-							</button>
-							<button class="mb-4 btn btn-outline-success"
-								ng-click="initModal('muploadfile')">
-								<i class="glyphicon glyphicon-upload"></i> {{"upload_file" |
-								translate}}
-							</button>
-							<button class="mb-4 btn btn-outline-danger"
-								data-ng-click="setTemplate('main-icons')"
-								data-ng-show="viewTemplate !== 'main-icons'"
-								title="{{'icons' | translate}}">
-								<i class="ion-grid"></i>
-							</button>
-							<button class="mb-4 btn btn-outline-danger"
-								data-ng-click="setTemplate('main-table')"
-								data-ng-show="viewTemplate !== 'main-table'"
-								title="{{'list' | translate}}">
-								<i class="ion-navicon-round"></i>
-							</button>
+<div class="cardbox" data-ng-controller="FileManagerCtrl">
+	<div class="cardbox-heading">
+		<div class="total float-right">
 
-                    </div>
-                    <h3 class="cardbox-title">Files</h3>
-                  </div>
-                  <div class="cardbox-body">
+			<button class="mb-4 btn btn-outline-info"
+				ng-click="createFolder($event)"
+				<i class="glyphicon glyphicon-plus"></i> {{"create_folder" |
+				translate}}
+			</button>
+			<button class="mb-4 btn btn-outline-success"
+				ng-click="uploadItem($event)">
+				<i class="glyphicon glyphicon-upload"></i> {{"upload_file" |
+				translate}}
+			</button>
+			<button class="mb-4 btn btn-outline-danger"
+				data-ng-click="setTemplate('main-icons')"
+				data-ng-show="viewTemplate !== 'main-icons'"
+				title="{{'icons' | translate}}">
+				<i class="ion-grid"></i>
+			</button>
+			<button class="mb-4 btn btn-outline-danger"
+				data-ng-click="setTemplate('main-table')"
+				data-ng-show="viewTemplate !== 'main-table'"
+				title="{{'list' | translate}}">
+				<i class="ion-navicon-round"></i>
+			</button>
 
+		</div>
+		<h3 class="cardbox-title">Files</h3>
+	</div>
+	<div class="cardbox-body">
+    <div class="row">
+                  <div class="col-3">
+
+                    <div class="cardbox" style="height:  100%;">
+                        <div class="pb-1 bg-gradient-success top-line"></div>
+
+                        <div class="cardbox-body">
+                          <ul class="breadcrumb" style="padding: 8px 20px;">
+                            <li ng-repeat="b in breadcrums" ng-class="{ active: $last }">{{ b }} <span class="divider" ng-show="!$last">/</span></li>
+                          </ul>
+                            <div>Root</div>
+                            <div tree-view="treeView" tree-view-options="options"></div>
+
+                        </div>
                       </div>
-                    </div>
+
                   </div>
-                </div>
+                  <div class="col-9">
+
+
+                    <md-table-container>
+                      <table md-table md-row-select multiple="false" ng-model="selected" md-progress="promise" class="table table-striped bootgrid-table">
+                        <thead md-head md-order="query.order" md-on-reorder="refresh">
+                          <tr md-row>
+                            <th md-column md-order-by="nameToLower"><span>Name</span></th>
+                            <th md-column md-numeric>Size (kb)</th>
+                            <th md-column >Date</th>
+                            <th md-column >Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody md-body>
+                          <tr md-row md-select="item" md-select-id="name" md-auto-select ng-repeat="item in modelFolder.data">
+                            <td md-cell>{{item.name}}</td>
+                            <td md-cell>{{item.size}}</td>
+                            <td md-cell>{{item.time}}</td>
+                            <td md-cell><button type="button" class="btn btn-sm btn-info mr-2 command-edit" data-row-id="10246"><em class="ion-edit"></em></button><button type="button" class="btn btn-sm btn-danger command-delete" data-row-id="10246"><em class="ion-trash-a"></em></button></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </md-table-container>
+
+                    <md-table-pagination md-limit="query.limit" md-limit-options="[5, 10, 15]" md-page="query.page" md-total="{{modelFolder.count}}" md-on-paginate="refresh" md-page-select></md-table-pagination>
+
+
+
+                  </div>
+    </div>
+
+  </div>
+</div>
+</div>
+</div>
