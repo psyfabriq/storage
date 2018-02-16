@@ -13,18 +13,6 @@
 				<i class="glyphicon glyphicon-upload"></i> {{"upload_file" |
 				translate}}
 			</button>
-			<button class="mb-4 btn btn-outline-danger"
-				data-ng-click="setTemplate('main-icons')"
-				data-ng-show="viewTemplate !== 'main-icons'"
-				title="{{'icons' | translate}}">
-				<i class="ion-grid"></i>
-			</button>
-			<button class="mb-4 btn btn-outline-danger"
-				data-ng-click="setTemplate('main-table')"
-				data-ng-show="viewTemplate !== 'main-table'"
-				title="{{'list' | translate}}">
-				<i class="ion-navicon-round"></i>
-			</button>
 
 		</div>
 		<h3 class="cardbox-title">Files</h3>
@@ -40,9 +28,8 @@
                           <ul class="breadcrumb" style="padding: 8px 20px;">
                             <li ng-repeat="b in breadcrums" ng-class="{ active: $last }">{{ b }} <span class="divider" ng-show="!$last">/</span></li>
                           </ul>
-                            <div>Root</div>
+                            <div><a href="#" class="tree-folder-header inline " ng-click="rootFolder()"  style=""> <span class="tree-folder-name ng-binding">Root</span> </a> </div>
                             <div tree-view="treeView" tree-view-options="options"></div>
-
                         </div>
                       </div>
 
@@ -51,9 +38,10 @@
 
 
                     <md-table-container>
-                      <table md-table md-row-select multiple="false" ng-model="selected" md-progress="promise" class="table table-striped bootgrid-table">
+                      <table md-table md-row-select="false" multiple="false" ng-model="selected" md-progress="promise" class="table table-striped bootgrid-table">
                         <thead md-head md-order="query.order" md-on-reorder="refresh">
                           <tr md-row>
+                            <th md-column ></th>
                             <th md-column md-order-by="nameToLower"><span>Name</span></th>
                             <th md-column md-numeric>Size (kb)</th>
                             <th md-column >Date</th>
@@ -61,11 +49,16 @@
                           </tr>
                         </thead>
                         <tbody md-body>
-                          <tr md-row md-select="item" md-select-id="name" md-auto-select ng-repeat="item in modelFolder.data">
+                          <tr md-row md-select="item" md-select-id="name" md-auto-select ng-repeat="item in modelFolder.data | orderBy: query.order | limitTo: query.limit : (query.page -1) * query.limit" md-on-select="rowSelect()" md-on-deselect="rowDeSelect()" >
+                            <td md-cell><em class="text-md" ng-class="{ 'ion-folder': item.type == 'dir', 'ion-document-text': item.type == 'file' }"></em></td>
                             <td md-cell>{{item.name}}</td>
                             <td md-cell>{{item.size}}</td>
                             <td md-cell>{{item.time}}</td>
-                            <td md-cell><button type="button" class="btn btn-sm btn-info mr-2 command-edit" data-row-id="10246"><em class="ion-edit"></em></button><button type="button" class="btn btn-sm btn-danger command-delete" data-row-id="10246"><em class="ion-trash-a"></em></button></td>
+                            <td md-cell>
+                              <button type="button" class="btn btn-sm btn-success mr-2 command-edit" data-row-id="10246" ng-if = "item.type == 'dir'" ng-click="openfolder(item)"><em class="ion-folder"></em></button>
+                              <button type="button" class="btn btn-sm btn-warning mr-2 command-edit" data-row-id="10246" ng-if = "item.type == 'file'" ng-click="download(item)"><em class="ion-ios-cloud-download"></em></button>
+                              <button type="button" class="btn btn-sm btn-info mr-2 command-edit" data-row-id="10246"><em class="ion-edit" ng-click="edit(item)"></em></button>
+                              <button type="button" class="btn btn-sm btn-danger command-delete" data-row-id="10246"><em class="ion-trash-a" ng-click="delete(item)"></em></button></td>
                           </tr>
                         </tbody>
                       </table>

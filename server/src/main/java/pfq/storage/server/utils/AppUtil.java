@@ -79,6 +79,8 @@ public class AppUtil {
         return json;
     }
     
+
+    
     public static String getResponseJson(String error,ResponseStatus status){
         Map<String, Object> map = new HashMap<String, Object>();
         String  json ="";
@@ -151,6 +153,12 @@ public class AppUtil {
             logger.error(e);
         }
         return json;
+    }
+    
+    public static Map<String, Object>  wrapperJson(String wrapper ,Object result) {
+    	Map<String, Object> map = new HashMap<String, Object>();
+    	map.put(wrapper, result);
+    	return map;
     }
     
     public static Map<String, Object> getResponseMap(Object result, String error,ResponseStatus status){

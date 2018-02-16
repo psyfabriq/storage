@@ -1,10 +1,14 @@
 package pfq.storage.server.service.impl;
 
+import java.awt.List;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import pfq.storage.server.dao.FileDAO;
 import pfq.storage.server.model.File;
@@ -102,19 +106,27 @@ public class FileServiceImpl  implements FileService{
 	@Override
 	public String getListDirectory(Map<String, Object> map) {
 		//String parrent = !map.containsKey("parrent")?"null":(String)map.get("parrent");
+		//map.put("userid", systemInfoService.getCurrentUserID());
+		Map<String, Object> result = new HashMap<String, Object>();
+		ArrayList<File> test = new ArrayList<File>();
 		if(map.containsKey("parrent")) {
 			if("/".equals((String)map.get("parrent"))) {
-				return AppUtil.getResponseJson(fileDAO.getAllFolders(),ResponseStatus.OK);
+				result.put("folders", fileDAO.getAllFolders());
+			} else {
+				Optional<Folder> parrent = fileDAO.findFolder((String) map.get("parrent"));
+				if (parrent.isPresent()) {
+					result.put("folders", fileDAO.getAllFolders(parrent.get()));
+				} else {
+					return AppUtil.getResponseJson("Parrent folder not found ", ResponseStatus.ERROR);
+				}
 			}
-			Optional<Folder> parrent = fileDAO.findFolder((String)map.get("parrent"));
-			if(parrent.isPresent()) {
-				return AppUtil.getResponseJson(fileDAO.getAllFolders(parrent.get()),ResponseStatus.OK);
-			}else {return AppUtil.getResponseJson("Parrent folder not found ",ResponseStatus.ERROR);}
-			
 			
 		}else {
-			return AppUtil.getResponseJson(fileDAO.getAllFolders(),ResponseStatus.OK);
+			result.put("folders", fileDAO.getAllFolders());
+			//return AppUtil.getResponseJson(fileDAO.getAllFolders(),ResponseStatus.OK);
 		}
+		result.put("files", test);
+		return AppUtil.getResponseJson(result,ResponseStatus.OK);
 
 	}
 

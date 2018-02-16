@@ -22,6 +22,7 @@ public class Folder implements Serializable, Cloneable {
 	private String   name;
 	private String   path;
 	private String   type;
+	private int      size;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
 	private Date     time;
 	@DBRef(lazy = false)
@@ -34,6 +35,19 @@ public class Folder implements Serializable, Cloneable {
 		return super.clone();
 	}
 	
+
+    
+
+	public int getSize() {
+		return size;
+	}
+
+
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
 
 
 
