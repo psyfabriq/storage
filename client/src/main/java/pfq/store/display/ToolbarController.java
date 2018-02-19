@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import pfq.store.LibraryAssistantUtil;
+import pfq.store.AppUtil;
 
 public class ToolbarController implements Initializable {
 

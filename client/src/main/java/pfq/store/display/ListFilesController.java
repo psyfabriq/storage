@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.Initializable;
 
-public class ListFilesController implements Initializable {
+public class ListFilesController implements Initializable  {
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {

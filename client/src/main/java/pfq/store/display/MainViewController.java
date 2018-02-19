@@ -17,7 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import pfq.store.StateManager;
 
-public class MainViewController implements Initializable {
+public class MainViewController  implements Initializable {
 	
 	    @FXML
 	    private JFXDrawer drawer;

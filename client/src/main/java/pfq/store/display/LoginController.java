@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import pfq.store.StateManager;
+import pfq.store.config.ContextStateApp;
 
 public class LoginController implements Initializable{
 
@@ -21,19 +22,18 @@ public class LoginController implements Initializable{
 	@FXML
 	private Button loginButton;
 
-	private StateManager stateManager;
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
-	public void initManager(final StateManager loginManager) {
-		this.stateManager = loginManager;
-	}
+
 
 	@FXML
 	private void handleCancelButtonAction(ActionEvent event) {
-		System.exit(0);
+		//context.setState(context.getState("stop"));
+		//context.pull();
 	}
 
 	@FXML
@@ -42,7 +42,8 @@ public class LoginController implements Initializable{
         String pword = password.getText();
 		
 		if (!pword.isEmpty() && !uname.isEmpty()) {
-			stateManager.authenticated("");
+			//context.setState(context.getState("main"));
+			//context.pull();
         } else {
             username.getStyleClass().add("wrong-credentials");
             password.getStyleClass().add("wrong-credentials");

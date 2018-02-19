@@ -27,7 +27,7 @@
                <center>
                   <AnchorPane BorderPane.alignment="CENTER">
                      <children>
-                           <JFXHamburger fx:id="hamburger" styleClass="jfx-hamburger-icon" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="75.0" />
+                           <JFXHamburger fx:id="hamburger" styleClass="jfx-hamburger-icon" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="75.0" />
                      </children>
                   </AnchorPane>
                </center>
