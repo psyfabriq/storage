@@ -13,7 +13,7 @@ public class Main extends Application {
 	  @Override public void start(Stage stage) throws IOException {
 	    Scene scene = new Scene(new StackPane());
 	    
-	    LoginManager loginManager = new LoginManager(scene);
+	    StateManager loginManager = new StateManager(scene);
 	    loginManager.showLoginScreen();
 
 	    stage.setScene(scene);

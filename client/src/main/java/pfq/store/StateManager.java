@@ -10,17 +10,19 @@ import javafx.scene.Scene;
 import pfq.store.display.LoginController;
 import pfq.store.display.MainViewController;
 
-public class LoginManager {
+public class StateManager {
 	
 	private Scene scene;
 
-	  public LoginManager(Scene scene) {
+	  public StateManager(Scene scene) {
 	    this.scene = scene;
+	    this.scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 	  }
 
 	  public void authenticated(String sessionID) {
 		    showMainView(sessionID);
 		  }
+	  
 	  public void logout() {
 		    showLoginScreen();
 		  }
@@ -30,12 +32,14 @@ public class LoginManager {
 		      FXMLLoader loader = new FXMLLoader(
 		        getClass().getResource("login.fxml")
 		      );
-		      scene.setRoot((Parent) loader.load());
+		      scene.setRoot((Parent)loader.load());
+		      
 		      LoginController controller = 
 		        loader.<LoginController>getController();
 		      controller.initManager(this);
 		    } catch (IOException ex) {
-		      Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, ex);
+		    	System.out.println(ex);
+		    Logger.getLogger(StateManager.class.getName()).log(Level.SEVERE, null, ex);
 		    }
 		  }
 
@@ -49,7 +53,7 @@ public class LoginManager {
 		        loader.<MainViewController>getController();
 		      controller.initSessionID(this, sessionID);
 		    } catch (IOException ex) {
-		      Logger.getLogger(LoginManager.class.getName()).log(Level.SEVERE, null, ex);
+		      Logger.getLogger(StateManager.class.getName()).log(Level.SEVERE, null, ex);
 		    }
 		  }
 }
