@@ -111,7 +111,7 @@ public class User implements Serializable, Cloneable {
 	public class Builder {
 		
 	    private Builder() { }
-	    public  Builder(User u) { }
+
 	    
 		public Builder setId(String id) {
 			User.this.id = id;

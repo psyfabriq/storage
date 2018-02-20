@@ -22,8 +22,7 @@ public class CurrentUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-		User user = userService.getUserByLogin(login).orElseThrow(
-				() -> new UsernameNotFoundException(String.format("User with login=%s was not found", login)));
+		User user = userService.getUserByLogin(login).orElseThrow(() -> new UsernameNotFoundException(String.format("User with login=%s was not found", login)));
 		return new CurrentUser(user);
 	}
 

@@ -19,7 +19,7 @@
 <?import javafx.scene.text.Text?>
 
 <StackPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="1000.0"  xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pfq.store.display.MainViewController">
-   <children>
+  <children>
       <AnchorPane fx:id="rootAnchorPane">
          <children>
             <BorderPane prefHeight="455.0" prefWidth="665.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -27,7 +27,10 @@
                <center>
                   <AnchorPane BorderPane.alignment="CENTER">
                      <children>
-                           <JFXHamburger fx:id="hamburger" styleClass="jfx-hamburger-icon" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="75.0" />
+                     
+                 
+                        <JFXHamburger fx:id="hamburger" styleClass="jfx-hamburger-icon" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="75.0" />
+
                      </children>
                   </AnchorPane>
                </center>

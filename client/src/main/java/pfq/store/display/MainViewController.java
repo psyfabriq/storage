@@ -15,9 +15,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import pfq.store.StateManager;
+import pfq.store.DisplayManager;
 
-public class MainViewController  implements Initializable {
+public class MainViewController extends Controller  implements Initializable {
 	
 	    @FXML
 	    private JFXDrawer drawer;
@@ -26,7 +26,7 @@ public class MainViewController  implements Initializable {
 	  
 
 	  
-	  public void initSessionID(final StateManager loginManager, String sessionID) {
+	  public void initSessionID(final DisplayManager loginManager, String sessionID) {
 		 /* 
 	    sessionLabel.setText(sessionID);
 	    logoutButton.setOnAction(new EventHandler<ActionEvent>() {

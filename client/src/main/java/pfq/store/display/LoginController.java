@@ -10,10 +10,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import pfq.store.StateManager;
+import pfq.store.DisplayManager;
 import pfq.store.config.ContextStateApp;
+import pfq.store.service.ConnettionService;
+import pfq.store.service.ConnettionServiceException;
 
-public class LoginController implements Initializable{
+public class LoginController extends Controller implements Initializable{
 
 	@FXML
 	private JFXTextField username;
@@ -32,9 +34,16 @@ public class LoginController implements Initializable{
 
 	@FXML
 	private void handleCancelButtonAction(ActionEvent event) {
-		//context.setState(context.getState("stop"));
-		//context.pull();
+		context.setState(context.getState("stop"));
+		context.pull();
 	}
+	
+	@FXML
+	private void handleConfigButtonAction(ActionEvent event) {
+		context.setState(context.getState("conf"));
+		context.pull();
+	}
+
 
 	@FXML
 	private void handleLoginButtonAction(ActionEvent event) {
@@ -42,8 +51,19 @@ public class LoginController implements Initializable{
         String pword = password.getText();
 		
 		if (!pword.isEmpty() && !uname.isEmpty()) {
-			//context.setState(context.getState("main"));
-			//context.pull();
+			
+			try {
+				context.connettionService = ConnettionService.newBuilder().connect(uname, pword).build();
+				context.setState(context.getState("main"));
+				context.pull();
+			} catch (ConnettionServiceException e) {
+	            username.getStyleClass().add("wrong-credentials");
+	            password.getStyleClass().add("wrong-credentials");
+				//e.printStackTrace();
+			}
+			
+
+			
         } else {
             username.getStyleClass().add("wrong-credentials");
             password.getStyleClass().add("wrong-credentials");

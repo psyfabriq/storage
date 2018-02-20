@@ -14,7 +14,7 @@ public class Main extends Application {
 	  @Override public void start(Stage stage) throws IOException {
 		   Scene scene = new Scene(new StackPane()); 
 		   stage.setScene(scene);
-		   StateManager stateManager = new StateManager(scene,stage);
+		   DisplayManager stateManager = new DisplayManager(scene,stage);
       	   ContextStateApp csa = new ContextStateApp(stateManager); 
 	       csa.pull(); 
 		    
