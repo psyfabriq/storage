@@ -18,7 +18,7 @@
                      
                  
                         <JFXHamburger fx:id="hamburger" styleClass="jfx-hamburger-icon" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="75.0" />
-                        <BorderPane fx:id="pane" prefHeight="608.0" prefWidth="930.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="0.0" />
+                        <StackPane fx:id="pane" layoutX="-2.0" prefHeight="599.0" prefWidth="936.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="66.0" AnchorPane.topAnchor="0.0" />
 
                      </children>
                   </AnchorPane>

@@ -23,6 +23,15 @@ public class CreateFolderController extends Controller implements Initializable 
 		// TODO Auto-generated method stub
 
 	}
+	
+	
+
+	public CreateFolderController() {
+		super();
+		System.out.println("CreateFolderController");
+	}
+
+
 
 	@FXML
 	void handleCancelButtonAction(ActionEvent event) {

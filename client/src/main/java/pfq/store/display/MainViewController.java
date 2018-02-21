@@ -16,6 +16,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import pfq.store.DisplayManager;
 import pfq.store.display.components.CallBackToolbar;
 import pfq.store.display.components.ToolbarController;
@@ -29,7 +31,7 @@ public class MainViewController extends Controller  implements Initializable,Cal
 	    private JFXHamburger hamburger;
 	    
 	    @FXML
-	    private BorderPane pane;
+	    private StackPane pane;
 	  
 
 	  
@@ -56,7 +58,8 @@ public class MainViewController extends Controller  implements Initializable,Cal
 	private void initPane() {
 		try {
 			Parent page = FXMLLoader.load(getClass().getResource("/pfq/store/components/dashboard.fxml"));
-			pane.setCenter(page);
+			pane.getChildren().add(page);
+			//pane.setCenter(page);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -69,6 +72,7 @@ public class MainViewController extends Controller  implements Initializable,Cal
         	Parent toolbar = (Parent)loader.load();
         	ToolbarController controller = loader.<ToolbarController>getController();
         	controller.addListener(this);
+        	controller.initContext(context);
             drawer.setSidePane(toolbar);
         } catch (IOException ex) {
         	System.out.println(ex);
@@ -90,7 +94,8 @@ public class MainViewController extends Controller  implements Initializable,Cal
 	@Override
 	public void pageToCallBack(Optional<Parent> p) {
 		if(p.isPresent()) {
-			pane.setCenter(p.get());
+			pane.getChildren().clear();
+			pane.getChildren().add(p.get());
 		}
 	}
 	
