@@ -14,16 +14,19 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CustomAuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+	
+	
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException exception) throws IOException, ServletException {
+    	System.out.println(request);
     	System.out.println("onAuthenticationFailure");
     	//response.set
       //  response.addHeader("WWW-Authenticate", "Basic realm=" + getRealmName());
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-    	PrintWriter writer = response.getWriter();
-    	writer.println("HTTP Status 401 - " + exception.getMessage());
+    	//PrintWriter writer = response.getWriter();
+    	//writer.println("HTTP Status 401 - " + exception.getMessage());
     	/*
     	Enumeration<String> names = request.getAttributeNames();
         while (names.hasMoreElements()) {
