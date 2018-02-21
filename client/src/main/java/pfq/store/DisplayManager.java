@@ -24,7 +24,7 @@ public class DisplayManager extends Controller  {
 	  public DisplayManager(Scene scene,Stage stage) {
 	    this.scene = scene;
 	    this.stage = stage;
-	    this.scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+	   // this.scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 	  }
 	  /*  
 	  public void initContext(ContextStateApp context) {

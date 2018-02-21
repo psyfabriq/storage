@@ -2,11 +2,11 @@ package pfq.store.display;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
-import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.transitions.hamburger.HamburgerSlideCloseTransition;
 
 import javafx.event.Event;
@@ -15,17 +15,21 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.BorderPane;
 import pfq.store.DisplayManager;
+import pfq.store.display.components.CallBackToolbar;
+import pfq.store.display.components.ToolbarController;
 
-public class MainViewController extends Controller  implements Initializable {
+public class MainViewController extends Controller  implements Initializable,CallBackToolbar {
 	
 	    @FXML
 	    private JFXDrawer drawer;
-	    @FXML
-	    private JFXTreeTableView<?> treeView;
+	
 	    @FXML
 	    private JFXHamburger hamburger;
+	    
+	    @FXML
+	    private BorderPane pane;
 	  
 
 	  
@@ -47,15 +51,27 @@ public class MainViewController extends Controller  implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 		initDrawer();
+		initPane();
 	}
-	
+	private void initPane() {
+		try {
+			Parent page = FXMLLoader.load(getClass().getResource("/pfq/store/components/dashboard.fxml"));
+			pane.setCenter(page);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
     private void initDrawer() {
         try {
-        	Parent toolbar = FXMLLoader.load(getClass().getResource("/pfq/store/toolbar.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/pfq/store/components/toolbar.fxml"));
+            
+        	Parent toolbar = (Parent)loader.load();
+        	ToolbarController controller = loader.<ToolbarController>getController();
+        	controller.addListener(this);
             drawer.setSidePane(toolbar);
         } catch (IOException ex) {
         	System.out.println(ex);
-           // Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
         HamburgerSlideCloseTransition task = new HamburgerSlideCloseTransition(hamburger);
         task.setRate(-1);
@@ -69,6 +85,14 @@ public class MainViewController extends Controller  implements Initializable {
             }
         });
     }
+    
+
+	@Override
+	public void pageToCallBack(Optional<Parent> p) {
+		if(p.isPresent()) {
+			pane.setCenter(p.get());
+		}
+	}
 	
 	
 

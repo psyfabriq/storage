@@ -4,7 +4,6 @@
 <?import com.jfoenix.controls.JFXHamburger?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
 <StackPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="599.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pfq.store.display.MainViewController">
@@ -16,10 +15,10 @@
                <center>
                   <AnchorPane BorderPane.alignment="CENTER">
                      <children>
-                        <HBox fx:id="mainplace" prefHeight="599.0" prefWidth="933.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="67.0" AnchorPane.topAnchor="0.0" />
                      
                  
                         <JFXHamburger fx:id="hamburger" styleClass="jfx-hamburger-icon" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="75.0" />
+                        <BorderPane fx:id="pane" prefHeight="608.0" prefWidth="930.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="0.0" />
 
                      </children>
                   </AnchorPane>
