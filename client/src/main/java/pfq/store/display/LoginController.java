@@ -10,8 +10,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import pfq.store.DisplayManager;
-import pfq.store.config.ContextStateApp;
 import pfq.store.service.ConnettionService;
 import pfq.store.service.ConnettionServiceException;
 

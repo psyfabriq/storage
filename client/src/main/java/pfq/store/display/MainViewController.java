@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
+import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.transitions.hamburger.HamburgerSlideCloseTransition;
 
 import javafx.event.Event;
@@ -21,6 +22,8 @@ public class MainViewController extends Controller  implements Initializable {
 	
 	    @FXML
 	    private JFXDrawer drawer;
+	    @FXML
+	    private JFXTreeTableView<?> treeView;
 	    @FXML
 	    private JFXHamburger hamburger;
 	  

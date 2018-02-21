@@ -1,6 +1,8 @@
 package pfq.storage.server.config;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,15 +20,21 @@ public class CustomAuthFailureHandler extends SimpleUrlAuthenticationFailureHand
             AuthenticationException exception) throws IOException, ServletException {
     	System.out.println("onAuthenticationFailure");
     	//response.set
+      //  response.addHeader("WWW-Authenticate", "Basic realm=" + getRealmName());
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    	PrintWriter writer = response.getWriter();
+    	writer.println("HTTP Status 401 - " + exception.getMessage());
     	/*
     	Enumeration<String> names = request.getAttributeNames();
         while (names.hasMoreElements()) {
             String name = names.nextElement();
             Object value = request.getAttribute(name);
-            attributes.put(name, value);
+         //   attributes.put(name, value);
+            //System.out.println(name);
+           // System.out.println(value);
         }
         */
-        getRedirectStrategy().sendRedirect(request, response, "/login?error");
+     //   getRedirectStrategy().sendRedirect(request, response, "/login?error");
         
 
     }

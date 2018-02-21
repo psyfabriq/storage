@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CookieStore;
@@ -97,15 +98,13 @@ public class ConnettionService {
 			
 			try {
 				HttpResponse res = ConnettionService.this.doPost("/login",variables,false);
-				
-				//System.out.println(res.);
-				System.out.println(res.getEntity());
+				System.out.println(res.getStatusLine().getStatusCode());
+				if (  res.getStatusLine().getStatusCode() > 302 ) {
+					ConnettionService.this.isConnect = false;
+				}else {ConnettionService.this.isConnect = true;}
 				
 			} catch (URISyntaxException | IOException e) {
 				ConnettionService.this.isConnect = false;
-				//e.printStackTrace();
-			}finally {
-				ConnettionService.this.isConnect = true;
 			}
 			return this;
 		}
