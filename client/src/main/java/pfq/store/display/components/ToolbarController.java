@@ -40,7 +40,7 @@ public class ToolbarController extends Controller implements Initializable {
 
     @FXML
     private void loadSettings(ActionEvent event) {
-    	//loadUI("dashboard");
+    	loadUI("usersettings");
     }
     
     @FXML
