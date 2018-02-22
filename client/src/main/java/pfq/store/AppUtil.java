@@ -17,9 +17,17 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import pfq.store.display.MainViewController;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 public class AppUtil {
 
+    private static ObjectMapper mapper = new ObjectMapper();
+    private static StringBuilder error  = new StringBuilder();
     private static final String IMAGE_LOC = "/resources/icon.png";
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
 
