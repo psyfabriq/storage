@@ -2,6 +2,7 @@ package pfq.store.service;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,14 +57,15 @@ public class ConnettionService {
     	HttpPost httppost = new HttpPost(builder.build());
     	List<NameValuePair> params = new ArrayList<NameValuePair>();
     	for (String key: variables.keySet()) {
-    		params.add(new BasicNameValuePair(key, variables.get(key)));
+    	
+    		params.add(new BasicNameValuePair(key, URLEncoder.encode( variables.get(key), "UTF-8" )));
     	}
     	if(isJson) {
     		httppost.setHeader("Accept", "application/json");
-    		httppost.setHeader("Content-type", "application/json");
+    		httppost.setHeader("Content-type", "application/json; charset=UTF-8;");
     	}else {
     		httppost.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
-    		httppost.setHeader("Content-type", "application/x-www-form-urlencoded");
+    		httppost.setHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
     	}
     	httppost.setEntity(new UrlEncodedFormEntity(params));
     	HttpResponse response = httpClient.execute(httppost);
@@ -98,7 +100,7 @@ public class ConnettionService {
 			
 			try {
 				HttpResponse res = ConnettionService.this.doPost("/login",variables,false);
-				System.out.println(res.getStatusLine().getStatusCode());
+				//System.out.println(res.getStatusLine().getStatusCode());
 				if (  res.getStatusLine().getStatusCode() > 302 ) {
 					ConnettionService.this.isConnect = false;
 				}else {ConnettionService.this.isConnect = true;}

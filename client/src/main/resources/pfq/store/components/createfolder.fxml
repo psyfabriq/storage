@@ -43,9 +43,9 @@
                         </JFXTextField>
                      </children>
                   </HBox>
-                  <HBox prefHeight="70.0" prefWidth="496.0">
+                  <HBox alignment="BOTTOM_RIGHT" prefHeight="73.0" prefWidth="496.0">
                      <children>
-                        <JFXButton onAction="#handleSaveButtonAction" prefHeight="40.0" prefWidth="80.0" styleClass="login-button" text="Save" />
+                        <JFXButton buttonType="RAISED" onAction="#handleSaveButtonAction" prefHeight="40.0" prefWidth="80.0" styleClass="login-button" text="Save" />
                         <JFXButton onAction="#handleCancelButtonAction" prefHeight="40.0" prefWidth="77.0" styleClass="login-button" text="Cancel" />
                      </children>
                   </HBox>

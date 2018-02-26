@@ -17,11 +17,15 @@
 }
 
 .button{
+	-fx-border-width: 0.5;
+
     -fx-text-fill: -fx-primarytext;
     -fx-background-color: -fx-primary;
     -fx-border-color: -fx-secondary;
-    -fx-border-radius: 15px;
-    -fx-background-radius: 15px;
+    -fx-border-radius: 20px;
+    -fx-padding: 10;
+    -fx-border-style: solid inside;
+    -fx-background-radius: 20px;
     -fx-font-size: 13pt;
 }
 
@@ -30,6 +34,8 @@
     -fx-background-color: -fx-secondary;
     -fx-text-fill: -fx-primary;
 }
+
+
 
 .text-field
 {

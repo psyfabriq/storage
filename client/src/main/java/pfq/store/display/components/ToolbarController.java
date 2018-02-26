@@ -12,7 +12,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import pfq.store.config.ContextStateApp;
 import pfq.store.display.Controller;
+import pfq.store.display.LoginController;
 
 public class ToolbarController extends Controller implements Initializable {
 	private List<CallBackToolbar> listeners = new ArrayList<CallBackToolbar>();
@@ -21,8 +23,14 @@ public class ToolbarController extends Controller implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }
+    
+    @Override
+	public void initContext(ContextStateApp context) {
+		super.initContext(context);
+		loadUI("dashboard");
+	}
 
-    @FXML
+	@FXML
     private void loadCreateFolder(ActionEvent event) {
     	loadUI("createfolder");
     }
@@ -54,10 +62,35 @@ public class ToolbarController extends Controller implements Initializable {
 
     private void loadUI(String ui) {
     	Parent page = null;
-    	try {
-			 page = FXMLLoader.load(getClass().getResource("/pfq/store/components/"+ui+".fxml"));
+    	try {			 
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/pfq/store/components/" + ui + ".fxml"));
+			page = (Parent) loader.load();
+			Controller controller = null;
+			
+			switch (ui) {
+			case "createfolder":
+			    controller = loader.<CreateFolderController>getController();
+				break;
+			case "upload":
+			    controller = loader.<UploadController>getController();
+				break;
+			case "usersettings":
+				
+		    //	 controller = loader.<UploadController>getController();
+		    //	controller.initContext(context);
+
+				break;
+			case "dashboard":
+			    controller = loader.<DashboardController>getController();
+				break;
+			default:
+				break;
+			}
+			
+	    	controller.initContext(context);
+
+	    	
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	

@@ -138,6 +138,7 @@ public class FileManagerController implements FileManagerControllerI {
 	@Override
 	public ResponseEntity<String> getListDirectory(@RequestBody String json, HttpServletRequest request,
 			HttpServletResponse response) {
+		System.out.println(json);
 		prepare(json, request);
 		if (systemInfoService.access()) {
 			result = fileService.getListDirectory(map);

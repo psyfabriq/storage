@@ -22,11 +22,18 @@ public class LoginController extends Controller implements Initializable{
 	@FXML
 	private Button loginButton;
 
+	
+
+    public LoginController() {
+		super();
+
+	}
 
 
-    @Override
+	@Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+		username.setText("Admin");
+		password.setText("Admin");
     }
 
 

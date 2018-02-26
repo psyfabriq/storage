@@ -19,6 +19,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import pfq.store.DisplayManager;
+import pfq.store.config.ContextStateApp;
 import pfq.store.display.components.CallBackToolbar;
 import pfq.store.display.components.ToolbarController;
 
@@ -32,39 +33,24 @@ public class MainViewController extends Controller  implements Initializable,Cal
 	    
 	    @FXML
 	    private StackPane pane;
-	  
-
-	  
-	  public void initSessionID(final DisplayManager loginManager, String sessionID) {
-		 /* 
-	    sessionLabel.setText(sessionID);
-	    logoutButton.setOnAction(new EventHandler<ActionEvent>() {
-	      @Override public void handle(ActionEvent event) {
-	        loginManager.logout();
-	      }
-	      
-	    });
-	    */
-	  }
-
-
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		initDrawer();
-		initPane();
 	}
-	private void initPane() {
-		try {
-			Parent page = FXMLLoader.load(getClass().getResource("/pfq/store/components/dashboard.fxml"));
-			pane.getChildren().add(page);
-			//pane.setCenter(page);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	
+	
+	
+	@Override
+	public void initContext(ContextStateApp context) {
+		super.initContext(context);
 
+		initDrawer();
+		//initPane();
+		//System.out.println(context!=null?true:false);
 	}
+
+
     private void initDrawer() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/pfq/store/components/toolbar.fxml"));
