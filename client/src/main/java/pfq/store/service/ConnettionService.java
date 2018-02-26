@@ -19,12 +19,15 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import pfq.store.AppSettings;
 
@@ -33,6 +36,7 @@ public class ConnettionService {
 	private CookieStore cookieStore;
 	private HttpContext httpContext;
 	private boolean     isConnect;
+	ObjectMapper mapper = new ObjectMapper();
 	
 	
 	private ConnettionService() {
@@ -56,18 +60,27 @@ public class ConnettionService {
     	builder.setScheme("http").setHost(AppSettings.get("host")).setPort(AppSettings.getInt("port", 8080)).setPath(path);
     	HttpPost httppost = new HttpPost(builder.build());
     	List<NameValuePair> params = new ArrayList<NameValuePair>();
-    	for (String key: variables.keySet()) {
-    	
-    		params.add(new BasicNameValuePair(key, URLEncoder.encode( variables.get(key), "UTF-8" )));
-    	}
+    
     	if(isJson) {
+    		StringEntity postingString = new StringEntity( mapper.writeValueAsString(variables));
+    		httppost.setEntity(postingString);
     		httppost.setHeader("Accept", "application/json");
-    		httppost.setHeader("Content-type", "application/json; charset=UTF-8;");
+    		httppost.setHeader("Content-type", "application/json");
+    		System.out.println("isJson");
     	}else {
+    		
+    		for (String key: variables.keySet()) {
+    	    	
+        		params.add(new BasicNameValuePair(key, URLEncoder.encode( variables.get(key), "UTF-8" )));
+        	}
+    		
     		httppost.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
     		httppost.setHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
+    		
+    		httppost.setEntity(new UrlEncodedFormEntity(params));
     	}
-    	httppost.setEntity(new UrlEncodedFormEntity(params));
+    	
+    	System.out.println(httppost.getEntity());
     	HttpResponse response = httpClient.execute(httppost);
     	return response;
     }

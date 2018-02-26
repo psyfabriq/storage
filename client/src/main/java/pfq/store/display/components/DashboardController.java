@@ -2,20 +2,30 @@ package pfq.store.display.components;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jfoenix.controls.JFXTreeView;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,6 +36,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
@@ -39,6 +50,12 @@ public class DashboardController extends Controller implements Initializable  {
 	 private  ObjectMapper mapper = new ObjectMapper();
 	 private ObservableList<FileItemFX> fileData = FXCollections.observableArrayList();
 	 
+	 private final FilterableTreeItem<TreeObject> rootNodeTree = new FilterableTreeItem<>(new TreeObject("Root Folder", "/", "/","0"));
+
+	 
+	    @FXML
+	    private JFXTreeView<TreeObject> treeView;
+
 	    @FXML
 	    private TableView<FileItemFX> filesView;
 
@@ -53,6 +70,7 @@ public class DashboardController extends Controller implements Initializable  {
 
 	    @FXML
 	    private TableColumn<FileItemFX, String> dateColumn;
+	    
 
 	
 	@Override
@@ -66,10 +84,31 @@ public class DashboardController extends Controller implements Initializable  {
 	      dateColumn.setCellValueFactory( dateProperty );
 	      
 		filesView.setItems(fileData);
+		rootNodeTree.setExpanded(true);
+		treeView.setRoot(rootNodeTree);
+		
 		addButtonToTable();
+		initTreeViews();
 	}
-	
+	   
+	   @SuppressWarnings("unchecked")
+	private void initTreeViews() {
+			rootNodeTree.setExpanded(true);
+			treeView.setRoot(rootNodeTree);
+			
+			 treeView.getSelectionModel().selectedItemProperty().addListener( new ChangeListener() {
 
+			        @Override
+			        public void changed(ObservableValue observable, Object oldValue,
+			                Object newValue) {
+			            TreeItem<TreeObject> selectedItem = (TreeItem<TreeObject>) newValue;
+			            //System.out.println("Selected Text : " + selectedItem.getValue().id);
+                        MemoryUtil.put("parrent_path", selectedItem.getValue().getPath());
+                        getListFolder();
+			        }
+
+			      });
+	   }
 	   private void addButtonToTable() {
 	        TableColumn<FileItemFX, Void> colBtn = new TableColumn("");
 
@@ -182,6 +221,46 @@ public class DashboardController extends Controller implements Initializable  {
 					        		                    objNode.get("type").asText(),
 					        		                    objNode.get("size").asLong(), 
 					        		                    objNode.get("time").asText()));
+					        
+				            FilterableTreeItem<TreeObject> empLeaf = new FilterableTreeItem<>(new TreeObject(objNode.get("name").asText(),
+				            		                                                                         objNode.get("path").asText(),
+				            		                                                                         "",
+				            		                                                                         objNode.get("id").asText()));
+				           
+			                //rootNodeTree.getInternalChildren().add(empLeaf);
+			                boolean found = false;
+			                
+			                for (TreeItem<TreeObject> depNode : rootNodeTree.getChildren()) {
+				                if (depNode.getValue().getId().contentEquals(objNode.get("id").asText())) {
+				                    found = true;
+				                    break;
+				                }
+				                
+				  
+				            }
+			                
+			                if (!found) {
+				              
+				                rootNodeTree.getInternalChildren().add(empLeaf);
+				     
+				            }
+			                /*
+				            
+				            
+				            for (TreeItem<TreeObject> depNode : rootNodeTree.getChildren()) {
+				                if (depNode.getValue().contentEquals(objNode.get("path").asText())) {
+				                    ((FilterableTreeItem)depNode).getInternalChildren().add(empLeaf);
+				                    found = true;
+				                    break;
+				                }
+				            }
+
+				            if (!found) {
+				                FilterableTreeItem<TreeObject> depNode = new FilterableTreeItem<>(objNode.get("path").asText());
+				                rootNodeTree.getInternalChildren().add(depNode);
+				                depNode.getInternalChildren().add(empLeaf);
+				            }
+				            */
 					        		                    
 					    }
 					}
@@ -214,5 +293,112 @@ public class DashboardController extends Controller implements Initializable  {
 		}
 		
 	}
+	
+
+	public class TreeObject {
+		String name;
+		String path;
+		String parrent;
+		String id;
+
+	    public TreeObject(String name, String path, String parrent, String id) {
+	        this.name    = name;
+	        this.path    = path;
+	        this.parrent = parrent;
+	        this.id      = id;
+	    }
+		public String getName() {
+			return name;
+		}
+		public String getPath() {
+			return path;
+		}
+		public String getParrent() {
+			return parrent;
+		}
+		public String getId() {
+			return id;
+		}
+		
+		@Override
+		public String toString() {
+		    return this.name;
+		}
+	    
+	}
+	
+    @FunctionalInterface
+    public interface TreeItemPredicate<T> {
+
+        boolean test(TreeItem<T> parent, T value);
+
+        static <T> TreeItemPredicate<T> create(Predicate<T> predicate) {
+            return (parent, value) -> predicate.test(value);
+        }
+
+    }
+
+    
+	 public class FilterableTreeItem<T> extends TreeItem<T> {
+	        final private ObservableList<TreeItem<T>> sourceList;
+	        private FilteredList<TreeItem<T>> filteredList;
+	        private ObjectProperty<TreeItemPredicate<T>> predicate = new SimpleObjectProperty<>();
+
+
+	        public FilterableTreeItem(T value) {
+	            super(value);
+	            this.sourceList = FXCollections.observableArrayList();
+	            this.filteredList = new FilteredList<>(this.sourceList);
+	            this.filteredList.predicateProperty().bind(Bindings.createObjectBinding(() -> {
+	                return child -> {
+	                    // Set the predicate of child items to force filtering
+	                    if (child instanceof FilterableTreeItem) {
+	                        FilterableTreeItem<T> filterableChild = (FilterableTreeItem<T>) child;
+	                        filterableChild.setPredicate(this.predicate.get());
+	                    }
+	                    // If there is no predicate, keep this tree item
+	                    if (this.predicate.get() == null)
+	                        return true;
+	                    // If there are children, keep this tree item
+	                    if (child.getChildren().size() > 0)
+	                        return true;
+	                    // Otherwise ask the TreeItemPredicate
+	                    return this.predicate.get().test(this, child.getValue());
+	                };
+	            }, this.predicate));
+	            setHiddenFieldChildren(this.filteredList);
+	        }
+
+	        protected void setHiddenFieldChildren(ObservableList<TreeItem<T>> list) {
+	            try {
+	                Field childrenField = TreeItem.class.getDeclaredField("children"); //$NON-NLS-1$
+	                childrenField.setAccessible(true);
+	                childrenField.set(this, list);
+
+	                Field declaredField = TreeItem.class.getDeclaredField("childrenListener"); //$NON-NLS-1$
+	                declaredField.setAccessible(true);
+	                list.addListener((ListChangeListener<? super TreeItem<T>>) declaredField.get(this));
+	            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+	                throw new RuntimeException("Could not set TreeItem.children", e); //$NON-NLS-1$
+	            }
+	        }
+
+	        public ObservableList<TreeItem<T>> getInternalChildren() {
+	            return this.sourceList;
+	        }
+
+	        public void setPredicate(TreeItemPredicate<T> predicate) {
+	            this.predicate.set(predicate);
+	        }
+
+	        public TreeItemPredicate getPredicate() {
+	            return predicate.get();
+	        }
+
+	        public ObjectProperty<TreeItemPredicate<T>> predicateProperty() {
+	            return predicate;
+	        }
+	    }
+
 
 }
