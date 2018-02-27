@@ -33,6 +33,11 @@ public class FileServiceImpl  implements FileService{
 	public String addFolder(Map<String, Object> map) {
 		Folder f = null;
 		if(map.containsKey("parrent")) {
+			if("".equals(map.get("parrent").toString()) || "/".equals(map.get("parrent").toString())){
+				map.remove("parrent");
+			}
+		}
+		if(map.containsKey("parrent")) {
 			Optional<Folder>  fp = fileDAO.findFolder((String)map.get("parrent"));
 			if (fp.isPresent()) {
 				try {

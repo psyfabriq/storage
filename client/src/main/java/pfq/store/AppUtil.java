@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javafx.fxml.FXMLLoader;
@@ -114,6 +115,16 @@ public class AppUtil {
         } 
         //map.put("ResponseMessage", getResponseMap(rs));
         return map;
+    }
+    
+    public static String prettyPrintJsonString(JsonNode jsonNode) {
+        try {
+           
+            Object json = mapper.readValue(jsonNode.toString(), Object.class);
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+        } catch (Exception e) {
+            return "Sorry, pretty print didn't work";
+        }
     }
     
     public static Map<String, Object> getResponseMap(ResponseStatus status){

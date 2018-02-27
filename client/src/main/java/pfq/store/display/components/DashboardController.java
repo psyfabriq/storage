@@ -44,13 +44,15 @@ import pfq.store.AppUtil;
 import pfq.store.MemoryUtil;
 import pfq.store.config.ContextStateApp;
 import pfq.store.display.Controller;
+import pfq.store.filters.FilterableTreeItem;
 import pfq.store.model.FileItemFX;
+import pfq.store.model.TreeObject;
 
 public class DashboardController extends Controller implements Initializable  {
 	 private  ObjectMapper mapper = new ObjectMapper();
 	 private ObservableList<FileItemFX> fileData = FXCollections.observableArrayList();
 	 
-	 private final FilterableTreeItem<TreeObject> rootNodeTree = new FilterableTreeItem<>(new TreeObject("Root Folder", "/", "/","0"));
+	 private final FilterableTreeItem<TreeObject> rootNodeTree;
 
 	 
 	    @FXML
@@ -72,6 +74,10 @@ public class DashboardController extends Controller implements Initializable  {
 	    private TableColumn<FileItemFX, String> dateColumn;
 	    
 
+		public DashboardController() {
+			super();
+			this.rootNodeTree = MemoryUtil.getObj("treeFoders").isPresent()?( FilterableTreeItem<TreeObject>)MemoryUtil.getObj("treeFoders").get() : new FilterableTreeItem<>(new TreeObject("Root Folder", "/", "/","0"));
+	}    
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -126,25 +132,19 @@ public class DashboardController extends Controller implements Initializable  {
 	                    private final ToggleButton btnDelete = new ToggleButton("Delete");
 	                    
 					{
-						
 						hb.setAlignment(Pos.CENTER);
-						//hb.getChildren().addAll(btnOpen, btnEdit, btnDelete);
 					}
 	                    
-
 	                    {
-	                    
                     	     	hb.getChildren().add(btnEdit);
 	                    	    btnEdit.setToggleGroup(group);
 		                    	btnEdit.setOnAction((ActionEvent event) -> {
 			                    	FileItemFX data = getTableView().getItems().get(getIndex());
 		                            System.out.println("selectedData: " + data);
 		                        });  		
-	                    	
 	                    }
 	                    
 	                    {
-
 	                    	btnOpen.setToggleGroup(group);
                     		hb.getChildren().add(btnOpen);
 	                    	
@@ -226,8 +226,6 @@ public class DashboardController extends Controller implements Initializable  {
 				            		                                                                         objNode.get("path").asText(),
 				            		                                                                         "",
 				            		                                                                         objNode.get("id").asText()));
-				           
-			                //rootNodeTree.getInternalChildren().add(empLeaf);
 			                boolean found = false;
 			                
 			                for (TreeItem<TreeObject> depNode : rootNodeTree.getChildren()) {
@@ -235,32 +233,12 @@ public class DashboardController extends Controller implements Initializable  {
 				                    found = true;
 				                    break;
 				                }
-				                
-				  
 				            }
 			                
-			                if (!found) {
-				              
+			                if (!found) {             
 				                rootNodeTree.getInternalChildren().add(empLeaf);
-				     
+				                MemoryUtil.putObj("treeFoders", rootNodeTree);
 				            }
-			                /*
-				            
-				            
-				            for (TreeItem<TreeObject> depNode : rootNodeTree.getChildren()) {
-				                if (depNode.getValue().contentEquals(objNode.get("path").asText())) {
-				                    ((FilterableTreeItem)depNode).getInternalChildren().add(empLeaf);
-				                    found = true;
-				                    break;
-				                }
-				            }
-
-				            if (!found) {
-				                FilterableTreeItem<TreeObject> depNode = new FilterableTreeItem<>(objNode.get("path").asText());
-				                rootNodeTree.getInternalChildren().add(depNode);
-				                depNode.getInternalChildren().add(empLeaf);
-				            }
-				            */
 					        		                    
 					    }
 					}
@@ -271,134 +249,19 @@ public class DashboardController extends Controller implements Initializable  {
 					    }
 					}
 				}
-			        
-/*			        
-			        Map<String, Object> map = AppUtil.getValues(AppUtil.convertStreamToString(instream));
-			        map = (Map<String, Object>) map.get("Result");
-			        
-			        for (HashMap<String, Object> folder : (List<HashMap<String, Object>>) map.get("folders")) {
-			        	 //System.out.println(folder.toString());
-			        	JsonNode myObjects = mapper.readValue(mapper.writeValueAsString(folder), JsonNode.class);
-			        	 System.out.println(myObjects);
-					}
-*/
-
-		           // System.out.println(map.get("folders"));
+			  
 		           
 			}
-			//System.out.println(res.get);
 		} catch (URISyntaxException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 	}
 	
 
-	public class TreeObject {
-		String name;
-		String path;
-		String parrent;
-		String id;
-
-	    public TreeObject(String name, String path, String parrent, String id) {
-	        this.name    = name;
-	        this.path    = path;
-	        this.parrent = parrent;
-	        this.id      = id;
-	    }
-		public String getName() {
-			return name;
-		}
-		public String getPath() {
-			return path;
-		}
-		public String getParrent() {
-			return parrent;
-		}
-		public String getId() {
-			return id;
-		}
-		
-		@Override
-		public String toString() {
-		    return this.name;
-		}
-	    
-	}
-	
-    @FunctionalInterface
-    public interface TreeItemPredicate<T> {
-
-        boolean test(TreeItem<T> parent, T value);
-
-        static <T> TreeItemPredicate<T> create(Predicate<T> predicate) {
-            return (parent, value) -> predicate.test(value);
-        }
-
-    }
 
     
-	 public class FilterableTreeItem<T> extends TreeItem<T> {
-	        final private ObservableList<TreeItem<T>> sourceList;
-	        private FilteredList<TreeItem<T>> filteredList;
-	        private ObjectProperty<TreeItemPredicate<T>> predicate = new SimpleObjectProperty<>();
-
-
-	        public FilterableTreeItem(T value) {
-	            super(value);
-	            this.sourceList = FXCollections.observableArrayList();
-	            this.filteredList = new FilteredList<>(this.sourceList);
-	            this.filteredList.predicateProperty().bind(Bindings.createObjectBinding(() -> {
-	                return child -> {
-	                    // Set the predicate of child items to force filtering
-	                    if (child instanceof FilterableTreeItem) {
-	                        FilterableTreeItem<T> filterableChild = (FilterableTreeItem<T>) child;
-	                        filterableChild.setPredicate(this.predicate.get());
-	                    }
-	                    // If there is no predicate, keep this tree item
-	                    if (this.predicate.get() == null)
-	                        return true;
-	                    // If there are children, keep this tree item
-	                    if (child.getChildren().size() > 0)
-	                        return true;
-	                    // Otherwise ask the TreeItemPredicate
-	                    return this.predicate.get().test(this, child.getValue());
-	                };
-	            }, this.predicate));
-	            setHiddenFieldChildren(this.filteredList);
-	        }
-
-	        protected void setHiddenFieldChildren(ObservableList<TreeItem<T>> list) {
-	            try {
-	                Field childrenField = TreeItem.class.getDeclaredField("children"); //$NON-NLS-1$
-	                childrenField.setAccessible(true);
-	                childrenField.set(this, list);
-
-	                Field declaredField = TreeItem.class.getDeclaredField("childrenListener"); //$NON-NLS-1$
-	                declaredField.setAccessible(true);
-	                list.addListener((ListChangeListener<? super TreeItem<T>>) declaredField.get(this));
-	            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-	                throw new RuntimeException("Could not set TreeItem.children", e); //$NON-NLS-1$
-	            }
-	        }
-
-	        public ObservableList<TreeItem<T>> getInternalChildren() {
-	            return this.sourceList;
-	        }
-
-	        public void setPredicate(TreeItemPredicate<T> predicate) {
-	            this.predicate.set(predicate);
-	        }
-
-	        public TreeItemPredicate getPredicate() {
-	            return predicate.get();
-	        }
-
-	        public ObjectProperty<TreeItemPredicate<T>> predicateProperty() {
-	            return predicate;
-	        }
-	    }
+	 
 
 
 }

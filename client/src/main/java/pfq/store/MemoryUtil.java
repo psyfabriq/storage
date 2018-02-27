@@ -1,12 +1,15 @@
 package pfq.store;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 public class MemoryUtil {
 	HashMap<String,String> variables = null;
+	HashMap<String,Object> variablesObj = null;
 	private static MemoryUtil SINGLETON;
 	private MemoryUtil() {
 		this.variables = new HashMap<>();
+		this.variablesObj = new HashMap<>();
 	}
 	
 	static {
@@ -14,16 +17,20 @@ public class MemoryUtil {
 	}
 	
 	
-	public static String get(String key) {
-		return SINGLETON.variables.get(key);
+	public static Optional<String> get(String key) {
+		return Optional.ofNullable(SINGLETON.variables.get(key));
+	}
+	
+	public static Optional<Object> getObj(String key) {
+		return Optional.ofNullable(SINGLETON.variablesObj.get(key)) ;
 	}
 	
 	public static String get(String key, String deflt) {
-		String obj = SINGLETON.variables.get(key);
-		if (obj == null) {
-			return deflt;
+		
+		if (SINGLETON.get(key).isPresent()) {
+			return SINGLETON.get(key).get();
 		} else {
-			return obj;
+			return deflt;
 		}
 	}
 	
@@ -53,6 +60,14 @@ public class MemoryUtil {
 			throw new IllegalArgumentException();
 		} else {
 			SINGLETON.variables.put(key, data);
+		}
+	}
+	
+	public static void putObj(String key, Object data) {
+		if (data == null) {
+			throw new IllegalArgumentException();
+		} else {
+			SINGLETON.variablesObj.put(key, data);
 		}
 	}
 }

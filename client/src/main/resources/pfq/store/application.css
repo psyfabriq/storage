@@ -17,10 +17,9 @@
 }
 
 .button{
-	-fx-border-width: 0.5;
+	-fx-border-width: 1;
 
     -fx-text-fill: -fx-primarytext;
-    -fx-background-color: -fx-primary;
     -fx-border-color: -fx-secondary;
     -fx-border-radius: 20px;
     -fx-padding: 10;
@@ -240,4 +239,12 @@
 .table-context
 {
     -fx-base: -fx-primary;
+}
+
+.scroll-pane,
+.split-pane {
+    -fx-border-style: none;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-box-border: transparent;
 }

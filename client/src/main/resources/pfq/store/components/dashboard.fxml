@@ -7,23 +7,23 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane prefHeight="464.0" prefWidth="657.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pfq.store.display.components.DashboardController">
+<StackPane prefHeight="833.0" prefWidth="1065.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pfq.store.display.components.DashboardController">
    <children>
-      <SplitPane dividerPositions="0.28549618320610687" prefHeight="160.0" prefWidth="200.0">
+      <SplitPane dividerPositions="0.28549618320610687" nodeOrientation="LEFT_TO_RIGHT" prefHeight="160.0" prefWidth="200.0" style="-fx-border-width: 0; -fx-border-style: none; -fx-box-border: transparent;">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" SplitPane.resizableWithParent="false">
                <children>
                   <JFXTreeView fx:id="treeView" prefHeight="462.0" prefWidth="191.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-border-width: 0;">
                <children>
-                  <TableView fx:id="filesView" prefHeight="464.0" prefWidth="464.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="filesView" prefHeight="464.0" prefWidth="372.0" style="-fx-border-width: 0;" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-223.0" AnchorPane.topAnchor="0.0">
                     <columns>
                       <TableColumn fx:id="imageColumn" prefWidth="47.0" resizable="false" sortable="false" />
-                      <TableColumn fx:id="nameColumn" prefWidth="346.0" text="Name" />
-                        <TableColumn fx:id="sizeColumn" minWidth="0.0" prefWidth="76.0" text="Size" />
-                        <TableColumn fx:id="dateColumn" prefWidth="170.0" text="Date" />
+                      <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" minWidth="150.0" prefWidth="-1.0" text="Name" />
+                        <TableColumn fx:id="sizeColumn" minWidth="0.0" prefWidth="76.0" resizable="false" text="Size" />
+                        <TableColumn fx:id="dateColumn" prefWidth="270.0" resizable="false" text="Date" />
                     </columns>
                   </TableView>
                </children>

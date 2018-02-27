@@ -2,56 +2,76 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTreeView?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="186.0" prefWidth="516.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pfq.store.display.components.CreateFolderController">
+<StackPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pfq.store.display.components.CreateFolderController">
    <children>
-      <GridPane layoutY="3.0" prefHeight="146.0" prefWidth="516.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="3.0">
-        <columnConstraints>
-            <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="ALWAYS" maxWidth="114.0" minWidth="10.0" prefWidth="101.0" />
-          <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="631.0" />
-          <ColumnConstraints fillWidth="false" halignment="RIGHT" maxWidth="258.0" minWidth="10.0" prefWidth="92.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints maxHeight="125.0" minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="261.0" minHeight="10.0" prefHeight="261.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="75.0" minHeight="10.0" prefHeight="17.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <VBox prefHeight="161.0" prefWidth="496.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <SplitPane dividerPositions="0.29797979797979796" prefHeight="160.0" prefWidth="200.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" SplitPane.resizableWithParent="false">
                <children>
-                  <HBox prefHeight="73.0" prefWidth="496.0">
-                     <children>
-                        <FontAwesomeIconView glyphName="OPTIN_MONSTER" size="25" wrappingWidth="37.64285659790039" />
-                        <JFXTextField fx:id="fname" prefHeight="26.0" prefWidth="580.0" promptText="Folder name" />
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="13.0" prefWidth="496.0">
-                     <children>
-                        <FontAwesomeIconView glyphName="EXTERNAL_LINK" size="25" wrappingWidth="36.0" />
-                        <JFXTextField fx:id="fpath" labelFloat="true" prefHeight="41.0" prefWidth="460.0" promptText="Parrent path">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </JFXTextField>
-                     </children>
-                  </HBox>
-                  <HBox alignment="BOTTOM_RIGHT" prefHeight="73.0" prefWidth="496.0">
-                     <children>
-                        <JFXButton buttonType="RAISED" onAction="#handleSaveButtonAction" prefHeight="40.0" prefWidth="80.0" styleClass="login-button" text="Save" />
-                        <JFXButton onAction="#handleCancelButtonAction" prefHeight="40.0" prefWidth="77.0" styleClass="login-button" text="Cancel" />
-                     </children>
-                  </HBox>
+                  <JFXTreeView fx:id="treeView" layoutX="1.0" layoutY="-2.0" prefHeight="400.0" prefWidth="174.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="-2.0" />
                </children>
-            </VBox>
-         </children>
-      </GridPane>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #2A2E37;">
+               <children>
+                  <GridPane prefHeight="146.0" prefWidth="516.0" style="-fx-background-color: #2A2E37;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="3.0">
+                     <columnConstraints>
+                        <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="ALWAYS" maxWidth="114.0" minWidth="10.0" prefWidth="101.0" />
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="631.0" />
+                        <ColumnConstraints fillWidth="false" halignment="RIGHT" maxWidth="258.0" minWidth="10.0" prefWidth="92.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="125.0" minHeight="10.0" prefHeight="111.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints fillHeight="false" maxHeight="261.0" minHeight="10.0" prefHeight="189.0" valignment="CENTER" vgrow="SOMETIMES" />
+                        <RowConstraints fillHeight="false" maxHeight="145.0" minHeight="10.0" prefHeight="95.0" valignment="CENTER" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <children>
+                              <VBox alignment="CENTER" prefHeight="161.0" prefWidth="496.0">
+                                 <children>
+                                    <HBox alignment="TOP_CENTER" prefHeight="73.0" prefWidth="496.0">
+                                       <children>
+                                          <FontAwesomeIconView glyphName="OPTIN_MONSTER" size="25" wrappingWidth="52.64285659790039" />
+                                          <JFXTextField fx:id="fname" prefHeight="26.0" prefWidth="386.0" promptText="Folder name" />
+                                       </children>
+                                    </HBox>
+                                    <HBox prefHeight="13.0" prefWidth="496.0">
+                                       <children>
+                                          <FontAwesomeIconView glyphName="EXTERNAL_LINK" size="25" wrappingWidth="51.0" />
+                                          <JFXTextField fx:id="fpath" labelFloat="true" prefHeight="26.0" prefWidth="386.0" promptText="Parrent path">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </JFXTextField>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="73.0" prefWidth="496.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <children>
+                              <JFXButton buttonType="RAISED" onAction="#handleAddButtonAction" prefHeight="40.0" prefWidth="141.0" ripplerFill="#56a435" styleClass="login-button" text="Add Folder" wrapText="true" />
+                           </children>
+                        </HBox>
+                        <FontAwesomeIconView glyphName="PLUS_SQUARE" size="80" GridPane.columnIndex="1" />
+                     </children>
+                  </GridPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
    </children>
-</AnchorPane>
+</StackPane>
