@@ -26,6 +26,7 @@ import javafx.scene.control.TreeItem;
 import javafx.util.Duration;
 import pfq.store.AppUtil;
 import pfq.store.MemoryUtil;
+import pfq.store.Notification;
 import pfq.store.display.Controller;
 import pfq.store.filters.FilterableTreeItem;
 import pfq.store.model.TreeObject;
@@ -88,22 +89,10 @@ public class CreateFolderController extends Controller implements Initializable 
 					 instream.close();
 					 System.out.println(rootNode.toString());
 					 if(rootNode.get("BStatus").asBoolean()) {
-						 Notifications notificationBuilder = Notifications.create()
-	                                                         .title("Create folder saccess")
-	                                                         .text("Folder "+fname.getText()+" added")
-	                                                         .graphic(null)
-	                                                         .hideAfter(Duration.seconds(5))
-	                                                         .position(Pos.TOP_RIGHT);
-						 notificationBuilder.show();
+						 Notification.success("Folder "+fname.getText()+" added");
 	                                                         
 					 }else {
-						 Notifications notificationBuilder = Notifications.create()
-                                 .title("Create folder error")
-                                 .text("Folder "+fname.getText()+" added error")
-                                 .graphic(null)
-                                 .hideAfter(Duration.seconds(5))
-                                 .position(Pos.TOP_RIGHT);
-                         notificationBuilder.show();
+						 Notification.error("Folder "+fname.getText()+" added error");
 					 }
 
 					 

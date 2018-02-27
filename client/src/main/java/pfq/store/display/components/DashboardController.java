@@ -193,6 +193,8 @@ public class DashboardController extends Controller implements Initializable  {
 	                    	
 	                        	FileItemFX data = getTableView().getItems().get(getIndex());
 	                        	btnOpen.setSelected(false);
+	                        	
+	                        	foundTreeViewChild(data.getId());
 	                            MemoryUtil.put("parrent_path", data.getPath());
 	                            getListFolder();
 	                            
@@ -237,6 +239,17 @@ public class DashboardController extends Controller implements Initializable  {
 		super.initContext(context);
 		getListFolder();
 
+	}
+	
+	private void foundTreeViewChild(String id) {
+        FilterableTreeItem<TreeObject>  currentNodeTree =  MemoryUtil.getObj("current_tree_item").isPresent()?(FilterableTreeItem<TreeObject>)MemoryUtil.getObj("current_tree_item").get():rootNodeTree;
+        
+        for (TreeItem<TreeObject> depNode : currentNodeTree.getChildren()) {
+            if (depNode.getValue().getId().contentEquals(id)) {
+	            MemoryUtil.putObj("current_tree_item", depNode);
+                break;
+            }
+        }
 	}
 
 	private void getListFolder() {
@@ -304,10 +317,5 @@ public class DashboardController extends Controller implements Initializable  {
 		
 	}
 	
-
-
-    
-	 
-
 
 }

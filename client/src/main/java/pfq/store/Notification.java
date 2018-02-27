@@ -25,7 +25,7 @@ public class Notification {
                 .graphic(null)
                 .hideAfter(duration)
                 .position(position);
-       notificationBuilder.show();
+       notificationBuilder.showError();
 	}
 	
 	public static void success(String text) {
@@ -35,7 +35,7 @@ public class Notification {
                 .graphic(null)
                 .hideAfter(duration)
                 .position(position);
-       notificationBuilder.show();
+       notificationBuilder.showConfirm();
 	}
 	
 	public static void info(String text) {
