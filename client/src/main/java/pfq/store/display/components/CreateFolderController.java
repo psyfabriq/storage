@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.controlsfx.control.Notifications;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,7 +21,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.TreeItem;
+import javafx.util.Duration;
 import pfq.store.AppUtil;
 import pfq.store.MemoryUtil;
 import pfq.store.display.Controller;
@@ -84,6 +87,26 @@ public class CreateFolderController extends Controller implements Initializable 
 					 JsonNode rootNode    = mapper.readValue(AppUtil.convertStreamToString(instream), JsonNode.class);
 					 instream.close();
 					 System.out.println(rootNode.toString());
+					 if(rootNode.get("BStatus").asBoolean()) {
+						 Notifications notificationBuilder = Notifications.create()
+	                                                         .title("Create folder saccess")
+	                                                         .text("Folder "+fname.getText()+" added")
+	                                                         .graphic(null)
+	                                                         .hideAfter(Duration.seconds(5))
+	                                                         .position(Pos.TOP_RIGHT);
+						 notificationBuilder.show();
+	                                                         
+					 }else {
+						 Notifications notificationBuilder = Notifications.create()
+                                 .title("Create folder error")
+                                 .text("Folder "+fname.getText()+" added error")
+                                 .graphic(null)
+                                 .hideAfter(Duration.seconds(5))
+                                 .position(Pos.TOP_RIGHT);
+                         notificationBuilder.show();
+					 }
+
+					 
 				}
 				
 			} catch (URISyntaxException | IOException e) {

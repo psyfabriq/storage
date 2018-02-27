@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.image.Image;
 
 public class FileItemFX {
 	
@@ -14,6 +15,7 @@ public class FileItemFX {
 	private   SimpleStringProperty  type = new SimpleStringProperty();
 	private   SimpleLongProperty    size = new SimpleLongProperty();
 	private   SimpleStringProperty  time = new SimpleStringProperty();
+	private                  Image  icon;
 	
 
 
@@ -26,6 +28,12 @@ public class FileItemFX {
 		this.type.setValue(type);
 		this.size.setValue(size);
 		this.time.setValue(time);
+		
+		if("dir".equals(type)) {
+			icon = new Image("/pfq/store/img/bookmark-alt-flat/128x128.png");
+		}else if ("file".equals(type)) {
+			icon = new Image("/pfq/store/img/document-flat/128x128.png");
+		}
 	}
 	
 
@@ -51,6 +59,11 @@ public class FileItemFX {
 
 	public String getTime() {
 		return time.get();
+	}
+
+
+	public Image getIcon() {
+		return icon;
 	}
 
   

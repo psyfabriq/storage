@@ -38,6 +38,8 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import pfq.store.AppUtil;
@@ -62,7 +64,7 @@ public class DashboardController extends Controller implements Initializable  {
 	    private TableView<FileItemFX> filesView;
 
 	    @FXML
-	    private TableColumn<FileItemFX, ?> imageColumn;
+	    private TableColumn<FileItemFX, Image> imageColumn;
 
 	    @FXML
 	    private TableColumn<FileItemFX, String> nameColumn;
@@ -81,20 +83,56 @@ public class DashboardController extends Controller implements Initializable  {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-	      PropertyValueFactory<FileItemFX, String> nameProperty = new PropertyValueFactory<FileItemFX, String>("name");
-	      PropertyValueFactory<FileItemFX, Long> sizeProperty = new PropertyValueFactory<FileItemFX, Long>("size");
-	      PropertyValueFactory<FileItemFX, String> dateProperty = new PropertyValueFactory<FileItemFX, String>("time");
-	      
-	      nameColumn.setCellValueFactory( nameProperty );
-	      sizeColumn.setCellValueFactory( sizeProperty );
-	      dateColumn.setCellValueFactory( dateProperty );
+
 	      
 		filesView.setItems(fileData);
 		rootNodeTree.setExpanded(true);
 		treeView.setRoot(rootNodeTree);
 		
 		addButtonToTable();
+		initColums();
 		initTreeViews();
+	}
+	
+	private void initColums() {
+		
+		Callback<TableColumn<FileItemFX, Image>, TableCell<FileItemFX, Image>> cellFactory = new Callback<TableColumn<FileItemFX, Image>, TableCell<FileItemFX, Image>>() {
+            public TableCell<FileItemFX, Image> call(TableColumn<FileItemFX, Image> param) {
+
+                final ImageView imageView = new ImageView();
+                imageView.setFitHeight(50);
+                imageView.setFitWidth(50);
+
+                    TableCell<FileItemFX, Image> cell = new TableCell<FileItemFX, Image>(){
+
+                        @Override
+                        protected void updateItem(Image item, boolean empty) {
+                        	System.out.println(item);
+                        	if (empty) {
+                        		imageView.setImage(null);
+	                        } else {
+	                        	imageView.setImage(item);
+	                        }
+                              
+                        }
+                    };
+                    cell.setGraphic(imageView);
+                    return cell;
+            }
+        };
+		
+		
+	      PropertyValueFactory<FileItemFX, String> nameProperty = new PropertyValueFactory<FileItemFX, String>("name");
+	      PropertyValueFactory<FileItemFX, Long> sizeProperty   = new PropertyValueFactory<FileItemFX, Long>("size");
+	      PropertyValueFactory<FileItemFX, String> dateProperty = new PropertyValueFactory<FileItemFX, String>("time");
+	      PropertyValueFactory<FileItemFX, Image> typeProperty  = new PropertyValueFactory<FileItemFX, Image>("icon");
+	      
+	      imageColumn.setCellFactory(cellFactory);
+	      nameColumn.setCellValueFactory( nameProperty );
+	      sizeColumn.setCellValueFactory( sizeProperty );
+	      dateColumn.setCellValueFactory( dateProperty );
+	      imageColumn.setCellValueFactory( typeProperty );
+
 	}
 	   
 	   @SuppressWarnings("unchecked")
@@ -108,7 +146,7 @@ public class DashboardController extends Controller implements Initializable  {
 			        public void changed(ObservableValue observable, Object oldValue,
 			                Object newValue) {
 			            TreeItem<TreeObject> selectedItem = (TreeItem<TreeObject>) newValue;
-			            //System.out.println("Selected Text : " + selectedItem.getValue().id);
+			            MemoryUtil.putObj("current_tree_item", selectedItem);
                         MemoryUtil.put("parrent_path", selectedItem.getValue().getPath());
                         getListFolder();
 			        }
@@ -138,31 +176,37 @@ public class DashboardController extends Controller implements Initializable  {
 	                    {
                     	     	hb.getChildren().add(btnEdit);
 	                    	    btnEdit.setToggleGroup(group);
+	                    	    
 		                    	btnEdit.setOnAction((ActionEvent event) -> {
 			                    	FileItemFX data = getTableView().getItems().get(getIndex());
+			                    	btnEdit.setSelected(false);
 		                            System.out.println("selectedData: " + data);
+		                            
 		                        });  		
 	                    }
 	                    
 	                    {
 	                    	btnOpen.setToggleGroup(group);
                     		hb.getChildren().add(btnOpen);
-	                    	
+                    		
 	                    	btnOpen.setOnAction((ActionEvent event) -> {
+	                    	
 	                        	FileItemFX data = getTableView().getItems().get(getIndex());
-	                            //System.out.println("selectedData: " + data.getName());
+	                        	btnOpen.setSelected(false);
 	                            MemoryUtil.put("parrent_path", data.getPath());
 	                            getListFolder();
+	                            
 	                        });
 	                    }
 	                    
 	                    {
 	                    	btnDelete.setToggleGroup(group);
                     		hb.getChildren().add(btnDelete);
+                    		
 	                    	btnDelete.setOnAction((ActionEvent event) -> {
 	                        	FileItemFX data = getTableView().getItems().get(getIndex());
+	                        	btnDelete.setSelected(false);
 	                            System.out.println("selectedData: " + data);
-	                           
 	                        });
 	                    }
 	                    
@@ -228,7 +272,9 @@ public class DashboardController extends Controller implements Initializable  {
 				            		                                                                         objNode.get("id").asText()));
 			                boolean found = false;
 			                
-			                for (TreeItem<TreeObject> depNode : rootNodeTree.getChildren()) {
+			                FilterableTreeItem<TreeObject>  currentNodeTree =  MemoryUtil.getObj("current_tree_item").isPresent()?(FilterableTreeItem<TreeObject>)MemoryUtil.getObj("current_tree_item").get():rootNodeTree;
+			                
+			                for (TreeItem<TreeObject> depNode : currentNodeTree.getChildren()) {
 				                if (depNode.getValue().getId().contentEquals(objNode.get("id").asText())) {
 				                    found = true;
 				                    break;
@@ -236,7 +282,7 @@ public class DashboardController extends Controller implements Initializable  {
 				            }
 			                
 			                if (!found) {             
-				                rootNodeTree.getInternalChildren().add(empLeaf);
+			                	currentNodeTree.getInternalChildren().add(empLeaf);
 				                MemoryUtil.putObj("treeFoders", rootNodeTree);
 				            }
 					        		                    

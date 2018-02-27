@@ -41,16 +41,19 @@
                            <children>
                               <VBox alignment="CENTER" prefHeight="161.0" prefWidth="496.0">
                                  <children>
-                                    <HBox alignment="TOP_CENTER" prefHeight="73.0" prefWidth="496.0">
+                                    <HBox prefHeight="73.0" prefWidth="496.0">
                                        <children>
                                           <FontAwesomeIconView glyphName="OPTIN_MONSTER" size="25" wrappingWidth="52.64285659790039" />
-                                          <JFXTextField fx:id="fname" prefHeight="26.0" prefWidth="386.0" promptText="Folder name" />
+                                          <JFXTextField fx:id="fname" prefHeight="26.0" prefWidth="386.0" promptText="Folder name">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font></JFXTextField>
                                        </children>
                                     </HBox>
-                                    <HBox prefHeight="13.0" prefWidth="496.0">
+                                    <HBox alignment="CENTER_LEFT" prefHeight="13.0" prefWidth="496.0">
                                        <children>
                                           <FontAwesomeIconView glyphName="EXTERNAL_LINK" size="25" wrappingWidth="51.0" />
-                                          <JFXTextField fx:id="fpath" labelFloat="true" prefHeight="26.0" prefWidth="386.0" promptText="Parrent path">
+                                          <JFXTextField fx:id="fpath" prefHeight="26.0" prefWidth="386.0" promptText="Parrent path">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
