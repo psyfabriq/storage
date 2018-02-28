@@ -54,8 +54,7 @@ public class FileManagerController implements FileManagerControllerI {
 		if (systemInfoService.access()) {
 			result = fileService.addFolder(map);
 		}
-		return new ResponseEntity<String>(result, head,
-				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
+		return new ResponseEntity<String>(result, head, systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
 	}
 
 	@Override
@@ -63,10 +62,9 @@ public class FileManagerController implements FileManagerControllerI {
 			HttpServletResponse response) {
 		prepare(json, request);
 		if (systemInfoService.access()) {
-			result = fileService.addFolder(map);
+			result = fileService.itemCopy(map); 
 		}
-		return new ResponseEntity<String>(result, head,
-				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
+		return new ResponseEntity<String>(result, head, systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
 	}
 
 	@Override
@@ -74,7 +72,7 @@ public class FileManagerController implements FileManagerControllerI {
 			HttpServletResponse response) {
 		prepare(json, request);
 		if (systemInfoService.access()) {
-			result = fileService.addFolder(map);
+			result = fileService.itemDelete(map); 
 		}
 		return new ResponseEntity<String>(result, head,
 				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
@@ -85,7 +83,7 @@ public class FileManagerController implements FileManagerControllerI {
 			HttpServletResponse response) {
 		prepare(json, request);
 		if (systemInfoService.access()) {
-			result = fileService.addFolder(map);
+			result = fileService.itemUpload(map); 
 		}
 		return new ResponseEntity<String>(result, head,
 				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
@@ -96,7 +94,7 @@ public class FileManagerController implements FileManagerControllerI {
 			HttpServletResponse response) {
 		prepare(json, request);
 		if (systemInfoService.access()) {
-			result = fileService.addFolder(map);
+			result = fileService.itemDownload(map); 
 		}
 		return new ResponseEntity<String>(result, head,
 				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
@@ -107,7 +105,7 @@ public class FileManagerController implements FileManagerControllerI {
 			HttpServletResponse response) {
 		prepare(json, request);
 		if (systemInfoService.access()) {
-			result = fileService.addFolder(map);
+			result = fileService.itemCompress(map); 
 		}
 		return new ResponseEntity<String>(result, head,
 				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
@@ -118,7 +116,7 @@ public class FileManagerController implements FileManagerControllerI {
 			HttpServletResponse response) {
 		prepare(json, request);
 		if (systemInfoService.access()) {
-			result = fileService.addFolder(map);
+			result = fileService.itemMoveFile(map); 
 		}
 		return new ResponseEntity<String>(result, head,
 				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
@@ -129,7 +127,7 @@ public class FileManagerController implements FileManagerControllerI {
 			HttpServletResponse response) {
 		prepare(json, request);
 		if (systemInfoService.access()) {
-			result = fileService.addFolder(map);
+			result = fileService.itemRenameFile(map); 
 		}
 		return new ResponseEntity<String>(result, head,
 				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
@@ -141,7 +139,7 @@ public class FileManagerController implements FileManagerControllerI {
 		System.out.println(json);
 		prepare(json, request);
 		if (systemInfoService.access()) {
-			result = fileService.getListDirectory(map);
+			result = fileService.getListDirectory(map); 
 		}
 		return new ResponseEntity<String>(result, head,
 				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);

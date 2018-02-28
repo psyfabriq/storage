@@ -69,7 +69,7 @@ public class FileDaoImpl implements FileDAO{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+/*
 	@Override
 	public Optional<File> findFileByID(String id) {
 		// TODO Auto-generated method stub
@@ -93,7 +93,7 @@ public class FileDaoImpl implements FileDAO{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+*/
 	@Override
 	public List<File> getAllFiles(String folderpath) {
 		// TODO Auto-generated method stub
@@ -129,8 +129,11 @@ public class FileDaoImpl implements FileDAO{
 
 	@Override
 	public boolean deleteFolder(Folder folder) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean result = !checkHasFolder(folder.getPath());
+		if(result){
+			mongoOperation.remove(folder);
+			return true;
+		}else {return false;}
 	}
 
 	@Override

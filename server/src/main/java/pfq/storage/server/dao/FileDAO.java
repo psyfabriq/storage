@@ -15,10 +15,10 @@ public interface FileDAO {
     boolean checkHasFile(String filepath);
     boolean checkHasFileByID(String ID);
     Optional<File>  findFile(String filepath);
-    Optional<File>  findFileByID(String id);
-    Optional<File>  findFileByQueryOne(String query);
-    List<File> findFileByQueryList(String query);
-    List<File> findFileByQueryList(Query query);
+  //  Optional<File>  findFileByID(String id);
+  //  Optional<File>  findFileByQueryOne(String query);
+  //  List<File> findFileByQueryList(String query);
+  //  List<File> findFileByQueryList(Query query);
     List<File> getAllFiles(String folderpath);
     
 	boolean addFolder(Folder folder);

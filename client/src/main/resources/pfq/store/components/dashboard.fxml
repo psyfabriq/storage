@@ -4,6 +4,7 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
@@ -18,13 +19,18 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-border-width: 0;">
                <children>
-                  <TableView fx:id="filesView" prefHeight="464.0" prefWidth="372.0" style="-fx-border-width: 0;" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-223.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="filesView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" opacity="0.8" style="-fx-border-width: 0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
                       <TableColumn fx:id="imageColumn" editable="false" prefWidth="64.0" resizable="false" sortable="false" />
                       <TableColumn fx:id="nameColumn" maxWidth="1.7976931348623157E308" minWidth="133.0" prefWidth="133.0" text="Name" />
-                        <TableColumn fx:id="sizeColumn" minWidth="0.0" prefWidth="76.0" resizable="false" text="Size" />
-                        <TableColumn fx:id="dateColumn" prefWidth="270.0" resizable="false" text="Date" />
+                        <TableColumn fx:id="sizeColumn" minWidth="0.0" prefWidth="76.0" text="Size" />
+                        <TableColumn fx:id="dateColumn" prefWidth="155.0" text="Date" />
+                        <TableColumn fx:id="actionColumn" editable="false" prefWidth="138.0" sortable="false" text=" " />
+                        <TableColumn fx:id="emptyColumn" prefWidth="75.0" sortable="false" text=" " />
                     </columns>
+                     <effect>
+                        <Blend mode="MULTIPLY" />
+                     </effect>
                   </TableView>
                </children>
             </AnchorPane>

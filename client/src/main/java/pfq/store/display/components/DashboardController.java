@@ -2,35 +2,23 @@ package pfq.store.display.components;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfoenix.controls.JFXTreeView;
-
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -75,6 +63,13 @@ public class DashboardController extends Controller implements Initializable  {
 	    @FXML
 	    private TableColumn<FileItemFX, String> dateColumn;
 	    
+	    @FXML
+	    private TableColumn<FileItemFX, Void> actionColumn;
+	    
+	    @FXML
+	    private TableColumn<FileItemFX, Void> emptyColumn;
+
+	    
 
 		public DashboardController() {
 			super();
@@ -89,7 +84,7 @@ public class DashboardController extends Controller implements Initializable  {
 		rootNodeTree.setExpanded(true);
 		treeView.setRoot(rootNodeTree);
 		
-		addButtonToTable();
+		//addButtonToTable();
 		initColums();
 		initTreeViews();
 	}
@@ -121,6 +116,76 @@ public class DashboardController extends Controller implements Initializable  {
             }
         };
 		
+        
+        Callback<TableColumn<FileItemFX, Void>, TableCell<FileItemFX, Void>> cellFactoryButton = new Callback<TableColumn<FileItemFX, Void>, TableCell<FileItemFX, Void>>() {
+            @Override
+            public TableCell<FileItemFX, Void> call(final TableColumn<FileItemFX, Void> param) {
+                final TableCell<FileItemFX, Void> cell = new TableCell<FileItemFX, Void>() {
+                	
+                	
+                	private final ToggleGroup group = new ToggleGroup();
+                	private final HBox hb = new HBox();
+                	
+                    private final ToggleButton btnOpen   = new ToggleButton("Open");
+                    private final ToggleButton btnEdit   = new ToggleButton("Edit");
+                    private final ToggleButton btnDelete = new ToggleButton("Delete");
+                    
+				{
+					hb.setAlignment(Pos.CENTER);
+				}
+                    
+                    {
+                	     	hb.getChildren().add(btnEdit);
+                    	    btnEdit.setToggleGroup(group);
+                    	    
+	                    	btnEdit.setOnAction((ActionEvent event) -> {
+		                    	FileItemFX data = getTableView().getItems().get(getIndex());
+		                    	btnEdit.setSelected(false);
+	                            System.out.println("selectedData: " + data);
+	                            
+	                        });  		
+                    }
+                    
+                    {
+                    	btnOpen.setToggleGroup(group);
+                		hb.getChildren().add(btnOpen);
+                		
+                    	btnOpen.setOnAction((ActionEvent event) -> {
+                    	
+                        	FileItemFX data = getTableView().getItems().get(getIndex());
+                        	btnOpen.setSelected(false);
+                        	
+                        	foundTreeViewChild(data.getId());
+                            MemoryUtil.put("parrent_path", data.getPath());
+                            getListFolder();
+                            
+                        });
+                    }
+                    
+                    {
+                    	btnDelete.setToggleGroup(group);
+                		hb.getChildren().add(btnDelete);
+                		
+                    	btnDelete.setOnAction((ActionEvent event) -> {
+                        	FileItemFX data = getTableView().getItems().get(getIndex());
+                        	btnDelete.setSelected(false);
+                            System.out.println("selectedData: " + data);
+                        });
+                    }
+                   
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(hb);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
 		
 	      PropertyValueFactory<FileItemFX, String> nameProperty = new PropertyValueFactory<FileItemFX, String>("name");
 	      PropertyValueFactory<FileItemFX, Long> sizeProperty   = new PropertyValueFactory<FileItemFX, Long>("size");
@@ -128,10 +193,22 @@ public class DashboardController extends Controller implements Initializable  {
 	      PropertyValueFactory<FileItemFX, Image> typeProperty  = new PropertyValueFactory<FileItemFX, Image>("icon");
 	      
 	      imageColumn.setCellFactory(cellFactory);
+	      actionColumn.setCellFactory(cellFactoryButton);
+	      
 	      nameColumn.setCellValueFactory( nameProperty );
 	      sizeColumn.setCellValueFactory( sizeProperty );
 	      dateColumn.setCellValueFactory( dateProperty );
 	      imageColumn.setCellValueFactory( typeProperty );
+	      
+	      filesView.setColumnResizePolicy( TableView.CONSTRAINED_RESIZE_POLICY );
+	      
+	      nameColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 20 ); // 30% width
+	      sizeColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 5 ); // 5% width
+	      imageColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 5 ); // 5% width
+	      dateColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 20 ); // 20% width
+	      actionColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 20 ); // 30% width
+	      emptyColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 5 ); // 30% width
+
 
 	}
 	   
@@ -143,8 +220,7 @@ public class DashboardController extends Controller implements Initializable  {
 			 treeView.getSelectionModel().selectedItemProperty().addListener( new ChangeListener() {
 
 			        @Override
-			        public void changed(ObservableValue observable, Object oldValue,
-			                Object newValue) {
+			        public void changed(ObservableValue observable, Object oldValue, Object newValue) {
 			            TreeItem<TreeObject> selectedItem = (TreeItem<TreeObject>) newValue;
 			            MemoryUtil.putObj("current_tree_item", selectedItem);
                         MemoryUtil.put("parrent_path", selectedItem.getValue().getPath());
@@ -154,83 +230,14 @@ public class DashboardController extends Controller implements Initializable  {
 			      });
 	   }
 	   private void addButtonToTable() {
-	        TableColumn<FileItemFX, Void> colBtn = new TableColumn("");
+	        //TableColumn<FileItemFX, Void> colBtn = new TableColumn("");
+	        //colBtn.setMaxWidth( 1f * Integer.MAX_VALUE * 30 ); // 30% width
+	        
+	     
 
-	        Callback<TableColumn<FileItemFX, Void>, TableCell<FileItemFX, Void>> cellFactory = new Callback<TableColumn<FileItemFX, Void>, TableCell<FileItemFX, Void>>() {
-	            @Override
-	            public TableCell<FileItemFX, Void> call(final TableColumn<FileItemFX, Void> param) {
-	                final TableCell<FileItemFX, Void> cell = new TableCell<FileItemFX, Void>() {
-	                	
-	                	
-	                	private final ToggleGroup group = new ToggleGroup();
-	                	private final HBox hb = new HBox();
-	                	
-	                    private final ToggleButton btnOpen   = new ToggleButton("Open");
-	                    private final ToggleButton btnEdit   = new ToggleButton("Edit");
-	                    private final ToggleButton btnDelete = new ToggleButton("Delete");
-	                    
-					{
-						hb.setAlignment(Pos.CENTER);
-					}
-	                    
-	                    {
-                    	     	hb.getChildren().add(btnEdit);
-	                    	    btnEdit.setToggleGroup(group);
-	                    	    
-		                    	btnEdit.setOnAction((ActionEvent event) -> {
-			                    	FileItemFX data = getTableView().getItems().get(getIndex());
-			                    	btnEdit.setSelected(false);
-		                            System.out.println("selectedData: " + data);
-		                            
-		                        });  		
-	                    }
-	                    
-	                    {
-	                    	btnOpen.setToggleGroup(group);
-                    		hb.getChildren().add(btnOpen);
-                    		
-	                    	btnOpen.setOnAction((ActionEvent event) -> {
-	                    	
-	                        	FileItemFX data = getTableView().getItems().get(getIndex());
-	                        	btnOpen.setSelected(false);
-	                        	
-	                        	foundTreeViewChild(data.getId());
-	                            MemoryUtil.put("parrent_path", data.getPath());
-	                            getListFolder();
-	                            
-	                        });
-	                    }
-	                    
-	                    {
-	                    	btnDelete.setToggleGroup(group);
-                    		hb.getChildren().add(btnDelete);
-                    		
-	                    	btnDelete.setOnAction((ActionEvent event) -> {
-	                        	FileItemFX data = getTableView().getItems().get(getIndex());
-	                        	btnDelete.setSelected(false);
-	                            System.out.println("selectedData: " + data);
-	                        });
-	                    }
-	                    
-	                    
+	       // colBtn.setCellFactory(cellFactory);
 
-	                    @Override
-	                    public void updateItem(Void item, boolean empty) {
-	                        super.updateItem(item, empty);
-	                        if (empty) {
-	                            setGraphic(null);
-	                        } else {
-	                            setGraphic(hb);
-	                        }
-	                    }
-	                };
-	                return cell;
-	            }
-	        };
-
-	        colBtn.setCellFactory(cellFactory);
-
-	        filesView.getColumns().add(colBtn);
+	       // filesView.getColumns().add(colBtn);
 
 	    }
 	
@@ -250,6 +257,10 @@ public class DashboardController extends Controller implements Initializable  {
                 break;
             }
         }
+	}
+	
+	private void renoveFolder() {
+		
 	}
 
 	private void getListFolder() {
