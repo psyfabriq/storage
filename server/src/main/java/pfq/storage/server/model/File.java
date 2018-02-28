@@ -15,7 +15,7 @@ import pfq.storage.server.model.exception.FileBuilderException;
 
 @Document(collection = "file")
 @SuppressWarnings("serial")
-public class File implements Serializable, Cloneable {
+public class File implements Serializable, Cloneable,Comparable<File>  {
 	
 	@Indexed
 	private String   id;
@@ -175,5 +175,11 @@ public class File implements Serializable, Cloneable {
             return File.this;
         }
     }
+
+
+	@Override
+	public int compareTo(File o) {
+		return id.compareTo(o.getId());
+	}
 
 }

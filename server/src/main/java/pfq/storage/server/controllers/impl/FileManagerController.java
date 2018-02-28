@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import pfq.storage.server.controllers.FileManagerControllerI;
+import pfq.storage.server.model.CurrentUser;
 import pfq.storage.server.service.FileService;
 import pfq.storage.server.service.SystemInfoService;
 import pfq.storage.server.utils.AppUtil;
@@ -44,7 +45,9 @@ public class FileManagerController implements FileManagerControllerI {
 
 	private void prepare(String json, HttpServletRequest request) {
 		map = AppUtil.getValues(json);
-		systemInfoService.getCurrentUser(request);
+	    systemInfoService.getCurrentUser(request);
+	    System.out.println(map);
+		
 	}
 
 	@Override
@@ -67,15 +70,14 @@ public class FileManagerController implements FileManagerControllerI {
 		return new ResponseEntity<String>(result, head, systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
 	}
 
-	@Override
+	@Override ///item-delete
 	public ResponseEntity<String> itemDelete(@RequestBody String json, HttpServletRequest request,
 			HttpServletResponse response) {
 		prepare(json, request);
 		if (systemInfoService.access()) {
 			result = fileService.itemDelete(map); 
 		}
-		return new ResponseEntity<String>(result, head,
-				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
+		return new ResponseEntity<String>(result, head, systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
 	}
 
 	@Override

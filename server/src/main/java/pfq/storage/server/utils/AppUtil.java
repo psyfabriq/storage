@@ -326,9 +326,9 @@ public class AppUtil {
             }
         }
         if(wd) {
-        	//preg_replace('![^\w\d\s]*!','',$str);
+        	return sb.toString().replaceAll("\\W", "").toLowerCase();
         }
-        return sb.toString();
+        return sb.toString().toLowerCase();
     }
     
     

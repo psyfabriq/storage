@@ -19,6 +19,9 @@ import pfq.store.model.TreeObject;
 public class UploadController extends Controller implements Initializable{
 
 	private final FilterableTreeItem<TreeObject> rootNodeTree;
+	private  FilterableTreeItem<TreeObject>  currentNodeTree;
+
+	private String path_parrent;
 	
     @FXML
     private JFXTreeView<TreeObject> treeView;
@@ -26,7 +29,9 @@ public class UploadController extends Controller implements Initializable{
 	public UploadController() {
 		super();
 		this.rootNodeTree = MemoryUtil.getObj("treeFoders").isPresent()?( FilterableTreeItem<TreeObject>)MemoryUtil.getObj("treeFoders").get() : new FilterableTreeItem<>(new TreeObject("Root Folder", "/", "/","0"));
-    }
+		this.currentNodeTree =   MemoryUtil.getObj("current_tree_item").isPresent()?(FilterableTreeItem<TreeObject>)MemoryUtil.getObj("current_tree_item").get():rootNodeTree;
+		
+	}
 	
 	
 
@@ -38,6 +43,7 @@ public class UploadController extends Controller implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		initTreeViews();
+		this.path_parrent = currentNodeTree.getValue().getPath();
 		
 	}
 	

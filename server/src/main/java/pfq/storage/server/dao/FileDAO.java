@@ -9,6 +9,9 @@ import pfq.storage.server.model.File;
 import pfq.storage.server.model.Folder;
 
 public interface FileDAO {
+	
+
+	
 	boolean addFile(File file);
     boolean editFile(File file);
     boolean deleteFile(File file);
@@ -25,6 +28,7 @@ public interface FileDAO {
     boolean editFolder(Folder folder);
     boolean deleteFolder(Folder folder);
     Optional<Folder>  findFolder(String folderpath);
+    Optional<Folder>  findFolderID(String ID);
     boolean checkHasFolder(String folderpath);
     boolean checkHasFolderByID(String ID);
     List<Folder> getAllFolders(Folder parrent);

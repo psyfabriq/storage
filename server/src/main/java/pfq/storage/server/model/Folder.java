@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import pfq.storage.server.model.exception.FileBuilderException;
 
 @Document(collection = "folder")
-public class Folder implements Serializable, Cloneable {
+public class Folder implements Serializable, Cloneable, Comparable<Folder> {
 	
 	@Indexed
 	private String   id;
@@ -137,6 +137,12 @@ public class Folder implements Serializable, Cloneable {
 			return Folder.this;
 		}
 
+	}
+
+
+	@Override
+	public int compareTo(Folder o) {
+		return id.compareTo(o.getId());
 	}
 	
 	

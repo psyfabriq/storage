@@ -35,6 +35,7 @@ import pfq.store.model.TreeObject;
 public class CreateFolderController extends Controller implements Initializable {
 	
 	private final FilterableTreeItem<TreeObject> rootNodeTree;
+	private  FilterableTreeItem<TreeObject>  currentNodeTree;
 	private  ObjectMapper mapper = new ObjectMapper();
 	   
 	
@@ -51,13 +52,16 @@ public class CreateFolderController extends Controller implements Initializable 
 
 	public CreateFolderController() {
 			super();
-			this.rootNodeTree = MemoryUtil.getObj("treeFoders").isPresent()?( FilterableTreeItem<TreeObject>)MemoryUtil.getObj("treeFoders").get() : new FilterableTreeItem<>(new TreeObject("Root Folder", "/", "/","0"));
+			this.rootNodeTree    = MemoryUtil.getObj("treeFoders").isPresent()?( FilterableTreeItem<TreeObject>)MemoryUtil.getObj("treeFoders").get() : new FilterableTreeItem<>(new TreeObject("Root Folder", "/", "/","0"));
+			this.currentNodeTree =   MemoryUtil.getObj("current_tree_item").isPresent()?(FilterableTreeItem<TreeObject>)MemoryUtil.getObj("current_tree_item").get():rootNodeTree;
+
 	}
 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		initTreeViews();
+		fpath.setText(currentNodeTree.getValue().getPath());
 	}
 	
 	@SuppressWarnings("unchecked")

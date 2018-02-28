@@ -169,6 +169,7 @@ public class DashboardController extends Controller implements Initializable  {
                     	btnDelete.setOnAction((ActionEvent event) -> {
                         	FileItemFX data = getTableView().getItems().get(getIndex());
                         	btnDelete.setSelected(false);
+                        	removeItem(data.getType(),data.getId());
                             System.out.println("selectedData: " + data);
                         });
                     }
@@ -202,12 +203,12 @@ public class DashboardController extends Controller implements Initializable  {
 	      
 	      filesView.setColumnResizePolicy( TableView.CONSTRAINED_RESIZE_POLICY );
 	      
-	      nameColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 20 ); // 30% width
-	      sizeColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 5 ); // 5% width
-	      imageColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 5 ); // 5% width
-	      dateColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 20 ); // 20% width
+	      nameColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 20 );   // 30% width
+	      sizeColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 5 );    // 5% width
+	      imageColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 5 );   // 5% width
+	      dateColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 20 );   // 20% width
 	      actionColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 20 ); // 30% width
-	      emptyColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 5 ); // 30% width
+	      emptyColumn.setMaxWidth( 1f * Integer.MAX_VALUE * 5 );   // 30% width
 
 
 	}
@@ -259,7 +260,35 @@ public class DashboardController extends Controller implements Initializable  {
         }
 	}
 	
-	private void renoveFolder() {
+	private void removeItem(String itemtype, String id ) {
+		HashMap<String,String> variables = new HashMap<>();
+		variables.put("type", itemtype);
+		variables.put("id", id);
+		HttpResponse res;
+		try {
+			res = context.connettionService.doPost("/file/api/item-delete", variables, true);
+			HttpEntity entity = res.getEntity();
+			if (entity != null) {
+				 InputStream instream = entity.getContent();
+				    System.out.println(instream);
+			        instream.close();
+			        
+			        FilterableTreeItem<TreeObject>  currentNodeTree =   MemoryUtil.getObj("current_tree_item").isPresent()?(FilterableTreeItem<TreeObject>)MemoryUtil.getObj("current_tree_item").get():rootNodeTree;
+			        
+			        for (TreeItem<TreeObject> depNode : currentNodeTree.getChildren()) {
+		                if (depNode.getValue().getId().contentEquals(id)) {
+		                	currentNodeTree.getInternalChildren().remove(depNode);
+		                    break;
+		                }
+		            }
+			        
+			        getListFolder();
+			        
+			}
+		} catch (URISyntaxException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 

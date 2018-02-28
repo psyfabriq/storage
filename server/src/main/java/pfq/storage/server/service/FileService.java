@@ -3,6 +3,7 @@ package pfq.storage.server.service;
 import java.util.Map;
 
 public interface FileService {
+
     public String addFolder(Map<String, Object> map);
     public String itemCopy(Map<String, Object> map);
     public String itemDelete(Map<String, Object> map);

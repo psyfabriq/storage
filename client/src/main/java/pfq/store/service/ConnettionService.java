@@ -24,6 +24,7 @@ import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
@@ -62,10 +63,10 @@ public class ConnettionService {
     	List<NameValuePair> params = new ArrayList<NameValuePair>();
     
     	if(isJson) {
-    		StringEntity postingString = new StringEntity( mapper.writeValueAsString(variables));
+    		StringEntity postingString = new StringEntity( mapper.writeValueAsString(variables), "utf-8");
     		httppost.setEntity(postingString);
     		httppost.setHeader("Accept", "application/json");
-    		httppost.setHeader("Content-type", "application/json");
+    		httppost.setHeader("Content-type", "application/json; charset=utf-8");
     		System.out.println("isJson");
     	}else {
     		
