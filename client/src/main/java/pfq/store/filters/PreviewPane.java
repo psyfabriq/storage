@@ -27,12 +27,13 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
-public class FilterableNodeItem extends StackPane  {
+public class PreviewPane extends AnchorPane  {
 
-	@FXML
-    private StackPane rootNode;
+    @FXML
+    private AnchorPane rootNode;
 
     @FXML
     private StackPane bodyNode;
@@ -56,10 +57,12 @@ public class FilterableNodeItem extends StackPane  {
     
     int indexElement  = 1 ;
     
+    Timeline animation;
+    
     
     
 
-    public FilterableNodeItem() {
+    public PreviewPane() {
     	FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/pfq/store/components/imageframe.fxml"));
 
         fxmlLoader.setRoot(this);
@@ -84,6 +87,10 @@ public class FilterableNodeItem extends StackPane  {
     	rootNode.setMaxHeight(heightRoot);
     	rootNode.setPrefHeight(heightRoot);
         JFXDepthManager.setDepth(rootNode, 1);
+        
+        
+        labelNode.setWrapText(true);
+        labelNode.setTextAlignment(TextAlignment.LEFT);
     	
         bodyColor = getDefaultColor((int)(Math.random() * 12) % 12);
         
@@ -110,26 +117,82 @@ public class FilterableNodeItem extends StackPane  {
         
         glyph.setSize(20, 20);
         buttonNode.setGraphic(glyph);
+        /*
         buttonNode.translateYProperty().bind(Bindings.createDoubleBinding(() -> {
             return bodyNode.getBoundsInParent().getHeight() - buttonNode.getHeight() / 2;
         }, bodyNode.boundsInParentProperty(), buttonNode.heightProperty()));
+        */
         StackPane.setMargin(buttonNode, new Insets(0, 12, 0, 0));
         StackPane.setAlignment(buttonNode, Pos.TOP_RIGHT);
         
-        imageNode.setImage(new Image("/pfq/store/img/bookmark-alt-flat/128x128.png"));
+        imageNode.setImage(new Image("/pfq/store/img/bookmark-alt-flat/256x256.png"));
 
-        Timeline animation = new Timeline(new KeyFrame(Duration.millis(240),
+         animation = new Timeline(new KeyFrame(Duration.millis(240),
                                                        new KeyValue(buttonNode.scaleXProperty(),
                                                                     1,
                                                                     EASE_BOTH),
                                                        new KeyValue(buttonNode.scaleYProperty(),
                                                                     1,
                                                                     EASE_BOTH)));
-        animation.setDelay(Duration.millis(100 * indexElement + 1000));
-        animation.play();
+       // animation.setDelay(Duration.millis(100 * indexElement + 1000));
+       // animation.play();
     	
     }
 
+    public void setTextLabel(String text) {
+ 	   labelNode.setText(text);
+    }
+    
+    public void setBodyColor(String colorcode) {
+ 	   bodyColor = colorcode;
+ 	   bodyNode.setStyle("-fx-background-radius: 5 5 0 0; -fx-background-color: " + bodyColor);
+    }
+    
+    public void setBodyColor(int colorindex) {
+ 	   bodyColor = getDefaultColor(colorindex);
+ 	   bodyNode.setStyle("-fx-background-radius: 5 5 0 0; -fx-background-color: " + bodyColor);
+    }
+    
+    public void animateButtonStart() {
+ 	   animation.setDelay(Duration.millis(100 * indexElement + 1000));
+ 	   animation.play();
+    }
+    
+    public void setImage(Image im) {
+ 	   imageNode.setImage(im);
+    }
+    
+    public void setWidthElement(double width) {   
+    	widthRoot = width;
+    	rootNode.setMinWidth(widthRoot);
+    	rootNode.setMaxWidth(widthRoot);
+    	rootNode.setPrefWidth(widthRoot);
+ 	
+    }
+    public void setHeightElement(double height) {
+ 	   	heightRoot = height;
+ 	   	rootNode.setMinHeight(heightRoot);
+     	rootNode.setMaxHeight(heightRoot);
+     	rootNode.setPrefHeight(heightRoot);
+    }
+    
+    public void setButtonColor(String colorcode) {
+ 		buttonNode.setStyle("-fx-background-radius: 40;-fx-background-color: " + colorcode);
+ 		buttonNode.setRipplerFill(Color.valueOf(bodyColor));
+    }
+    
+    public void setButtonColor(int colorindex) {
+ 		buttonNode.setStyle("-fx-background-radius: 40;-fx-background-color: " + getDefaultColor(colorindex));
+ 		buttonNode.setRipplerFill(Color.valueOf(bodyColor));
+    }
+    
+    public void setButtonIco(Node node) {
+ 	   buttonNode.setGraphic(node);
+    }
+    
+    public void setElementIndex(int index) {
+ 	   indexElement = index; 
+    }
 
 
 

@@ -1,53 +1,38 @@
 package pfq.store.display.components;
 
-import static javafx.animation.Interpolator.EASE_BOTH;
-
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXMasonryPane;
-import com.jfoenix.controls.JFXScrollPane;
 import com.jfoenix.controls.JFXTreeView;
-import com.jfoenix.controls.JFXButton.ButtonType;
-import com.jfoenix.effects.JFXDepthManager;
-import com.jfoenix.svg.SVGGlyph;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeItem;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.util.Duration;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import pfq.store.MemoryUtil;
 import pfq.store.display.Controller;
-import pfq.store.filters.FilterableNodeItem;
 import pfq.store.filters.FilterableTreeItem;
-import pfq.store.model.FileItemFX;
+import pfq.store.filters.PreviewPane;
 import pfq.store.model.TreeObject;
+import pfq.store.service.CallBackFileService;
+import pfq.store.service.FileService;
 
-public class UploadController extends Controller implements Initializable{
+public class UploadController extends Controller implements Initializable, CallBackFileService {
 
 	private final FilterableTreeItem<TreeObject> rootNodeTree;
 	private  FilterableTreeItem<TreeObject>  currentNodeTree;
-	 private ObservableList<Node> fileData = FXCollections.observableArrayList();
+	private FileService fileService = FileService.getInstance(this);
+	private FontAwesomeIconView fv;
 
 
 	private String path_parrent;
@@ -64,7 +49,6 @@ public class UploadController extends Controller implements Initializable{
 		super();
 		this.rootNodeTree = MemoryUtil.getObj("treeFoders").isPresent()?( FilterableTreeItem<TreeObject>)MemoryUtil.getObj("treeFoders").get() : new FilterableTreeItem<>(new TreeObject("Root Folder", "/", "/","0"));
 		this.currentNodeTree =   MemoryUtil.getObj("current_tree_item").isPresent()?(FilterableTreeItem<TreeObject>)MemoryUtil.getObj("current_tree_item").get():rootNodeTree;
-		
 	}
 	
 	
@@ -74,14 +58,54 @@ public class UploadController extends Controller implements Initializable{
 
     }
     
+    @FXML
+    void buttonAddFilesAction(ActionEvent event) {
+    	//fileService.addElement();
+
+    }
+    
+    
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		initTreeViews();
 		this.path_parrent = currentNodeTree.getValue().getPath();
+
 		
-		test();
-		 mansoryPane.getChildren().addAll(fileData);
 		
+		 mansoryPane.getChildren().addAll(fileService.getFileData());
+		 
+	
+		 mansoryPane.setOnDragOver(new EventHandler<DragEvent>() {
+
+	            @Override
+	            public void handle(DragEvent event) {
+	                if (event.getGestureSource() != mansoryPane
+	                        && event.getDragboard().hasString()) {
+	                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+	                }
+	                event.consume();
+	            }
+	        });
+
+		 mansoryPane.setOnDragDropped(new EventHandler<DragEvent>() {
+
+	            @Override
+	            public void handle(DragEvent event) {
+	                Dragboard db = event.getDragboard();
+	                boolean success = false;
+	                if (db.hasString()) {
+	                    //dropped.setText(db.getString());
+	                	//System.out.println(db.getString());
+	  
+	                	fileService.addElements(db.getFiles());
+	                    success = true;
+	                }
+	                event.setDropCompleted(success);
+
+	                event.consume();
+	            }
+	        });
+		// test();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -100,75 +124,8 @@ public class UploadController extends Controller implements Initializable{
 	   }
 	
 	
-	 public void test() {
-	        //ArrayList<Node> children = new ArrayList<>();
-	        for (int i = 0; i < 20; i++) {
-	        	FilterableNodeItem f = new FilterableNodeItem();
-	        	fileData.add(f);
-	        	/*
-	            StackPane child = new StackPane();
-	            double width = Math.random() * 100 + 100;
-	            child.setMinWidth(width);
-	            child.setMaxWidth(width);
-	            child.setPrefWidth(width);
-	            double height = Math.random() * 100 + 100;
-	            child.setMinHeight(height);
-	            child.setMaxHeight(height);
-	            child.setPrefHeight(height);
-	            JFXDepthManager.setDepth(child, 1);
-	            fileData.add(child);
+	
 
-	            // create content
-	            StackPane header = new StackPane();
-	            String headerColor = getDefaultColor(i % 12);
-	            header.setStyle("-fx-background-radius: 5 5 0 0; -fx-background-color: " + headerColor);
-	            VBox.setVgrow(header, Priority.ALWAYS);
-	            StackPane body = new StackPane();
-	            body.setMinHeight(Math.random() * 20 + 50);
-	            VBox content = new VBox();
-	            content.getChildren().addAll(header, body);
-	            body.setStyle("-fx-background-radius: 0 0 5 5; -fx-background-color: rgb(255,255,255,0.87);");
-
-
-	            // create button
-	            JFXButton button = new JFXButton("");
-	            button.setButtonType(ButtonType.RAISED);
-	            button.setStyle("-fx-background-radius: 40;-fx-background-color: " + getDefaultColor((int) ((Math.random() * 12) % 12)));
-	            button.setPrefSize(40, 40);
-	            button.setRipplerFill(Color.valueOf(headerColor));
-	            button.setScaleX(0);
-	            button.setScaleY(0);
-	            SVGGlyph glyph = new SVGGlyph(-1,
-	                "test",
-	                "M1008 6.286q18.857 13.714 15.429 36.571l-146.286 877.714q-2.857 16.571-18.286 25.714-8 4.571-17.714 4.571-6.286 "
-	                + "0-13.714-2.857l-258.857-105.714-138.286 168.571q-10.286 13.143-28 13.143-7.429 "
-	                + "0-12.571-2.286-10.857-4-17.429-13.429t-6.571-20.857v-199.429l493.714-605.143-610.857 "
-	                + "528.571-225.714-92.571q-21.143-8-22.857-31.429-1.143-22.857 18.286-33.714l950.857-548.571q8.571-5.143 18.286-5.143"
-	                + " 11.429 0 20.571 6.286z",
-	                Color.WHITE);
-	            glyph.setSize(20, 20);
-	            button.setGraphic(glyph);
-	            button.translateYProperty().bind(Bindings.createDoubleBinding(() -> {
-	                return header.getBoundsInParent().getHeight() - button.getHeight() / 2;
-	            }, header.boundsInParentProperty(), button.heightProperty()));
-	            StackPane.setMargin(button, new Insets(0, 12, 0, 0));
-	            StackPane.setAlignment(button, Pos.TOP_RIGHT);
-
-	            Timeline animation = new Timeline(new KeyFrame(Duration.millis(240),
-	                                                           new KeyValue(button.scaleXProperty(),
-	                                                                        1,
-	                                                                        EASE_BOTH),
-	                                                           new KeyValue(button.scaleYProperty(),
-	                                                                        1,
-	                                                                        EASE_BOTH)));
-	            animation.setDelay(Duration.millis(100 * i + 1000));
-	            animation.play();
-	            child.getChildren().addAll(content, button);
-	            */
-	        }
-	       
-	      
-	    }
 
 	    private String getDefaultColor(int i) {
 	        String color = "#FFFFFF";
@@ -217,5 +174,18 @@ public class UploadController extends Controller implements Initializable{
 	        }
 	        return color;
 	    }
+
+
+
+		@Override
+		public void updateListElementsCallBack(Optional<PreviewPane> pp, boolean isRemove) {
+			if(pp.isPresent()) {
+				if(isRemove) {
+					mansoryPane.getChildren().remove(pp.get());
+				}else {
+					mansoryPane.getChildren().add(pp.get());
+				}
+			}
+		}
 
 }

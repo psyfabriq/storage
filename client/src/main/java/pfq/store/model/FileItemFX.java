@@ -30,7 +30,7 @@ public class FileItemFX {
 		this.time.setValue(time);
 		
 		if("dir".equals(type)) {
-			icon = new Image("/pfq/store/img/bookmark-alt-flat/128x128.png");
+			icon = new Image("/pfq/store/img/inbox-flat/128x128.png");
 		}else if ("file".equals(type)) {
 			icon = new Image("/pfq/store/img/document-flat/128x128.png");
 		}
