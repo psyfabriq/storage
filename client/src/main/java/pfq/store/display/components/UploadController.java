@@ -1,6 +1,8 @@
 package pfq.store.display.components;
 
+import java.io.File;
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -19,6 +21,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.stage.FileChooser;
 import pfq.store.MemoryUtil;
 import pfq.store.display.Controller;
 import pfq.store.filters.FilterableTreeItem;
@@ -60,8 +63,13 @@ public class UploadController extends Controller implements Initializable, CallB
     
     @FXML
     void buttonAddFilesAction(ActionEvent event) {
-    	//fileService.addElement();
-
+    	FileChooser fileChooser = new FileChooser();
+    	fileChooser.setTitle("Open Resource File");
+    	List<File> list =
+                fileChooser.showOpenMultipleDialog(null);
+            if (list != null) {
+                	fileService.addElements(list);            
+            }
     }
     
     
