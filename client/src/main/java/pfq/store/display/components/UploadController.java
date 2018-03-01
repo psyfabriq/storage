@@ -21,6 +21,8 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -36,18 +38,21 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import pfq.store.MemoryUtil;
 import pfq.store.display.Controller;
+import pfq.store.filters.FilterableNodeItem;
 import pfq.store.filters.FilterableTreeItem;
+import pfq.store.model.FileItemFX;
 import pfq.store.model.TreeObject;
 
 public class UploadController extends Controller implements Initializable{
 
 	private final FilterableTreeItem<TreeObject> rootNodeTree;
 	private  FilterableTreeItem<TreeObject>  currentNodeTree;
+	 private ObservableList<Node> fileData = FXCollections.observableArrayList();
+
 
 	private String path_parrent;
 	
-    @FXML
-    private ScrollPane scrollPane;
+  
 
     @FXML
     private JFXMasonryPane mansoryPane;
@@ -73,7 +78,9 @@ public class UploadController extends Controller implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 		initTreeViews();
 		this.path_parrent = currentNodeTree.getValue().getPath();
+		
 		test();
+		 mansoryPane.getChildren().addAll(fileData);
 		
 	}
 	
@@ -94,8 +101,11 @@ public class UploadController extends Controller implements Initializable{
 	
 	
 	 public void test() {
-	        ArrayList<Node> children = new ArrayList<>();
+	        //ArrayList<Node> children = new ArrayList<>();
 	        for (int i = 0; i < 20; i++) {
+	        	FilterableNodeItem f = new FilterableNodeItem();
+	        	fileData.add(f);
+	        	/*
 	            StackPane child = new StackPane();
 	            double width = Math.random() * 100 + 100;
 	            child.setMinWidth(width);
@@ -106,7 +116,7 @@ public class UploadController extends Controller implements Initializable{
 	            child.setMaxHeight(height);
 	            child.setPrefHeight(height);
 	            JFXDepthManager.setDepth(child, 1);
-	            children.add(child);
+	            fileData.add(child);
 
 	            // create content
 	            StackPane header = new StackPane();
@@ -154,11 +164,10 @@ public class UploadController extends Controller implements Initializable{
 	            animation.setDelay(Duration.millis(100 * i + 1000));
 	            animation.play();
 	            child.getChildren().addAll(content, button);
+	            */
 	        }
-	        mansoryPane.getChildren().addAll(children);
-	        Platform.runLater(() -> scrollPane.requestLayout());
-
-	        JFXScrollPane.smoothScrolling(scrollPane);
+	       
+	      
 	    }
 
 	    private String getDefaultColor(int i) {

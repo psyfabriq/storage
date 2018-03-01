@@ -102,7 +102,7 @@ public class DashboardController extends Controller implements Initializable  {
 
                         @Override
                         protected void updateItem(Image item, boolean empty) {
-                        	System.out.println(item);
+                        	//System.out.println(item);
                         	if (empty) {
                         		imageView.setImage(null);
 	                        } else {
@@ -344,7 +344,7 @@ public class DashboardController extends Controller implements Initializable  {
 					
 					if (filesNode.isArray()) {
 					    for (final JsonNode objNode : filesNode) {
-					        System.out.println(objNode);
+					      //  System.out.println(objNode);
 					    }
 					}
 				}
