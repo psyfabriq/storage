@@ -149,7 +149,6 @@ public class FileService implements CallBackPreviewPane {
 		{
 			public void run() 
 			{
-				System.out.println("Привет из побочного потока!");
 				try {
 					nowUpload = true;
 					listenerElements.uploadedStatus(true);
@@ -174,10 +173,11 @@ public class FileService implements CallBackPreviewPane {
 	}
 	
 	public class UploadObject implements Runnable {
-		protected Semaphore smp ; 
-		protected PreviewPane pp;
-		protected String      parrentpath;
+		private   Semaphore smp ; 
+		private   PreviewPane pp;
+		private   String      parrentpath;
 		private   ConnettionService connectionService;
+		CallBackPreviewPane call;
 		 
 		private UploadObject(Semaphore smp,CountDownLatch uploadactive, PreviewPane pp,String parrentpath,ConnettionService connectionService) {
 			this.smp = smp;
@@ -195,11 +195,11 @@ public class FileService implements CallBackPreviewPane {
 				variables.put("name", pp.getTextLabel());
 				HttpResponse res = connectionService.doPost("/file/api/item-upload", variables, true);
 				HttpEntity entity = res.getEntity();
-				Thread.sleep(1000);
+				Thread.sleep(9000);
 			} catch (InterruptedException | URISyntaxException | IOException e) {
 				e.printStackTrace();
 			}finally {
-				//fileData.remove(pp);
+				call.removeElementCallBack(Optional.ofNullable(pp));
 				uploadactive.countDown();
 				smp.release();
 			}
