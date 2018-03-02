@@ -59,7 +59,7 @@
                      <children>
                         <StackPane prefHeight="66.0" prefWidth="245.0">
                            <children>
-                              <JFXButton buttonType="RAISED" onAction="#buttonAddFilesAction" prefHeight="50.0" prefWidth="243.0" text="Add files ..." StackPane.alignment="CENTER">
+                              <JFXButton fx:id="addFilesButton" buttonType="RAISED" onAction="#buttonAddFilesAction" prefHeight="50.0" prefWidth="243.0" text="Add files ..." StackPane.alignment="CENTER">
                                  <font>
                                     <Font size="25.0" />
                                  </font>
@@ -68,7 +68,7 @@
                         </StackPane>
                         <StackPane prefHeight="67.0" prefWidth="245.0">
                            <children>
-                              <JFXButton buttonType="RAISED" onAction="#buttonUploadAction" prefHeight="50.0" prefWidth="243.0" text="Upload" StackPane.alignment="CENTER">
+                              <JFXButton fx:id="uploadButton" buttonType="RAISED" onAction="#buttonUploadAction" prefHeight="50.0" prefWidth="243.0" text="Upload" StackPane.alignment="CENTER">
                                  <font>
                                     <Font size="25.0" />
                                  </font>

@@ -123,7 +123,7 @@ public class DashboardController extends Controller implements Initializable  {
                 final TableCell<FileItemFX, String> cell = new TableCell<FileItemFX, String>() {
                 	
                 	
-                	private final ToggleGroup group = new ToggleGroup();
+                	private final ToggleGroup group = new ToggleGroup(); 
                 	private final HBox hb = new HBox();
                 	
                     private final ToggleButton btnOpen      = new ToggleButton("Open");

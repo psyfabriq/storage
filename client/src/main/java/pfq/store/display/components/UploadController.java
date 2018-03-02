@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXMasonryPane;
 import com.jfoenix.controls.JFXTreeView;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -35,10 +35,10 @@ public class UploadController extends Controller implements Initializable, CallB
 	private final FilterableTreeItem<TreeObject> rootNodeTree;
 	private  FilterableTreeItem<TreeObject>  currentNodeTree;
 	private FileService fileService = FileService.getInstance(this);
+	
 	private FontAwesomeIconView fv;
-
-
 	private String path_parrent;
+	//private boolean nowUpload = false;
 	
   
 
@@ -47,6 +47,13 @@ public class UploadController extends Controller implements Initializable, CallB
 	
     @FXML
     private JFXTreeView<TreeObject> treeView;
+    
+    @FXML
+    private JFXButton addFilesButton;
+
+    @FXML
+    private JFXButton uploadButton;
+    
     
 	public UploadController() {
 		super();
@@ -58,7 +65,7 @@ public class UploadController extends Controller implements Initializable, CallB
 
     @FXML
     void buttonUploadAction(ActionEvent event) {
-
+    	fileService.startUpload();
     }
     
     @FXML
@@ -73,16 +80,12 @@ public class UploadController extends Controller implements Initializable, CallB
     }
     
     
-	@Override
+	@Override 
 	public void initialize(URL location, ResourceBundle resources) {
 		initTreeViews();
 		this.path_parrent = currentNodeTree.getValue().getPath();
 
-		
-		
 		 mansoryPane.getChildren().addAll(fileService.getFileData());
-		 
-	
 		 mansoryPane.setOnDragOver(new EventHandler<DragEvent>() {
 
 	            @Override
@@ -113,7 +116,12 @@ public class UploadController extends Controller implements Initializable, CallB
 	                event.consume();
 	            }
 	        });
-		// test();
+		 
+		 if(fileService.getStatusUpload()) {
+			 addFilesButton.setDisable(true);
+			 uploadButton.setDisable(true);
+		 }
+		 
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -194,6 +202,19 @@ public class UploadController extends Controller implements Initializable, CallB
 					mansoryPane.getChildren().add(pp.get());
 				}
 			}
+		}
+
+
+
+		@Override
+		public void uploadedStatus(boolean result) {
+			 if(result) {
+				 addFilesButton.setDisable(true);
+				 uploadButton.setDisable(true);
+			 }else {
+				 addFilesButton.setDisable(false);
+				 uploadButton.setDisable(false);
+			 }
 		}
 
 }

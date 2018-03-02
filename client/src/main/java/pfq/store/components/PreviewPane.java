@@ -33,7 +33,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import pfq.store.service.CallBackFileService;
 
-public class PreviewPane extends AnchorPane  {
+public class PreviewPane extends AnchorPane   {
 
     @FXML
     private AnchorPane rootNode;
@@ -196,7 +196,14 @@ public class PreviewPane extends AnchorPane  {
     public void setElementIndex(int index) {
  	   indexElement = index; 
     }
-
+    
+    public String getTextLabel() {
+    	return labelNode.getText();
+    }
+    
+	public File getValueFile() {
+		return value;
+	}
 
 	@FXML
     void buttonClick(ActionEvent event) {

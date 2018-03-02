@@ -10,4 +10,8 @@ public class Controller {
 		this.context = context;
 	}
 	
+	public ContextStateApp getContext() {
+		return this.context;
+	}
+	
 }

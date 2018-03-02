@@ -2,24 +2,27 @@ package pfq.store.service;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URLEncoder;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.imageio.ImageIO;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
+import pfq.store.MemoryUtil;
 import pfq.store.components.CallBackPreviewPane;
 import pfq.store.components.PreviewPane;
 
@@ -29,20 +32,30 @@ public class FileService implements CallBackPreviewPane {
 	
 	private  ObservableList<PreviewPane> fileData ;
 	private CallBackFileService listenerElements;
+	//private ConnettionService   connectionService;
+	
+	protected Semaphore smp = new Semaphore(1); 
+	protected CountDownLatch uploadactive; 
+	
+	private boolean nowUpload = false;
+	
 
-	private FileService() {
+	private FileService() { 
 		initObjects();
 	}
 	
 	private static class SingletoneHolder{
 		private final static FileService instance = new FileService();
 	}
-	public static FileService getInstance(CallBackFileService listener) {
+	 
+    public static FileService getInstance(CallBackFileService listener) {
 		SingletoneHolder.instance.addListenerChangeListElements(listener);
+		//SingletoneHolder.instance.addConnettionService(connectionService);
 		return SingletoneHolder.instance;
 	}
-	
+    
 
+	
     private void addListenerChangeListElements(CallBackFileService listener) {
     	this.listenerElements = listener;
     }
@@ -57,11 +70,9 @@ public class FileService implements CallBackPreviewPane {
 
 				} else {
 					for (PreviewPane remitem : change.getRemoved()) {
-						//System.out.println("Remove detected");
 						listenerElements.updateListElementsCallBack(Optional.ofNullable(remitem), true);
 					}
 					for (PreviewPane additem : change.getAddedSubList()) {
-						//System.out.println("Add detected");
 						listenerElements.updateListElementsCallBack(Optional.ofNullable(additem), false);
 					}
 
@@ -122,11 +133,9 @@ public class FileService implements CallBackPreviewPane {
 	    return index == -1? null : mystr.substring(index);
 	}
 
-
 	public ObservableList<PreviewPane> getFileData() {
 		return fileData;
 	}
-
 
 	@Override
 	public void removeElementCallBack(Optional<PreviewPane> pp) {
@@ -134,9 +143,69 @@ public class FileService implements CallBackPreviewPane {
 			fileData.remove(pp.get());	
 	}
 	
+	public void startUpload() {
+		uploadactive = new CountDownLatch(fileData.size());	
+		Thread myThready = new Thread(new Runnable()
+		{
+			public void run() 
+			{
+				System.out.println("Привет из побочного потока!");
+				try {
+					nowUpload = true;
+					listenerElements.uploadedStatus(true);
+					for (PreviewPane previewPane : fileData) {
+						new Thread(new UploadObject(smp, uploadactive, previewPane, "/", listenerElements.getContext().connettionService)).start();
+					}
+					uploadactive.await();
+					nowUpload = false;
+					listenerElements.uploadedStatus(false);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		myThready.start();
+	}
 	
 
+
+	public boolean getStatusUpload() {
+		return nowUpload;
+	}
 	
-	
+	public class UploadObject implements Runnable {
+		protected Semaphore smp ; 
+		protected PreviewPane pp;
+		protected String      parrentpath;
+		private   ConnettionService connectionService;
+		 
+		private UploadObject(Semaphore smp,CountDownLatch uploadactive, PreviewPane pp,String parrentpath,ConnettionService connectionService) {
+			this.smp = smp;
+			this.pp = pp;
+			this.parrentpath = parrentpath;
+			this.connectionService = connectionService;
+		}
+
+		@Override
+		public void run() {
+			try {
+				smp.acquire(); //Ждем пока другой файл не загрузиться
+				HashMap<String,String> variables = new HashMap<>();
+				variables.put("parrent", parrentpath);
+				variables.put("name", pp.getTextLabel());
+				HttpResponse res = connectionService.doPost("/file/api/item-upload", variables, true);
+				HttpEntity entity = res.getEntity();
+				Thread.sleep(1000);
+			} catch (InterruptedException | URISyntaxException | IOException e) {
+				e.printStackTrace();
+			}finally {
+				//fileData.remove(pp);
+				uploadactive.countDown();
+				smp.release();
+			}
+			
+		} 
+		 
+	 }
 
 }
