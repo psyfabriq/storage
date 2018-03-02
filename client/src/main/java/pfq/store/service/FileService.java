@@ -1,6 +1,7 @@
 package pfq.store.service;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.activation.MimetypesFileTypeMap;
+import javax.imageio.ImageIO;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -18,9 +20,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
-import pfq.store.filters.PreviewPane;
+import pfq.store.components.CallBackPreviewPane;
+import pfq.store.components.PreviewPane;
 
-public class FileService {
+public class FileService implements CallBackPreviewPane {
 	
 	private static FileService instance;
 	
@@ -77,42 +80,37 @@ public class FileService {
 			
 			System.out.println(exists);
 			
-			if(exists) {
-		    	PreviewPane f = new PreviewPane();
+			if(exists && isFile) {
+		    	PreviewPane f = new PreviewPane(this,file);
 		    	FontAwesomeIconView fv = new FontAwesomeIconView(FontAwesomeIcon.TRASH);
 		        fv.setSize("20");
 		    	f.setButtonIco(fv);
 		    	f.setTextLabel(name);
 		    	
-		    
-		    	
-				if(isDirectory) {
-					
-				}else if (isFile) {
 					String  extension   =      getFileExtension(name);
 					String  mimetype    =      new MimetypesFileTypeMap().getContentType(file);
 					String type         =      mimetype.split("/")[0];
 
-					if(type.equals("image"))
-					{
-						String localUrl;
-						try {
-							localUrl = file.toURI().toURL().toString();
-							Image image = new Image(localUrl);
-							f.setImage(image);
-						} catch (MalformedURLException e) {
-							e.printStackTrace();
+					try {
+						if( ImageIO.read(file) != null)
+						{
+							String localUrl;
+							
+								localUrl = file.toURI().toURL().toString();
+								Image image = new Image(localUrl);
+								f.setImage(image);
+							
 						}
-						
-					}
-					else 
-					{
-						System.out.println(type);
+						else 
+						{
+							System.out.println(mimetype);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
 			    	f.animateButtonStart();
 			    	fileData.add(f);
-				}
-						
+			
 			}
 			
 		}
@@ -127,6 +125,13 @@ public class FileService {
 
 	public ObservableList<PreviewPane> getFileData() {
 		return fileData;
+	}
+
+
+	@Override
+	public void removeElementCallBack(Optional<PreviewPane> pp) {
+		if(pp.isPresent())
+			fileData.remove(pp.get());	
 	}
 	
 	

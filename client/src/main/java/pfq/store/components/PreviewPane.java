@@ -1,8 +1,10 @@
-package pfq.store.filters;
+package pfq.store.components;
 
 import static javafx.animation.Interpolator.EASE_BOTH;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXButton.ButtonType;
@@ -29,6 +31,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
+import pfq.store.service.CallBackFileService;
 
 public class PreviewPane extends AnchorPane  {
 
@@ -50,19 +53,16 @@ public class PreviewPane extends AnchorPane  {
     @FXML
     private JFXButton buttonNode;
     
-    double widthRoot;
-    double heightRoot;
-    
-    String bodyColor;
-    
-    int indexElement  = 1 ;
-    
-    Timeline animation;
-    
+    double  widthRoot;
+    double  heightRoot; 
+    private String bodyColor; 
+    private int indexElement  = 1 ; 
+    private Timeline animation;
+    private CallBackPreviewPane listenerService;
+    private File value;
     
     
-
-    public PreviewPane() {
+    public PreviewPane(CallBackPreviewPane listenerService,File value) {
     	FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/pfq/store/components/imageframe.fxml"));
 
         fxmlLoader.setRoot(this);
@@ -74,6 +74,9 @@ public class PreviewPane extends AnchorPane  {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
+        
+        this.listenerService =  listenerService;
+        this.value           =  value;
 	}
     
     private void initComponents() {
@@ -195,13 +198,9 @@ public class PreviewPane extends AnchorPane  {
     }
 
 
-
-
-
-
 	@FXML
     void buttonClick(ActionEvent event) {
-
+		listenerService.removeElementCallBack(Optional.ofNullable(this));
     }
 	
 	

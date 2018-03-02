@@ -64,7 +64,7 @@ public class DashboardController extends Controller implements Initializable  {
 	    private TableColumn<FileItemFX, String> dateColumn;
 	    
 	    @FXML
-	    private TableColumn<FileItemFX, Void> actionColumn;
+	    private TableColumn<FileItemFX, String> actionColumn;
 	    
 	    @FXML
 	    private TableColumn<FileItemFX, Void> emptyColumn;
@@ -117,69 +117,87 @@ public class DashboardController extends Controller implements Initializable  {
         };
 		
         
-        Callback<TableColumn<FileItemFX, Void>, TableCell<FileItemFX, Void>> cellFactoryButton = new Callback<TableColumn<FileItemFX, Void>, TableCell<FileItemFX, Void>>() {
+        Callback<TableColumn<FileItemFX, String>, TableCell<FileItemFX, String>> cellFactoryButton = new Callback<TableColumn<FileItemFX, String>, TableCell<FileItemFX, String>>() {
             @Override
-            public TableCell<FileItemFX, Void> call(final TableColumn<FileItemFX, Void> param) {
-                final TableCell<FileItemFX, Void> cell = new TableCell<FileItemFX, Void>() {
+            public TableCell<FileItemFX, String> call(final TableColumn<FileItemFX, String> param) {
+                final TableCell<FileItemFX, String> cell = new TableCell<FileItemFX, String>() {
                 	
                 	
                 	private final ToggleGroup group = new ToggleGroup();
                 	private final HBox hb = new HBox();
                 	
-                    private final ToggleButton btnOpen   = new ToggleButton("Open");
-                    private final ToggleButton btnEdit   = new ToggleButton("Edit");
-                    private final ToggleButton btnDelete = new ToggleButton("Delete");
-                    
-				{
-					hb.setAlignment(Pos.CENTER);
-				}
+                    private final ToggleButton btnOpen      = new ToggleButton("Open");
+                    private final ToggleButton btnDownload  = new ToggleButton("Download");
+                    private final ToggleButton btnEdit      = new ToggleButton("Edit");
+                    private final ToggleButton btnDelete    = new ToggleButton("Delete");
                     
                     {
-                	     	hb.getChildren().add(btnEdit);
-                    	    btnEdit.setToggleGroup(group);
-                    	    
-	                    	btnEdit.setOnAction((ActionEvent event) -> {
-		                    	FileItemFX data = getTableView().getItems().get(getIndex());
-		                    	btnEdit.setSelected(false);
-	                            System.out.println("selectedData: " + data);
-	                            
-	                        });  		
-                    }
-                    
-                    {
-                    	btnOpen.setToggleGroup(group);
-                		hb.getChildren().add(btnOpen);
-                		
-                    	btnOpen.setOnAction((ActionEvent event) -> {
-                    	
-                        	FileItemFX data = getTableView().getItems().get(getIndex());
-                        	btnOpen.setSelected(false);
-                        	
-                        	foundTreeViewChild(data.getId());
-                            MemoryUtil.put("parrent_path", data.getPath());
-                            getListFolder();
+                    	hb.setAlignment(Pos.CENTER);
+                    	btnEdit.setOnAction((ActionEvent event) -> {
+	                    	FileItemFX data = getTableView().getItems().get(getIndex());
+	                    	btnEdit.setSelected(false);
+                            System.out.println("selectedData: " + data);
                             
                         });
-                    }
-                    
-                    {
-                    	btnDelete.setToggleGroup(group);
-                		hb.getChildren().add(btnDelete);
-                		
+						btnOpen.setOnAction((ActionEvent event) -> {
+
+							FileItemFX data = getTableView().getItems().get(getIndex());
+							btnOpen.setSelected(false);
+
+							foundTreeViewChild(data.getId());
+							MemoryUtil.put("parrent_path", data.getPath());
+							getListFolder();
+
+						});
+						btnDownload.setOnAction((ActionEvent event) -> {
+
+							FileItemFX data = getTableView().getItems().get(getIndex());
+							btnDownload.setSelected(false);
+							
+
+						});
                     	btnDelete.setOnAction((ActionEvent event) -> {
                         	FileItemFX data = getTableView().getItems().get(getIndex());
                         	btnDelete.setSelected(false);
                         	removeItem(data.getType(),data.getId());
                             System.out.println("selectedData: " + data);
                         });
+                    	
+                	    btnEdit.setToggleGroup(group);
+						btnOpen.setToggleGroup(group);
+						btnDownload.setToggleGroup(group);
+                    	btnDelete.setToggleGroup(group);
+
+
+
+
                     }
-                   
+                    
+                    {
+                    	
+                    	
+	
+                    	hb.getChildren().add(btnEdit);
+                    	
+					//	if (isDir) {
+							hb.getChildren().add(btnOpen);
+					//	}else {
+							hb.getChildren().add(btnDownload);
+					//	}
+                    	
+                    	
+                    	hb.getChildren().add(btnDelete);
+                    	
+                    }
+
                     @Override
-                    public void updateItem(Void item, boolean empty) {
+                    public void updateItem(String item, boolean empty) {
                         super.updateItem(item, empty);
                         if (empty) {
                             setGraphic(null);
                         } else {
+                        	
+                        	//initB("dir".equals(item));
                             setGraphic(hb);
                         }
                     }
@@ -191,7 +209,8 @@ public class DashboardController extends Controller implements Initializable  {
 	      PropertyValueFactory<FileItemFX, String> nameProperty = new PropertyValueFactory<FileItemFX, String>("name");
 	      PropertyValueFactory<FileItemFX, Long> sizeProperty   = new PropertyValueFactory<FileItemFX, Long>("size");
 	      PropertyValueFactory<FileItemFX, String> dateProperty = new PropertyValueFactory<FileItemFX, String>("time");
-	      PropertyValueFactory<FileItemFX, Image> typeProperty  = new PropertyValueFactory<FileItemFX, Image>("icon");
+	      PropertyValueFactory<FileItemFX, Image> iconProperty  = new PropertyValueFactory<FileItemFX, Image>("icon");
+	      PropertyValueFactory<FileItemFX, String> typeProperty  = new PropertyValueFactory<FileItemFX, String>("type");
 	      
 	      imageColumn.setCellFactory(cellFactory);
 	      actionColumn.setCellFactory(cellFactoryButton);
@@ -199,7 +218,8 @@ public class DashboardController extends Controller implements Initializable  {
 	      nameColumn.setCellValueFactory( nameProperty );
 	      sizeColumn.setCellValueFactory( sizeProperty );
 	      dateColumn.setCellValueFactory( dateProperty );
-	      imageColumn.setCellValueFactory( typeProperty );
+	      imageColumn.setCellValueFactory( iconProperty );
+	      actionColumn.setCellValueFactory( typeProperty );
 	      
 	      filesView.setColumnResizePolicy( TableView.CONSTRAINED_RESIZE_POLICY );
 	      
