@@ -30,6 +30,7 @@ import pfq.store.Notification;
 import pfq.store.display.Controller;
 import pfq.store.filters.FilterableTreeItem;
 import pfq.store.model.TreeObject;
+import pfq.store.service.RequestType;
 
 
 public class CreateFolderController extends Controller implements Initializable {
@@ -85,7 +86,7 @@ public class CreateFolderController extends Controller implements Initializable 
 			variables.put("name", fname.getText());
 			variables.put("parrent", fpath.getText());
 			try {
-				HttpResponse res = context.connettionService.doPost("/file/api/add-folder", variables, true);
+				HttpResponse res = context.connettionService.doPost("/file/api/add-folder", variables, RequestType.JSON);
 				HttpEntity entity = res.getEntity();
 				if (entity != null) {
 					 InputStream instream = entity.getContent();

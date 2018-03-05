@@ -143,7 +143,7 @@ public class FileService implements CallBackPreviewPane {
 			fileData.remove(pp.get());	
 	}
 	
-	public void startUpload() {
+	public void startUpload(String parentpath) {
 		uploadactive = new CountDownLatch(fileData.size());	
 		Thread myThready = new Thread(new Runnable()
 		{
@@ -153,7 +153,7 @@ public class FileService implements CallBackPreviewPane {
 					nowUpload = true;
 					listenerElements.uploadedStatus(true);
 					for (PreviewPane previewPane : fileData) {
-						new Thread(new UploadObject(smp, uploadactive, previewPane, "/", listenerElements.getContext().connettionService)).start();
+						new Thread(new UploadObject(smp, uploadactive, previewPane, parentpath, listenerElements.getContext().connettionService)).start();
 					}
 					uploadactive.await();
 					nowUpload = false;
@@ -193,9 +193,9 @@ public class FileService implements CallBackPreviewPane {
 				HashMap<String,String> variables = new HashMap<>();
 				variables.put("parrent", parrentpath);
 				variables.put("name", pp.getTextLabel());
-				HttpResponse res = connectionService.doPost("/file/api/item-upload", variables, true);
+				HttpResponse res = connectionService.doPost("/file/api/item-upload", variables, RequestType.FILE, pp.getValueFile());
 				HttpEntity entity = res.getEntity();
-				//Thread.sleep(9000);
+				Thread.sleep(1000);
 			} catch (InterruptedException | URISyntaxException | IOException e) {
 				e.printStackTrace();
 			}finally {

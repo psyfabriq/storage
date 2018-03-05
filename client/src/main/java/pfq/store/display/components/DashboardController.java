@@ -37,6 +37,7 @@ import pfq.store.display.Controller;
 import pfq.store.filters.FilterableTreeItem;
 import pfq.store.model.FileItemFX;
 import pfq.store.model.TreeObject;
+import pfq.store.service.RequestType;
 
 public class DashboardController extends Controller implements Initializable  {
 	 private  ObjectMapper mapper = new ObjectMapper();
@@ -286,7 +287,7 @@ public class DashboardController extends Controller implements Initializable  {
 		variables.put("id", id);
 		HttpResponse res;
 		try {
-			res = context.connettionService.doPost("/file/api/item-delete", variables, true);
+			res = context.connettionService.doPost("/file/api/item-delete", variables, RequestType.JSON);
 			HttpEntity entity = res.getEntity();
 			if (entity != null) {
 				 InputStream instream = entity.getContent();
@@ -317,7 +318,7 @@ public class DashboardController extends Controller implements Initializable  {
 		variables.put("parrent", MemoryUtil.get("parrent_path", "/",true));
 		fileData.clear();
 		try {
-			HttpResponse res = context.connettionService.doPost("/file/api/get-list-directory", variables, true);
+			HttpResponse res = context.connettionService.doPost("/file/api/get-list-directory", variables, RequestType.JSON);
 			HttpEntity entity = res.getEntity();
 			if (entity != null) {
 			        InputStream instream = entity.getContent();

@@ -62,5 +62,10 @@
 			<artifactId>controlsfx</artifactId>
 			<version>8.40.13</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>4.5.4</version>
+		</dependency>
 	</dependencies>
 </project>

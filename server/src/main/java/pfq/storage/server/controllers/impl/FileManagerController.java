@@ -14,7 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import pfq.storage.server.controllers.FileManagerControllerI;
 import pfq.storage.server.model.CurrentUser;
@@ -81,9 +83,15 @@ public class FileManagerController implements FileManagerControllerI {
 	}
 
 	@Override
-	public ResponseEntity<String> itemUpload(@RequestBody String json, HttpServletRequest request,
+	public ResponseEntity<String> itemUpload(@RequestParam("json") String json, @RequestParam("file") MultipartFile file, HttpServletRequest request,
 			HttpServletResponse response) {
+		
+		System.out.println(json);
+		System.out.println(file);
+		System.out.println("3453453453453453453453453453453453453453453454");
+		
 		prepare(json, request);
+		
 		if (systemInfoService.access()) {
 			result = fileService.itemUpload(map); 
 		}

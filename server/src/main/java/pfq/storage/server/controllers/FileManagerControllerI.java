@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface FileManagerControllerI {
 	
@@ -24,9 +26,9 @@ public interface FileManagerControllerI {
     @ResponseBody
     public ResponseEntity<String> itemDelete(@RequestBody String json, HttpServletRequest request, HttpServletResponse response);
     
-    @RequestMapping(value = "/item-upload", method = RequestMethod.POST,headers="Accept=*/*",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/item-upload", method = RequestMethod.POST, headers = "Content-Type= multipart/form-data")
     @ResponseBody
-    public ResponseEntity<String> itemUpload(@RequestBody String json, HttpServletRequest request, HttpServletResponse response);
+    public ResponseEntity<String> itemUpload(@RequestParam("json") String json, @RequestParam("file") MultipartFile file, HttpServletRequest request, HttpServletResponse response);
     
     @RequestMapping(value = "/item-download", method = RequestMethod.POST,headers="Accept=*/*",consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody

@@ -1,5 +1,6 @@
 package pfq.store.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -19,7 +21,13 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
@@ -28,9 +36,11 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import pfq.store.AppSettings;
+import pfq.store.AppUtil;
 
 public class ConnettionService {
 	private HttpClient  httpClient;
@@ -56,19 +66,23 @@ public class ConnettionService {
         return this.new Builder();
     }
     
-    public HttpResponse doPost(String path, HashMap<String,String> variables,boolean isJson) throws URISyntaxException, ClientProtocolException, IOException {
+    public HttpResponse doPost(String path, HashMap<String,String> variables,RequestType requestType) throws ClientProtocolException, URISyntaxException, IOException {
+    	return doPost(path,variables,requestType,null);
+    }
+    
+    public HttpResponse doPost(String path, HashMap<String,String> variables,RequestType requestType, File file) throws URISyntaxException, ClientProtocolException, IOException {
     	URIBuilder builder = new URIBuilder();
     	builder.setScheme("http").setHost(AppSettings.get("host")).setPort(AppSettings.getInt("port", 8080)).setPath(path);
     	HttpPost httppost = new HttpPost(builder.build());
     	List<NameValuePair> params = new ArrayList<NameValuePair>();
     
-    	if(isJson) {
+    	if(requestType.equals(RequestType.JSON)) {
     		StringEntity postingString = new StringEntity( mapper.writeValueAsString(variables), "utf-8");
     		httppost.setEntity(postingString);
     		httppost.setHeader("Accept", "application/json");
     		httppost.setHeader("Content-type", "application/json; charset=utf-8");
     		System.out.println("isJson");
-    	}else {
+    	}else if(requestType.equals(RequestType.TEXT)){
     		
     		for (String key: variables.keySet()) {
     	    	
@@ -79,6 +93,19 @@ public class ConnettionService {
     		httppost.setHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
     		
     		httppost.setEntity(new UrlEncodedFormEntity(params));
+    	}else if(requestType.equals(RequestType.FILE)){
+    		//httppost.setHeader("Accept", "multipart/form-data");
+    		//httppost.setHeader("Content-type", "multipart/form-data; charset=utf-8");
+    		//StringEntity postingString = new StringEntity( , "utf-8");
+
+            HttpEntity data = MultipartEntityBuilder.create()
+                    .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
+                    .addBinaryBody("file", file, ContentType.DEFAULT_BINARY, file.getName())
+                    .addTextBody("json", mapper.writeValueAsString(variables), ContentType.DEFAULT_BINARY)
+                    .build();
+    		
+    		httppost.setEntity(data);
+
     	}
     	
     	System.out.println(httppost.getEntity());
@@ -113,7 +140,7 @@ public class ConnettionService {
 			variables.put("password", password);
 			
 			try {
-				HttpResponse res = ConnettionService.this.doPost("/login",variables,false);
+				HttpResponse res = ConnettionService.this.doPost("/login",variables,RequestType.TEXT);
 				//System.out.println(res.getStatusLine().getStatusCode());
 				if (  res.getStatusLine().getStatusCode() > 302 ) {
 					ConnettionService.this.isConnect = false;

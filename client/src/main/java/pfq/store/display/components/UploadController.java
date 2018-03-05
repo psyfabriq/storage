@@ -65,7 +65,7 @@ public class UploadController extends Controller implements Initializable, CallB
 
     @FXML
     void buttonUploadAction(ActionEvent event) {
-    	fileService.startUpload();
+    	fileService.startUpload(path_parrent);
     }
     
     @FXML
@@ -122,6 +122,7 @@ public class UploadController extends Controller implements Initializable, CallB
 			 uploadButton.setDisable(true);
 		 }
 		 
+		 
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -133,6 +134,7 @@ public class UploadController extends Controller implements Initializable, CallB
 			        public void changed(ObservableValue observable, Object oldValue,
 			                Object newValue) {
 			            TreeItem<TreeObject> selectedItem = (TreeItem<TreeObject>) newValue;
+			            path_parrent = selectedItem.getValue().getPath();
 			            
 			        }
 
