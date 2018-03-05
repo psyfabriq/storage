@@ -21,54 +21,60 @@
 }
 
 .button{
-	-fx-border-width: 1;
-
-    -fx-text-fill: -fx-primarytext;
-    -fx-border-color: -fx-secondary;
-    -fx-border-radius: 20px;
-    -fx-padding: 10;
-    -fx-border-style: solid inside;
-    -fx-background-radius: 20px;
-    -fx-font-size: 13pt;
+    
+    -fx-background-color: 
+        #c3c4c4,
+        linear-gradient(#d6d6d6 50%, white 100%),
+        radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230,230,230,0) 50%);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0,1,1;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
 }
 
 .button:hover{
-    -fx-border-color: -fx-secondary;
-    -fx-background-color: -fx-secondary;
+     -fx-background-color: 
+        #ecebe9,
+        rgba(0,0,0,0.05),
+        linear-gradient(#dcca8a, #c7a740),
+        linear-gradient(#f9f2d6 0%, #f4e5bc 20%, #e6c75d 80%, #e2c045 100%),
+        linear-gradient(#f6ebbe, #e6c34d);
     -fx-text-fill: -fx-primary;
 }
 
 
 .toggle-button {
-    -fx-border-color: -fx-secondary-g;
-    -fx-background-color: derive(-fx-primary, 10%);
-    -fx-background-radius: 0px;
-    -fx-border-radius: 0px;
-    -fx-text-fill: -fx-primarytext;
+    -fx-background-color: 
+        #090a0c,
+        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),
+        linear-gradient(#20262b, #191d22),
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+    -fx-background-radius: 5,4,3,5;
+    -fx-background-insets: 0,1,2,0;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-text-fill: linear-gradient(white, #d0d0d0);
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.75) , 4,0,0,1 );
+    -fx-font-weight: bold;
+    -fx-font-size: 1.1em;
+    -fx-padding: 10 20 10 20;
 }
 
 .toggle-button:focused {
-    -fx-border-color: white, white;
-
-    -fx-border-width: 1, 1;
-    -fx-border-style: solid, segments(1, 1);
-    -fx-border-radius: 0, 0;
-    -fx-border-insets: 1 1 1 1, 0;
+     -fx-background-radius: 9,8,5,4;
 }
 
 .toggle-button:hover {
-    -fx-background-color: -fx-secondary;
-    -fx-text-fill: -fx-primary;
+    -fx-background-color: linear-gradient(#ff5400, #be1d00);
+    -fx-text-fill: white;
 }
 
 .toggle-button:selected {
-    -fx-background-color: -fx-secondary;
-    -fx-text-fill: -fx-primary;
+
 }
 
 .toggle-button:selected:hover {
-    -fx-background-color: -fx-secondary;
-    -fx-text-fill: -fx-primary;
+
 }
 .toggle-button:disabled {
     -fx-opacity: -fx-disabled-opacity;
@@ -134,6 +140,7 @@
     -fx-background-color: derive(-fx-primary, 10%);
     -fx-background-radius: 0px;
     -fx-border-radius: 0px;
+    -fx-text-fill: white;
 }
 .toolbar-button:hover
 {
@@ -174,29 +181,6 @@
 .jfx-layout-actions
 {
     -fx-hgap:8;
-}
-
-/*Chart Styling*/
-.data0.chart-pie{
-    -fx-pie-color: -fx-secondary;
-    -fx-border-color: derive(-fx-secondary, -30%);
-}
-.data1.chart-pie{
-    -fx-pie-color: derive(-fx-primary, 30%);
-    -fx-border-color: derive(-fx-primary, 30%);
-}
-.chart-pie-label
-{
-    -fx-fill : derive(-fx-secondary, -5%);
-}
-
-/*About window*/
-.about-text{
-    -fx-fill: -fx-secondary;
-}
-
-.about-button{
-    -fx-border-color: transparent;
 }
 
 /*Custom window background*/

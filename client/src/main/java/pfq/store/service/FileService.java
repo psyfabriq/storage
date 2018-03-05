@@ -50,7 +50,6 @@ public class FileService implements CallBackPreviewPane {
 	 
     public static FileService getInstance(CallBackFileService listener) {
 		SingletoneHolder.instance.addListenerChangeListElements(listener);
-		//SingletoneHolder.instance.addConnettionService(connectionService);
 		return SingletoneHolder.instance;
 	}
     
@@ -85,7 +84,7 @@ public class FileService implements CallBackPreviewPane {
 		for (File file : files) {
 			
 			boolean exists      =      file.exists();     
-			boolean isDirectory =      file.isDirectory(); 
+			//boolean isDirectory =      file.isDirectory(); 
 			boolean isFile      =      file.isFile(); 
 			String  name        =      file.getName(); 
 			
@@ -98,9 +97,9 @@ public class FileService implements CallBackPreviewPane {
 		    	f.setButtonIco(fv);
 		    	f.setTextLabel(name);
 		    	
-					String  extension   =      getFileExtension(name);
+					//String  extension   =      getFileExtension(name);
 					String  mimetype    =      new MimetypesFileTypeMap().getContentType(file);
-					String type         =      mimetype.split("/")[0];
+					//String type         =      mimetype.split("/")[0];
 
 					try {
 						if( ImageIO.read(file) != null)
@@ -127,11 +126,12 @@ public class FileService implements CallBackPreviewPane {
 		}
 		
 	}
-	
+	/*
 	private static String getFileExtension(String mystr) {
 	    int index = mystr.indexOf('.');
 	    return index == -1? null : mystr.substring(index);
 	}
+	*/
 
 	public ObservableList<PreviewPane> getFileData() {
 		return fileData;
@@ -177,7 +177,7 @@ public class FileService implements CallBackPreviewPane {
 		private   PreviewPane pp;
 		private   String      parrentpath;
 		private   ConnettionService connectionService;
-		CallBackPreviewPane call;
+		//CallBackPreviewPane call;
 		 
 		private UploadObject(Semaphore smp,CountDownLatch uploadactive, PreviewPane pp,String parrentpath,ConnettionService connectionService) {
 			this.smp = smp;
@@ -195,17 +195,14 @@ public class FileService implements CallBackPreviewPane {
 				variables.put("name", pp.getTextLabel());
 				HttpResponse res = connectionService.doPost("/file/api/item-upload", variables, true);
 				HttpEntity entity = res.getEntity();
-				Thread.sleep(9000);
+				//Thread.sleep(9000);
 			} catch (InterruptedException | URISyntaxException | IOException e) {
 				e.printStackTrace();
 			}finally {
-				call.removeElementCallBack(Optional.ofNullable(pp));
+				pp.removeMe();
 				uploadactive.countDown();
 				smp.release();
 			}
-			
-		} 
-		 
+		} 	 
 	 }
-
 }

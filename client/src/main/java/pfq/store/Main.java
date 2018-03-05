@@ -16,7 +16,6 @@ public class Main extends Application {
 		   stage.setScene(scene);
 		   DisplayManager stateManager = new DisplayManager(scene,stage);
       	   ContextStateApp csa = new ContextStateApp(stateManager); 
-	       csa.pull(); 
-		    
+	       csa.pull();  
 	  }
 }

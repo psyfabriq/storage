@@ -14,6 +14,7 @@ import com.jfoenix.svg.SVGGlyph;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -204,10 +205,20 @@ public class PreviewPane extends AnchorPane   {
 	public File getValueFile() {
 		return value;
 	}
+	
+    public void removeMe() {
+        PreviewPane tmp = this;
+    	Platform.runLater(new Runnable() {
+           @Override
+           public void run() {
+        	   listenerService.removeElementCallBack(Optional.ofNullable(tmp));
+           }
+        }); 
+	}
 
 	@FXML
     void buttonClick(ActionEvent event) {
-		listenerService.removeElementCallBack(Optional.ofNullable(this));
+		removeMe();
     }
 	
 	
