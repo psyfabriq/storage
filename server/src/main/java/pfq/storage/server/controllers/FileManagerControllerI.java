@@ -32,7 +32,7 @@ public interface FileManagerControllerI {
     @ResponseBody
     public ResponseEntity<String> itemUpload(@RequestParam("json") String json, @RequestParam("file") MultipartFile file, HttpServletRequest request, HttpServletResponse response);
     
-    @RequestMapping(value = "/item-download", method = RequestMethod.GET,headers="Accept=*/*",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/item-download", method = RequestMethod.POST,headers="Accept=*/*",consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<InputStreamResource> itemDownload(@RequestBody String json, HttpServletRequest request, HttpServletResponse response);
     

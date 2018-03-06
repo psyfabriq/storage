@@ -1,5 +1,6 @@
 package pfq.storage.server.model;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -33,6 +34,8 @@ public class FileMO implements Serializable, Cloneable,Comparable<FileMO>  {
 	private String   type;
 	@DBRef(lazy = false)
 	private Folder   parrent;
+	@JsonIgnore
+	private File     tmpFile;
 	
 	
 	@Override
@@ -90,6 +93,16 @@ public class FileMO implements Serializable, Cloneable,Comparable<FileMO>  {
 		return parrent;
 	}
 	
+
+	public File getTmpFile() {
+		return tmpFile;
+	}
+
+	public void setTmpFile(File tmpFile) {
+		this.tmpFile = tmpFile;
+	}
+
+
 	@JsonIgnore
 	public Update getUpdate() {
 		Update update = new Update();

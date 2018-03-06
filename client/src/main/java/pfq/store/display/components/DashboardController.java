@@ -353,11 +353,30 @@ public class DashboardController extends Controller implements Initializable  {
 	
 	
     private void SaveFile(String ID){
+		HashMap<String,String> variables = new HashMap<>();
+		variables.put("id", ID);
+	
+		try {
+			HttpResponse res = context.connettionService.doPost("/file/api/item-download", variables, RequestType.JSON);
+			HttpEntity entity = res.getEntity();
+			if (entity != null) {
+				InputStream instream = entity.getContent();
+				byte[] buffer = new byte[instream.available()];
+				instream.read(buffer);
+				instream.close();
+			}
+			
+		} catch (URISyntaxException | IOException e) {
+			e.printStackTrace();
+		}
+
+    	/*
     	FileChooser fileChooser = new FileChooser();
         File filetosave = fileChooser.showSaveDialog(null);
         if (filetosave != null) {
            // saveTextToFile(sampleText, filetosave);
         }
+        */
     }
 
 	private void getListFolder() {

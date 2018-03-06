@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import pfq.storage.server.controllers.FileManagerControllerI;
 import pfq.storage.server.model.CurrentUser;
+import pfq.storage.server.model.FileMO;
 import pfq.storage.server.service.FileService;
 import pfq.storage.server.service.SystemInfoService;
 import pfq.storage.server.utils.AppUtil;
@@ -105,18 +107,16 @@ public class FileManagerController implements FileManagerControllerI {
 	public ResponseEntity<InputStreamResource> itemDownload(@RequestBody String json, HttpServletRequest request,HttpServletResponse response) {
 		prepare(json, request);
 		if (systemInfoService.access()) {
-			File file = fileService.itemDownload(map); 
-			try {
-				InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-			    return ResponseEntity.ok()
-			            .headers(head)
-			            .contentLength(file.length())
-			            .contentType(MediaType.parseMediaType("application/octet-stream"))
-			            .body(resource);
-			} catch (FileNotFoundException e) {
-				return new ResponseEntity<InputStreamResource>( HttpStatus.NOT_FOUND );
+			Optional<FileMO> file = fileService.itemDownload(map); 
+			if (file.isPresent()) {
+				try {
+					InputStreamResource resource = new InputStreamResource(new FileInputStream(file.get().getTmpFile()));
+					return ResponseEntity.ok().headers(head).contentLength(file.get().getTmpFile().length())
+							.contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
+				} catch (FileNotFoundException e) {
+					return new ResponseEntity<InputStreamResource>(HttpStatus.NOT_FOUND);
+				}
 			}
-
 		}
 	    
 		return new ResponseEntity<InputStreamResource>( HttpStatus.NOT_FOUND );

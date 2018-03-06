@@ -189,9 +189,16 @@ public class FileServiceImpl  implements FileService{
 	}
 
 	@Override
-	public File itemDownload(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<FileMO> itemDownload(Map<String, Object> map) {
+		if(map.containsKey("id")) {
+			Optional<FileMO> filetodownload = fileDAO.findFileID((String) map.get("id"));
+			if(filetodownload.isPresent()) {
+				FileMO fmo = filetodownload.get();
+				String destination = systemInfoService.getCurrentUserFolder() +OSValidator.getOSSeparator()+ fmo.getId();
+				fmo.setTmpFile(new File(destination));
+				return Optional.ofNullable(fmo);
+			}
+		}	return Optional.ofNullable(null);
 	}
 
 	@Override
