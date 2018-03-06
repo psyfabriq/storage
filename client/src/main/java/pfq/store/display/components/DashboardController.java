@@ -1,5 +1,7 @@
 package pfq.store.display.components;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -29,6 +31,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import pfq.store.AppUtil;
 import pfq.store.MemoryUtil;
@@ -90,6 +93,27 @@ public class DashboardController extends Controller implements Initializable  {
 		initTreeViews();
 	}
 	
+	
+    private void actionOpen(FileItemFX data) {
+		if("dir".equals(data.getType())) {
+			foundTreeViewChild(data.getId());
+			MemoryUtil.put("parrent_path", data.getPath());
+			getListFolder();
+		}
+    }
+    
+    private void actionDelete(FileItemFX data) {
+    	removeItem(data.getType(),data.getId());
+    }
+    
+    private void actionDownload(FileItemFX data) {
+    	SaveFile(data.getId());
+    }
+    
+    private void actionEdit(FileItemFX data) {
+    	
+    }
+	
 	private void initColums() {
 		
 		Callback<TableColumn<FileItemFX, Image>, TableCell<FileItemFX, Image>> cellFactory = new Callback<TableColumn<FileItemFX, Image>, TableCell<FileItemFX, Image>>() {
@@ -116,7 +140,6 @@ public class DashboardController extends Controller implements Initializable  {
                     return cell;
             }
         };
-		
         
         Callback<TableColumn<FileItemFX, String>, TableCell<FileItemFX, String>> cellFactoryButton = new Callback<TableColumn<FileItemFX, String>, TableCell<FileItemFX, String>>() {
             @Override
@@ -125,66 +148,75 @@ public class DashboardController extends Controller implements Initializable  {
                 	
                 	
                 	private final ToggleGroup group = new ToggleGroup(); 
+                	private final ToggleGroup group_f = new ToggleGroup(); 
                 	
                 	private final HBox hb_folder = new HBox();
                 	private final HBox hb_file = new HBox();
                 	
-                    private final ToggleButton btnOpen      = new ToggleButton("Open");
-                    private final ToggleButton btnDownload  = new ToggleButton("Download");
-                    private final ToggleButton btnEdit      = new ToggleButton("Edit");
-                    private final ToggleButton btnDelete    = new ToggleButton("Delete");
+                    private final ToggleButton btnOpen        = new ToggleButton("Open");
+                    private final ToggleButton btnEdit        = new ToggleButton("Edit");
+                    private final ToggleButton btnDelete      = new ToggleButton("Delete");
+                    
+                    private final ToggleButton btnDownload_f  = new ToggleButton("Download");
+                    private final ToggleButton btnEdit_f      = new ToggleButton("Edit");
+                    private final ToggleButton btnDelete_f    = new ToggleButton("Delete");
                     
                     {
                     	hb_folder.setAlignment(Pos.CENTER);
                     	hb_file.setAlignment(Pos.CENTER);
                     	
+
+						btnOpen.setOnAction((ActionEvent event) -> {
+							FileItemFX data = getTableView().getItems().get(getIndex());
+							btnOpen.setSelected(false);
+							actionOpen(data);
+						});
                     	btnEdit.setOnAction((ActionEvent event) -> {
 	                    	FileItemFX data = getTableView().getItems().get(getIndex());
 	                    	btnEdit.setSelected(false);
-                            System.out.println("selectedData: " + data);
-                            
+                            actionEdit(data);
                         });
-						btnOpen.setOnAction((ActionEvent event) -> {
-
-							FileItemFX data = getTableView().getItems().get(getIndex());
-							btnOpen.setSelected(false);
-							
-							if("dir".equals(data.getType())) {
-								foundTreeViewChild(data.getId());
-								MemoryUtil.put("parrent_path", data.getPath());
-								getListFolder();
-							}
-
-
-						});
-						btnDownload.setOnAction((ActionEvent event) -> {
-
-							FileItemFX data = getTableView().getItems().get(getIndex());
-							btnDownload.setSelected(false);
-							
-
-						});
                     	btnDelete.setOnAction((ActionEvent event) -> {
                         	FileItemFX data = getTableView().getItems().get(getIndex());
                         	btnDelete.setSelected(false);
-                        	removeItem(data.getType(),data.getId());
-                            System.out.println("selectedData: " + data);
+                            actionDelete(data);
                         });
                     	
-                	    btnEdit.setToggleGroup(group);
+                    	
+						btnDownload_f.setOnAction((ActionEvent event) -> {
+							FileItemFX data = getTableView().getItems().get(getIndex());
+							btnDownload_f.setSelected(false);
+							actionDownload(data);
+						});
+                    	btnEdit_f.setOnAction((ActionEvent event) -> {
+	                    	FileItemFX data = getTableView().getItems().get(getIndex());
+	                    	btnEdit_f.setSelected(false);
+                            actionEdit(data);
+                        });
+                    	btnDelete_f.setOnAction((ActionEvent event) -> {
+                        	FileItemFX data = getTableView().getItems().get(getIndex());
+                        	btnDelete_f.setSelected(false);
+                            actionDelete(data);
+                        });
+                    	
 						btnOpen.setToggleGroup(group);
-						btnDownload.setToggleGroup(group);
+                	    btnEdit.setToggleGroup(group);
                     	btnDelete.setToggleGroup(group);
-
+                    	
+                    	
+                    	
+						btnDownload_f.setToggleGroup(group_f);
+                	    btnEdit_f.setToggleGroup(group_f);
+                    	btnDelete_f.setToggleGroup(group_f);
                     }
                     
                     {
                     	
-            			hb_file.getChildren().add(btnEdit);
-						hb_file.getChildren().add(btnDownload);
-						hb_file.getChildren().add(btnDelete);
+            			//hb_file.getChildren().add(btnEdit_f);
+						hb_file.getChildren().add(btnDownload_f);
+						hb_file.getChildren().add(btnDelete_f);
 	
-                    	hb_folder.getChildren().add(btnEdit);
+                    	//hb_folder.getChildren().add(btnEdit);
                     	hb_folder.getChildren().add(btnOpen);
 						hb_folder.getChildren().add(btnDelete);
 						
@@ -318,6 +350,15 @@ public class DashboardController extends Controller implements Initializable  {
 		}
 		
 	}
+	
+	
+    private void SaveFile(String ID){
+    	FileChooser fileChooser = new FileChooser();
+        File filetosave = fileChooser.showSaveDialog(null);
+        if (filetosave != null) {
+           // saveTextToFile(sampleText, filetosave);
+        }
+    }
 
 	private void getListFolder() {
 		HashMap<String,String> variables = new HashMap<>();

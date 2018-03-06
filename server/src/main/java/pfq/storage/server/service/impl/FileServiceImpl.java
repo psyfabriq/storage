@@ -92,8 +92,6 @@ public class FileServiceImpl  implements FileService{
 		if(isDir) {
 			Optional<Folder> foldertodelete = fileDAO.findFolderID((String) map.get("id"));
 			if(foldertodelete.isPresent()) {
-				//ArrayList<File> fileslist   = new ArrayList<File>();
-				//ArrayList<Folder> folderslist ;
 				Queue<Folder> fileTree = new PriorityQueue<>();
 				Collections.addAll(fileTree, foldertodelete.get());
 				while (!fileTree.isEmpty()) {
@@ -102,7 +100,6 @@ public class FileServiceImpl  implements FileService{
 					for (Folder folder : childFolders) {
 						Collections.addAll(fileTree, folder);
 					}
-					//fileslist = fileDAO.getAllFiles(currentFolder.getPath());
 					
 					System.out.println(currentFolder.getPath()+" is remove "+fileDAO.deleteFolder(currentFolder));
 				}
@@ -111,6 +108,18 @@ public class FileServiceImpl  implements FileService{
 				return AppUtil.getResponseJson("Not Found folder to delete",ResponseStatus.ERROR);
 			}
 			
+		}else {
+			Optional<FileMO> filetodelete = fileDAO.findFileID((String) map.get("id"));
+			if(filetodelete.isPresent()) {
+				String destination = systemInfoService.getCurrentUserFolder() +OSValidator.getOSSeparator()+ filetodelete.get().getId();
+				File file = new File(destination);
+	    		if(file.delete()){
+	    			System.out.println(file.getName() + " is deleted!");
+	    			fileDAO.deleteFile(filetodelete.get());
+	    		}else{
+	    			System.out.println("Delete operation is failed.");
+	    		}
+			}
 		}
 		
 	 return AppUtil.getResponseJson("GOOD",ResponseStatus.OK);
@@ -180,7 +189,7 @@ public class FileServiceImpl  implements FileService{
 	}
 
 	@Override
-	public String itemDownload(Map<String, Object> map) {
+	public File itemDownload(Map<String, Object> map) {
 		// TODO Auto-generated method stub
 		return null;
 	}

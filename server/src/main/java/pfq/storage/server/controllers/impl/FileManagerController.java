@@ -1,13 +1,18 @@
 package pfq.storage.server.controllers.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -97,14 +102,24 @@ public class FileManagerController implements FileManagerControllerI {
 	}
 
 	@Override
-	public ResponseEntity<String> itemDownload(@RequestBody String json, HttpServletRequest request,
-			HttpServletResponse response) {
+	public ResponseEntity<InputStreamResource> itemDownload(@RequestBody String json, HttpServletRequest request,HttpServletResponse response) {
 		prepare(json, request);
 		if (systemInfoService.access()) {
-			result = fileService.itemDownload(map); 
+			File file = fileService.itemDownload(map); 
+			try {
+				InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+			    return ResponseEntity.ok()
+			            .headers(head)
+			            .contentLength(file.length())
+			            .contentType(MediaType.parseMediaType("application/octet-stream"))
+			            .body(resource);
+			} catch (FileNotFoundException e) {
+				return new ResponseEntity<InputStreamResource>( HttpStatus.NOT_FOUND );
+			}
+
 		}
-		return new ResponseEntity<String>(result, head,
-				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
+	    
+		return new ResponseEntity<InputStreamResource>( HttpStatus.NOT_FOUND );
 	}
 
 	@Override
