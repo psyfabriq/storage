@@ -86,14 +86,11 @@ public class FileManagerController implements FileManagerControllerI {
 	public ResponseEntity<String> itemUpload(@RequestParam("json") String json, @RequestParam("file") MultipartFile file, HttpServletRequest request,
 			HttpServletResponse response) {
 		
-		System.out.println(json);
-		System.out.println(file);
-		System.out.println("3453453453453453453453453453453453453453453454");
-		
 		prepare(json, request);
 		
+		
 		if (systemInfoService.access()) {
-			result = fileService.itemUpload(map); 
+			result = fileService.itemUpload(map,file); 
 		}
 		return new ResponseEntity<String>(result, head,
 				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);

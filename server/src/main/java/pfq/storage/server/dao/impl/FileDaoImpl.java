@@ -10,10 +10,15 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
+
 import pfq.storage.server.dao.FileDAO;
-import pfq.storage.server.model.File;
+import pfq.storage.server.model.FileMO;
 import pfq.storage.server.model.Folder;
 import pfq.storage.server.model.User;
 import pfq.storage.server.service.SystemInfoService;
@@ -26,8 +31,9 @@ public class FileDaoImpl implements FileDAO{
 	private Logger logger = PFQloger.getLogger(FileDAO.class, Level.ALL);
 
 	
-	private File tmp_file;
+	private FileMO tmp_file;
 	private Folder tmp_folder;
+	ObjectMapper mapper = new ObjectMapper();
 
 
 	@Autowired
@@ -40,48 +46,82 @@ public class FileDaoImpl implements FileDAO{
 	QBuilder qb;
 
 	
-
-	
 	@Override
-	public boolean addFile(File file) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean addFile(FileMO file) {
+		boolean result = !checkHasFile(file.getPath());
+		if(result){
+			mongoOperation.save(file);
+			return true;
+		}else {return false;}
 	}
 
 	@Override
-	public boolean editFile(File file) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean editFile(FileMO file) {
+		
+	    Query query = new Query();
+		query.addCriteria(Criteria.where("path").is(file.getPath()));
+		query.addCriteria(Criteria.where("userid").is(systemInfoService.getCurrentUserID()));
+		
+		return mongoOperation.updateFirst(query,file.getUpdate(),FileMO.class).isUpdateOfExisting();
 	}
 
 	@Override
-	public boolean deleteFile(File file) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean deleteFile(FileMO file) {
+		boolean result = checkHasFile(file.getPath());
+		if(result){
+			mongoOperation.remove(file);
+			return true;
+		}else {return false;}
 	}
 
 	@Override
 	public boolean checkHasFile(String filepath) {
-		// TODO Auto-generated method stub
-		return false;
+		return findFile(filepath).isPresent();
 	}
 
 	@Override
 	public boolean checkHasFileByID(String ID) {
-		// TODO Auto-generated method stub
-		return false;
+		return findFileID(ID).isPresent();
 	}
 
 	@Override
-	public Optional<File> findFile(String filepath) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<FileMO> findFile(String filepath) {
+	    Query query = new Query();
+		query.addCriteria(Criteria.where("path").is(filepath));
+		query.addCriteria(Criteria.where("userid").is(systemInfoService.getCurrentUserID()));
+		
+		tmp_file = mongoOperation.findOne(query, FileMO.class);
+		
+	  return Optional.ofNullable(tmp_file);
+	}
+	
+	@Override
+	public Optional<FileMO> findFileID(String ID) {
+		    Query query = new Query();
+			query.addCriteria(Criteria.where("_id").is(ID));
+			query.addCriteria(Criteria.where("userid").is(systemInfoService.getCurrentUserID()));
+			
+			tmp_file = mongoOperation.findOne(query, FileMO.class);
+			
+		return Optional.ofNullable(tmp_file);
 	}
 
 	@Override
-	public List<File> getAllFiles(String folderpath) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<FileMO> getAllFiles(Folder parrent) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("parrent").is(parrent));
+		query.addCriteria(Criteria.where("userid").is(systemInfoService.getCurrentUserID()));
+		
+		return  mongoOperation.find(query, FileMO.class);
+	}
+	
+	@Override
+	public List<FileMO> getAllFiles() {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("parrent").is(null));
+		query.addCriteria(Criteria.where("userid").is(systemInfoService.getCurrentUserID()));
+		
+		return  mongoOperation.find(query, FileMO.class);
 	}
 
 	@Override

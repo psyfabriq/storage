@@ -5,24 +5,26 @@ import java.util.Optional;
 
 import org.springframework.data.mongodb.core.query.Query;
 
-import pfq.storage.server.model.File;
+import pfq.storage.server.model.FileMO;
 import pfq.storage.server.model.Folder;
 
 public interface FileDAO {
 	
 
 	
-	boolean addFile(File file);
-    boolean editFile(File file);
-    boolean deleteFile(File file);
+	boolean addFile(FileMO file);
+    boolean editFile(FileMO file);
+    boolean deleteFile(FileMO file);
     boolean checkHasFile(String filepath);
     boolean checkHasFileByID(String ID);
-    Optional<File>  findFile(String filepath);
+    Optional<FileMO>  findFile(String filepath);
+    Optional<FileMO> findFileID(String ID);
   //  Optional<File>  findFileByID(String id);
   //  Optional<File>  findFileByQueryOne(String query);
   //  List<File> findFileByQueryList(String query);
   //  List<File> findFileByQueryList(Query query);
-    List<File> getAllFiles(String folderpath);
+    List<FileMO> getAllFiles(Folder parrent);
+    List<FileMO> getAllFiles();
     
 	boolean addFolder(Folder folder);
     boolean editFolder(Folder folder);

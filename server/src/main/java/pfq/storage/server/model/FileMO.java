@@ -6,6 +6,7 @@ import java.util.Date;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.query.Update;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,7 +16,7 @@ import pfq.storage.server.model.exception.FileBuilderException;
 
 @Document(collection = "file")
 @SuppressWarnings("serial")
-public class File implements Serializable, Cloneable,Comparable<File>  {
+public class FileMO implements Serializable, Cloneable,Comparable<FileMO>  {
 	
 	@Indexed
 	private String   id;
@@ -24,7 +25,7 @@ public class File implements Serializable, Cloneable,Comparable<File>  {
 	private String   name;
 	private String   rights;
 	private String   mimeType;
-	private long     size;
+	private double     size;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
 	private Date     time;
 	private String   path;
@@ -40,13 +41,9 @@ public class File implements Serializable, Cloneable,Comparable<File>  {
 	}
 	
 	
-
-
-	private File() {
+	private FileMO() {
 		super();	
-		}
-
-
+	}
 
 
 	public String getId() {
@@ -57,21 +54,17 @@ public class File implements Serializable, Cloneable,Comparable<File>  {
 		return userid;
 	}
 
-
 	public String getName() {
 		return name;
 	}
-
 
 	public String getRights() {
 		return rights;
 	}
 
-
-	public long getSize() {
+	public double getSize() {
 		return size;
 	}
-
 
 	public Date getTime() {
 		return time;
@@ -81,12 +74,9 @@ public class File implements Serializable, Cloneable,Comparable<File>  {
 		return path;
 	}
 	
-	
-	
     public String getMimeType() {
 		return mimeType;
 	}
-
 
 	public boolean isImage() {
 		return isImage;
@@ -99,86 +89,106 @@ public class File implements Serializable, Cloneable,Comparable<File>  {
 	public Folder getParrent() {
 		return parrent;
 	}
+	
+	@JsonIgnore
+	public Update getUpdate() {
+		Update update = new Update();
+		update.set("name", name);
+		update.set("rights", rights);
+		update.set("size", size);
+		update.set("time", time);
+		update.set("path", path);
+		update.set("mimeType", mimeType);
+		update.set("parrent", parrent);	
+		return update;
+	}
 
 
+	
 	@JsonIgnore
     public Builder getBuilder() {
         return this.new Builder();
     }
     
     public static Builder newBuilder() {
-        return new File().new Builder();
+        return new FileMO().new Builder();
     }
 
 
 	public class Builder {
     	private Builder() { 
-    		  File.this.type = "file";
-    		  File.this.time = new Date();
+    		  FileMO.this.type = "file";
+    		  FileMO.this.time = new Date();
     		}
     	
     	    
 		    public Builder setUserId(String userid) {
-			   File.this.userid = name;
+			   FileMO.this.userid = userid;
 			   return this;
 		    }
 
     		public Builder setName(String name) {
-    			File.this.name = name;
+    			FileMO.this.name = name;
     			return this;
     		}
-
 
     		public Builder setRights(String rights) {
-    			File.this.rights = rights;
+    			FileMO.this.rights = rights;
+    			return this;
+    		}
+    		
+    		public Builder setMime(String mime) {
+    			FileMO.this.mimeType = mime;
+    			return this;
+    		}
+    		
+    		public Builder setIsImage(boolean isImage) {
+    			FileMO.this.isImage = isImage;
     			return this;
     		}
 
-
-    		public Builder setSize(long size) {
-    			File.this.size = size;
+    		public Builder setSize(double size) {
+    			FileMO.this.size = size;
     			return this;
     		}
-
 
     		public Builder setTime(Date time) {
-    			File.this.time = time;
+    			FileMO.this.time = time;
     			return this;
     		}
 
-
-
     		public Builder setPath(String path) {
-    			File.this.path = path;
+    			FileMO.this.path = path;
     			return this;
     		}
     		
     		public Builder setParrent(Folder parrent) {
-    			File.this.parrent = parrent;
+    			FileMO.this.parrent = parrent;
     			return this;
     		}
 	
     	
-		public File build() throws FileBuilderException {
+		public FileMO build() throws FileBuilderException {
 			
-			if ("".equals(File.this.name)||File.this.name == null) {
+			if ("".equals(FileMO.this.name)||FileMO.this.name == null) {
 				throw new FileBuilderException("Name is empty!");
 			}
-			if ("".equals(File.this.userid)||File.this.userid == null) {
+			
+			if ("".equals(FileMO.this.userid)||FileMO.this.userid == null) {
 				throw new FileBuilderException("Not set User ID!");
 			}
-			if ("".equals(File.this.path)||File.this.path == null) {
+			
+			if ("".equals(FileMO.this.path)||FileMO.this.path == null) {
 				throw new FileBuilderException("Not set path!");
 			}
-			
-			
-            return File.this;
+				
+            return FileMO.this;
         }
     }
 
 
 	@Override
-	public int compareTo(File o) {
+	public int compareTo(FileMO o) {
 		return id.compareTo(o.getId());
 	}
 
