@@ -8,6 +8,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -75,7 +76,8 @@ public class ConnettionService {
     	builder.setScheme("http").setHost(AppSettings.get("host")).setPort(AppSettings.getInt("port", 8080)).setPath(path);
     	HttpPost httppost = new HttpPost(builder.build());
     	List<NameValuePair> params = new ArrayList<NameValuePair>();
-    
+    	httppost.setHeader("User-Agent", "Java client");
+    	
     	if(requestType.equals(RequestType.JSON)) {
     		StringEntity postingString = new StringEntity( mapper.writeValueAsString(variables), "utf-8");
     		httppost.setEntity(postingString);
@@ -85,7 +87,6 @@ public class ConnettionService {
     	}else if(requestType.equals(RequestType.TEXT)){
     		
     		for (String key: variables.keySet()) {
-    	    	
         		params.add(new BasicNameValuePair(key, URLEncoder.encode( variables.get(key), "UTF-8" )));
         	}
     		
@@ -94,22 +95,25 @@ public class ConnettionService {
     		
     		httppost.setEntity(new UrlEncodedFormEntity(params));
     	}else if(requestType.equals(RequestType.FILE)){
-    		//httppost.setHeader("Accept", "multipart/form-data");
-    		//httppost.setHeader("Content-type", "multipart/form-data; charset=utf-8");
-    		//StringEntity postingString = new StringEntity( , "utf-8");
-
+    		String boundary = "---------------"+UUID.randomUUID().toString();
+    		httppost.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+    		httppost.setHeader("Content-Type", ContentType.MULTIPART_FORM_DATA.getMimeType()+";boundary="+boundary);
+    		httppost.setHeader("Accept-Encoding", "gzip, deflate");
+    		
             HttpEntity data = MultipartEntityBuilder.create()
                     .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
+                    .setBoundary(boundary)
                     .addBinaryBody("file", file, ContentType.DEFAULT_BINARY, file.getName())
                     .addTextBody("json", mapper.writeValueAsString(variables), ContentType.APPLICATION_JSON)
                     .build();
     		
     		httppost.setEntity(data);
-
     	}
     	
     	System.out.println(httppost.getEntity());
     	HttpResponse response = httpClient.execute(httppost);
+    	
+    	httppost.completed();
     	return response;
     }
     

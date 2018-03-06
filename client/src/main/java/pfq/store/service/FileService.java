@@ -2,6 +2,7 @@ package pfq.store.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,9 @@ import javax.imageio.ImageIO;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.application.Platform;
@@ -22,6 +26,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
+import pfq.store.AppUtil;
 import pfq.store.MemoryUtil;
 import pfq.store.components.CallBackPreviewPane;
 import pfq.store.components.PreviewPane;
@@ -36,6 +41,7 @@ public class FileService implements CallBackPreviewPane {
 	
 	protected Semaphore smp = new Semaphore(1); 
 	protected CountDownLatch uploadactive; 
+	private  ObjectMapper mapper = new ObjectMapper();
 	
 	private boolean nowUpload = false;
 	
@@ -195,13 +201,20 @@ public class FileService implements CallBackPreviewPane {
 				variables.put("name", pp.getTextLabel());
 				HttpResponse res = connectionService.doPost("/file/api/item-upload", variables, RequestType.FILE, pp.getValueFile());
 				HttpEntity entity = res.getEntity();
+				if (entity != null) {
+				        InputStream instream = entity.getContent();
+				        JsonNode rootNode = mapper.readValue(AppUtil.convertStreamToString(instream), JsonNode.class);
+				        instream.close();
+				        System.out.println(rootNode.toString());
+				}
 				Thread.sleep(1000);
+				
 			} catch (InterruptedException | URISyntaxException | IOException e) {
 				e.printStackTrace();
 			}finally {
-				pp.removeMe();
 				uploadactive.countDown();
 				smp.release();
+				pp.removeMe();
 			}
 		} 	 
 	 }

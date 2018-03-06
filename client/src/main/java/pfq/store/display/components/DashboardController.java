@@ -125,7 +125,9 @@ public class DashboardController extends Controller implements Initializable  {
                 	
                 	
                 	private final ToggleGroup group = new ToggleGroup(); 
-                	private final HBox hb = new HBox();
+                	
+                	private final HBox hb_folder = new HBox();
+                	private final HBox hb_file = new HBox();
                 	
                     private final ToggleButton btnOpen      = new ToggleButton("Open");
                     private final ToggleButton btnDownload  = new ToggleButton("Download");
@@ -133,7 +135,9 @@ public class DashboardController extends Controller implements Initializable  {
                     private final ToggleButton btnDelete    = new ToggleButton("Delete");
                     
                     {
-                    	hb.setAlignment(Pos.CENTER);
+                    	hb_folder.setAlignment(Pos.CENTER);
+                    	hb_file.setAlignment(Pos.CENTER);
+                    	
                     	btnEdit.setOnAction((ActionEvent event) -> {
 	                    	FileItemFX data = getTableView().getItems().get(getIndex());
 	                    	btnEdit.setSelected(false);
@@ -144,10 +148,13 @@ public class DashboardController extends Controller implements Initializable  {
 
 							FileItemFX data = getTableView().getItems().get(getIndex());
 							btnOpen.setSelected(false);
+							
+							if("dir".equals(data.getType())) {
+								foundTreeViewChild(data.getId());
+								MemoryUtil.put("parrent_path", data.getPath());
+								getListFolder();
+							}
 
-							foundTreeViewChild(data.getId());
-							MemoryUtil.put("parrent_path", data.getPath());
-							getListFolder();
 
 						});
 						btnDownload.setOnAction((ActionEvent event) -> {
@@ -169,25 +176,20 @@ public class DashboardController extends Controller implements Initializable  {
 						btnDownload.setToggleGroup(group);
                     	btnDelete.setToggleGroup(group);
 
-
-
-
                     }
                     
                     {
                     	
-                    	
+            			hb_file.getChildren().add(btnEdit);
+						hb_file.getChildren().add(btnDownload);
+						hb_file.getChildren().add(btnDelete);
 	
-                    	hb.getChildren().add(btnEdit);
+                    	hb_folder.getChildren().add(btnEdit);
+                    	hb_folder.getChildren().add(btnOpen);
+						hb_folder.getChildren().add(btnDelete);
+						
+			
                     	
-					//	if (isDir) {
-							hb.getChildren().add(btnOpen);
-					//	}else {
-							hb.getChildren().add(btnDownload);
-					//	}
-                    	
-                    	
-                    	hb.getChildren().add(btnDelete);
                     	
                     }
 
@@ -198,8 +200,12 @@ public class DashboardController extends Controller implements Initializable  {
                             setGraphic(null);
                         } else {
                         	
-                        	//initB("dir".equals(item));
-                            setGraphic(hb);
+                        	if("dir".equals(item)) {
+                                setGraphic(hb_folder);
+                        	}else {
+                                setGraphic(hb_file);
+                        	}
+
                         }
                     }
                 };
@@ -332,7 +338,7 @@ public class DashboardController extends Controller implements Initializable  {
 					
 					if (folderNode.isArray()) {
 					    for (final JsonNode objNode : folderNode) {
-					        System.out.println(objNode);
+					       // System.out.println(objNode);
 					        fileData.add(new FileItemFX(objNode.get("id").asText(),
 					        		                    objNode.get("name").asText(),
 					        		                    objNode.get("path").asText(),
@@ -365,7 +371,12 @@ public class DashboardController extends Controller implements Initializable  {
 					
 					if (filesNode.isArray()) {
 					    for (final JsonNode objNode : filesNode) {
-					      //  System.out.println(objNode);
+					        fileData.add(new FileItemFX(objNode.get("id").asText(),
+        		                    objNode.get("name").asText(),
+        		                    objNode.get("path").asText(),
+        		                    objNode.get("type").asText(),
+        		                    objNode.get("size").asLong(), 
+        		                    objNode.get("time").asText()));
 					    }
 					}
 				}
