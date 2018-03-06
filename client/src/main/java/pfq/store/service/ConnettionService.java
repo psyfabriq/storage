@@ -101,7 +101,7 @@ public class ConnettionService {
             HttpEntity data = MultipartEntityBuilder.create()
                     .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
                     .addBinaryBody("file", file, ContentType.DEFAULT_BINARY, file.getName())
-                    .addTextBody("json", mapper.writeValueAsString(variables), ContentType.DEFAULT_BINARY)
+                    .addTextBody("json", mapper.writeValueAsString(variables), ContentType.APPLICATION_JSON)
                     .build();
     		
     		httppost.setEntity(data);
