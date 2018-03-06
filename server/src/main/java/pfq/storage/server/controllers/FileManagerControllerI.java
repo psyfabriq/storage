@@ -36,6 +36,10 @@ public interface FileManagerControllerI {
     @ResponseBody
     public ResponseEntity<InputStreamResource> itemDownload(@RequestBody String json, HttpServletRequest request, HttpServletResponse response);
     
+    @RequestMapping(value = "/item-download-prop", method = RequestMethod.POST,headers="Accept=*/*",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> itemDownloadProp(@RequestBody String json, HttpServletRequest request, HttpServletResponse response);
+    
     @RequestMapping(value = "/item-compress", method = RequestMethod.POST,headers="Accept=*/*",consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<String> itemCompress(@RequestBody String json, HttpServletRequest request, HttpServletResponse response);

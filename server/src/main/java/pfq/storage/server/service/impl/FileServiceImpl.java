@@ -189,17 +189,39 @@ public class FileServiceImpl  implements FileService{
 	}
 
 	@Override
-	public Optional<FileMO> itemDownload(Map<String, Object> map) {
+	public Optional<File> itemDownload(Map<String, Object> map) {
 		if(map.containsKey("id")) {
+				String destination = systemInfoService.getCurrentUserFolder() +OSValidator.getOSSeparator()+ (String)map.get("id");
+				return Optional.ofNullable(new File(destination));
+		}	
+		return Optional.ofNullable(null);
+	}
+	
+	@Override
+	public String itemDownloadProp(Map<String, Object> map) {
+		if(!map.containsKey("id")) {
+			return AppUtil.getResponseJson("Not set all parametrs",ResponseStatus.ERROR);
+		}
+		Optional<FileMO> filetodownload = fileDAO.findFileID((String) map.get("id"));
+		if(filetodownload.isPresent()) {
+			return AppUtil.getResponseJson(filetodownload.get(), ResponseStatus.OK);
+		}else {
+			return AppUtil.getResponseJson("Not Found file to download",ResponseStatus.ERROR);
+		}
+		//return null;
+	}
+	
+	/*
+	 * 		if(map.containsKey("id")) {
 			Optional<FileMO> filetodownload = fileDAO.findFileID((String) map.get("id"));
 			if(filetodownload.isPresent()) {
 				FileMO fmo = filetodownload.get();
 				String destination = systemInfoService.getCurrentUserFolder() +OSValidator.getOSSeparator()+ fmo.getId();
 				fmo.setTmpFile(new File(destination));
-				return Optional.ofNullable(fmo);
+				return Optional.ofNullable(new File(destination));
 			}
 		}	return Optional.ofNullable(null);
-	}
+	 */
 
 	@Override
 	public String itemCompress(Map<String, Object> map) {
@@ -244,6 +266,8 @@ public class FileServiceImpl  implements FileService{
 		return AppUtil.getResponseJson(result,ResponseStatus.OK);
 
 	}
+
+
 
 
 

@@ -1,6 +1,5 @@
 package pfq.storage.server.model;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,7 +11,6 @@ import org.springframework.data.mongodb.core.query.Update;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import pfq.storage.server.model.User.Builder;
 import pfq.storage.server.model.exception.FileBuilderException;
 
 @Document(collection = "file")
@@ -34,8 +32,8 @@ public class FileMO implements Serializable, Cloneable,Comparable<FileMO>  {
 	private String   type;
 	@DBRef(lazy = false)
 	private Folder   parrent;
-	@JsonIgnore
-	private File     tmpFile;
+	//@JsonIgnore
+	//private File     tmpFile;
 	
 	
 	@Override
@@ -52,7 +50,7 @@ public class FileMO implements Serializable, Cloneable,Comparable<FileMO>  {
 	public String getId() {
 		return id;
 	}
-	
+	@JsonIgnore
 	public String getUserId() {
 		return userid;
 	}
@@ -93,7 +91,7 @@ public class FileMO implements Serializable, Cloneable,Comparable<FileMO>  {
 		return parrent;
 	}
 	
-
+/*
 	public File getTmpFile() {
 		return tmpFile;
 	}
@@ -102,7 +100,7 @@ public class FileMO implements Serializable, Cloneable,Comparable<FileMO>  {
 		this.tmpFile = tmpFile;
 	}
 
-
+*/
 	@JsonIgnore
 	public Update getUpdate() {
 		Update update = new Update();

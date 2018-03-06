@@ -1,13 +1,18 @@
 package pfq.store.display.components;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.ResourceBundle;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -290,14 +295,6 @@ public class DashboardController extends Controller implements Initializable  {
 			      });
 	   }
 	   private void addButtonToTable() {
-	        //TableColumn<FileItemFX, Void> colBtn = new TableColumn("");
-	        //colBtn.setMaxWidth( 1f * Integer.MAX_VALUE * 30 ); // 30% width
-	        
-	     
-
-	       // colBtn.setCellFactory(cellFactory);
-
-	       // filesView.getColumns().add(colBtn);
 
 	    }
 	
@@ -339,13 +336,10 @@ public class DashboardController extends Controller implements Initializable  {
 		                	currentNodeTree.getInternalChildren().remove(depNode);
 		                    break;
 		                }
-		            }
-			        
-			        getListFolder();
-			        
+		            }    
+			        getListFolder();       
 			}
 		} catch (URISyntaxException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -357,26 +351,48 @@ public class DashboardController extends Controller implements Initializable  {
 		variables.put("id", ID);
 	
 		try {
-			HttpResponse res = context.connettionService.doPost("/file/api/item-download", variables, RequestType.JSON);
-			HttpEntity entity = res.getEntity();
-			if (entity != null) {
-				InputStream instream = entity.getContent();
-				byte[] buffer = new byte[instream.available()];
-				instream.read(buffer);
-				instream.close();
+			HttpResponse res_prop = context.connettionService.doPost("/file/api/item-download-prop", variables, RequestType.JSON);
+			HttpEntity entity_prop = res_prop.getEntity();
+			if (entity_prop != null) {
+				 InputStream instream = entity_prop.getContent();
+			     JsonNode rootNode = mapper.readValue(AppUtil.convertStreamToString(instream), JsonNode.class);
+			     instream.close();
+			     if (rootNode.get("BStatus").asBoolean()) {
+			    	 JsonNode resultNode = rootNode.get("Result");
+			    	// String fileName = resultNode.get("name").asText()
+			    	// System.out.println(resultNode);
+			    	 
+			    	 FileChooser fileChooser = new FileChooser();
+			    	 fileChooser.setTitle("Save file");
+			    	 fileChooser.setInitialFileName(resultNode.get("name").asText());
+			    	 File savedFile = fileChooser.showSaveDialog(null);
+			    	 if (savedFile != null) {
+			    		 System.out.println(savedFile);
+			    		 HttpResponse res = context.connettionService.doPost("/file/api/item-download", variables, RequestType.JSON);
+			 			 HttpEntity entity = res.getEntity();
+			 			 if (entity != null) {
+			 				InputStream instream_file = entity.getContent();
+			 				
+			 				 java.nio.file.Files.copy(
+			 						instream_file, 
+			 						savedFile.toPath(), 
+			 					      StandardCopyOption.REPLACE_EXISTING);
+			 					 
+			 					    IOUtils.closeQuietly(instream_file);
+			 				
+			 			 }
+			    	 }
+			    	 
+			     }else {
+			    	 // Send not found
+			     }
 			}
 			
 		} catch (URISyntaxException | IOException e) {
 			e.printStackTrace();
 		}
 
-    	/*
-    	FileChooser fileChooser = new FileChooser();
-        File filetosave = fileChooser.showSaveDialog(null);
-        if (filetosave != null) {
-           // saveTextToFile(sampleText, filetosave);
-        }
-        */
+
     }
 
 	private void getListFolder() {

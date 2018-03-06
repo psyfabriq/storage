@@ -107,11 +107,11 @@ public class FileManagerController implements FileManagerControllerI {
 	public ResponseEntity<InputStreamResource> itemDownload(@RequestBody String json, HttpServletRequest request,HttpServletResponse response) {
 		prepare(json, request);
 		if (systemInfoService.access()) {
-			Optional<FileMO> file = fileService.itemDownload(map); 
+			Optional<File> file = fileService.itemDownload(map); 
 			if (file.isPresent()) {
 				try {
-					InputStreamResource resource = new InputStreamResource(new FileInputStream(file.get().getTmpFile()));
-					return ResponseEntity.ok().headers(head).contentLength(file.get().getTmpFile().length())
+					InputStreamResource resource = new InputStreamResource(new FileInputStream(file.get()));
+					return ResponseEntity.ok().headers(head).contentLength(file.get().length())
 							.contentType(MediaType.parseMediaType("application/octet-stream")).body(resource);
 				} catch (FileNotFoundException e) {
 					return new ResponseEntity<InputStreamResource>(HttpStatus.NOT_FOUND);
@@ -120,6 +120,16 @@ public class FileManagerController implements FileManagerControllerI {
 		}
 	    
 		return new ResponseEntity<InputStreamResource>( HttpStatus.NOT_FOUND );
+	}
+	
+	@Override
+	public ResponseEntity<String> itemDownloadProp(@RequestBody String json, HttpServletRequest request,HttpServletResponse response) {
+		prepare(json, request);
+		if (systemInfoService.access()) {
+			result = fileService.itemDownloadProp(map); 
+		}
+		return new ResponseEntity<String>(result, head,
+				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
 	}
 
 	@Override
@@ -158,7 +168,6 @@ public class FileManagerController implements FileManagerControllerI {
 	@Override
 	public ResponseEntity<String> getListDirectory(@RequestBody String json, HttpServletRequest request,
 			HttpServletResponse response) {
-		System.out.println(json);
 		prepare(json, request);
 		if (systemInfoService.access()) {
 			result = fileService.getListDirectory(map); 
@@ -166,5 +175,7 @@ public class FileManagerController implements FileManagerControllerI {
 		return new ResponseEntity<String>(result, head,
 				systemInfoService.access() ? HttpStatus.OK : HttpStatus.NOT_ACCEPTABLE);
 	}
+
+
 
 }
