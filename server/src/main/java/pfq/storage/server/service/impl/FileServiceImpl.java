@@ -24,6 +24,7 @@ import pfq.storage.server.model.exception.FileBuilderException;
 import pfq.storage.server.service.FileService;
 import pfq.storage.server.service.SystemInfoService;
 import pfq.storage.server.utils.AppUtil;
+import pfq.storage.server.utils.ImageUtill;
 import pfq.storage.server.utils.OSValidator;
 import pfq.storage.server.utils.ResponseStatus;
 
@@ -35,6 +36,9 @@ public class FileServiceImpl  implements FileService{
 	
 	@Autowired
 	SystemInfoService systemInfoService;
+	
+	@Autowired
+	OcrService ocrService;
     
     
 
@@ -183,7 +187,16 @@ public class FileServiceImpl  implements FileService{
 				fileDAO.deleteFile(f);
 				e.printStackTrace();
 			}
+		    try {
+		    	System.out.println(ocrService.read(ImageUtill.doIt(file)));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//System.out.println(ocrService.read(file));
 		}
+		
+
 		
 		return AppUtil.getResponseJson(result);
 	}
